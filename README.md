@@ -18,6 +18,7 @@
 	- id
 	- title
 	- snippet
+	- deleted
 2. Книги
 	- id
 	- title
@@ -26,6 +27,7 @@
 	- pages_cnt
 	- year
 	- lang
+	- deleted
 3. Авторы
 	- id
 	- firstname
@@ -33,3 +35,4 @@
 	- surname
 	- birth_date
 	- snippet
+	- deleted
