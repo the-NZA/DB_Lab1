@@ -1,5 +1,7 @@
 package services
 
+import "github.com/the-NZA/DB_Lab1/backend/internal/models"
+
 type Servicer interface {
 	BookService() BookServicer
 	// AuthorService() AuthorServicer
@@ -7,7 +9,7 @@ type Servicer interface {
 }
 
 type BookServicer interface {
-	Get() string
+	Get() models.Book
 	Add()
 	Update()
 	Delete()
