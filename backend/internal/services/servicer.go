@@ -2,12 +2,12 @@ package services
 
 type Servicer interface {
 	BookService() BookServicer
-	AuthorService() AuthorServicer
-	GenreService() GenreServicer
+	// AuthorService() AuthorServicer
+	// GenreService() GenreServicer
 }
 
 type BookServicer interface {
-	Get()
+	Get() string
 	Add()
 	Update()
 	Delete()

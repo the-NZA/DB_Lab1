@@ -25,8 +25,12 @@ func (s *MySQLStore) Genres() storer.GenreRepository {
 	return nil
 }
 
-func NewStore(config *config.Config) (storer.Storer, error) {
-	db, err := sql.Open(config.DBType, config.DBURL)
+func NewStore(c *config.Config) (storer.Storer, error) {
+	if c == nil {
+		return nil, config.ErrEmptyConfig
+	}
+
+	db, err := sql.Open(c.DBType, c.DBURL)
 	if err != nil {
 		return nil, err
 	}

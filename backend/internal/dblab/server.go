@@ -19,14 +19,18 @@ type Server struct {
 }
 
 // Returns new configured server
-func NewServer(config *config.Config, services services.Servicer) *Server {
+func NewServer(c *config.Config, services services.Servicer) (*Server, error) {
+	if c == nil {
+		return nil, config.ErrEmptyConfig
+	}
+
 	return &Server{
-		config:   config,
+		config:   c,
 		services: services,
 		// store:  store,
-		logger: configureLogger(config.LogDebug),
+		logger: configureLogger(c.LogDebug),
 		router: chi.NewRouter(),
-	}
+	}, nil
 }
 
 func (s *Server) configureRouter() {

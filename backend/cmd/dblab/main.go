@@ -50,7 +50,10 @@ func run() error {
 	}
 
 	// Create new server
-	server := dblab.NewServer(config, services)
+	server, err := dblab.NewServer(config, services)
+	if err != nil {
+		return err
+	}
 
 	return server.Start()
 }

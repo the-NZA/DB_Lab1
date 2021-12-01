@@ -2,9 +2,14 @@ package config
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"os"
+)
+
+var (
+	ErrEmptyConfig = errors.New("Config must be initialized before usage")
 )
 
 // Config represents application config structure
