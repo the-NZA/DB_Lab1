@@ -24,18 +24,57 @@ func (b *BookService) Get() models.Book {
 	}
 }
 
-func (b *BookService) Add() {
-
+func (b *BookService) Add() (models.Book, error) {
+	return models.Book{
+		ID:         "2",
+		Title:      "New book",
+		Snippet:    "This is new book",
+		GenreID:    "2",
+		PagesCnt:   2,
+		Year:       time.Now(),
+		BookLangID: "1",
+		Deleted:    false,
+	}, nil
 }
 
-func (b *BookService) Update() {
-
+func (b *BookService) Update() (models.Book, error) {
+	return models.Book{
+		ID:         "1",
+		Title:      "First book updated",
+		Snippet:    "This is first book updated",
+		GenreID:    "1",
+		PagesCnt:   1,
+		Year:       time.Now(),
+		BookLangID: "1",
+		Deleted:    false,
+	}, nil
 }
 
-func (b *BookService) Delete() {
-
+func (b *BookService) Delete() error {
+	return nil
 }
 
-func (b *BookService) FindAll() {
-
+func (b *BookService) FindAll() ([]models.Book, error) {
+	return []models.Book{
+		{
+			ID:         "1",
+			Title:      "First book",
+			Snippet:    "This is first book",
+			GenreID:    "1",
+			PagesCnt:   1,
+			Year:       time.Now(),
+			BookLangID: "1",
+			Deleted:    false,
+		},
+		{
+			ID:         "2",
+			Title:      "New book",
+			Snippet:    "This is new book",
+			GenreID:    "2",
+			PagesCnt:   2,
+			Year:       time.Now(),
+			BookLangID: "1",
+			Deleted:    false,
+		},
+	}, nil
 }

@@ -10,10 +10,10 @@ type Servicer interface {
 
 type BookServicer interface {
 	Get() models.Book
-	Add()
-	Update()
-	Delete()
-	FindAll()
+	Add() (models.Book, error)
+	Update() (models.Book, error)
+	Delete() error
+	FindAll() ([]models.Book, error)
 }
 
 type AuthorServicer interface {
