@@ -1,0 +1,7 @@
+{
+	"app_domain": "",
+	"app_port": "",
+	"db_type": "mysql",
+	"db_url": "db_url_here",
+	"log_debug": true
+}

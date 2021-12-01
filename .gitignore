@@ -1,2 +1,5 @@
 .DS_Store
 /dblab
+
+/etc/*
+!/etc/dev.config.json
