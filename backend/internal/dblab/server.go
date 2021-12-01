@@ -40,6 +40,10 @@ func (s *Server) configureRouter() {
 		// Books endpoints
 		r.Route("/book", func(r chi.Router) {
 			r.Get("/", s.handleBookGet())
+			r.Post("/", s.handleBookAdd())
+			r.Put("/", s.handleBookUpdate())
+			r.Delete("/", s.handleBookDelete())
+			r.Get("/all", s.handleBookGetAll())
 		})
 	})
 }

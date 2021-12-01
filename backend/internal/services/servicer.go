@@ -13,7 +13,7 @@ type BookServicer interface {
 	Add() (models.Book, error)
 	Update() (models.Book, error)
 	Delete() error
-	FindAll() ([]models.Book, error)
+	GetAll() ([]models.Book, error)
 }
 
 type AuthorServicer interface {

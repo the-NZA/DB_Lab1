@@ -54,7 +54,7 @@ func (b *BookService) Delete() error {
 	return nil
 }
 
-func (b *BookService) FindAll() ([]models.Book, error) {
+func (b *BookService) GetAll() ([]models.Book, error) {
 	return []models.Book{
 		{
 			ID:         "1",
