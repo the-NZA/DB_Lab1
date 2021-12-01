@@ -2,10 +2,12 @@ package main
 
 import (
 	"flag"
-	"fmt"
 
 	log "github.com/go-pkgz/lgr"
+	"github.com/the-NZA/DB_Lab1/backend/internal/config"
 	"github.com/the-NZA/DB_Lab1/backend/internal/dblab"
+	"github.com/the-NZA/DB_Lab1/backend/internal/services"
+	"github.com/the-NZA/DB_Lab1/backend/internal/store"
 )
 
 var (
@@ -18,7 +20,7 @@ func init() {
 
 func main() {
 	if err := run(); err != nil {
-		log.Fatalf("[ERROR]: %v", err)
+		log.Fatalf("[ERROR] %v", err)
 	}
 }
 
@@ -27,7 +29,7 @@ func run() error {
 	flag.Parse()
 
 	// Create new config
-	config := dblab.NewConfig()
+	config := config.NewConfig()
 
 	// Read config options
 	err := config.ReadFromFile(configPath)
@@ -35,8 +37,20 @@ func run() error {
 		return err
 	}
 
-	fmt.Println("Hello! This is app's entrypoint")
-	fmt.Printf("%s\n", configPath)
+	// Create new store base on passed config
+	store, err := store.NewStore(config)
+	if err != nil {
+		return err
+	}
 
-	return nil
+	// Init services with created store
+	services, err := services.NewServices(config, store)
+	if err != nil {
+		return err
+	}
+
+	// Create new server
+	server := dblab.NewServer(config, services)
+
+	return server.Start()
 }
