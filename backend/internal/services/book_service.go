@@ -11,17 +11,8 @@ type BookService struct {
 	repository storer.BookReporsitory
 }
 
-func (b *BookService) Get() models.Book {
-	return models.Book{
-		ID:         "1",
-		Title:      "First book",
-		Snippet:    "This is first book",
-		GenreID:    "1",
-		PagesCnt:   1,
-		Year:       time.Now(),
-		BookLangID: "1",
-		Deleted:    false,
-	}
+func (b *BookService) Get(ID string) (models.Book, error) {
+	return b.Get(ID)
 }
 
 func (b *BookService) Add() (models.Book, error) {

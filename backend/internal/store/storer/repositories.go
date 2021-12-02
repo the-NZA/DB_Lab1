@@ -1,7 +1,9 @@
 package storer
 
+import "github.com/the-NZA/DB_Lab1/backend/internal/models"
+
 type BookReporsitory interface {
-	Get()
+	Get(ID string) (models.Book, error)
 }
 
 type AuthorRepository interface {

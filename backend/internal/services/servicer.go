@@ -9,7 +9,7 @@ type Servicer interface {
 }
 
 type BookServicer interface {
-	Get() models.Book
+	Get(string) (models.Book, error)
 	Add() (models.Book, error)
 	Update() (models.Book, error)
 	Delete() error

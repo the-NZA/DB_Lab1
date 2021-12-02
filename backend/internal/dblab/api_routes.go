@@ -3,16 +3,31 @@ package dblab
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
+// handles GET /api/books/:bookID
 func (s *Server) handleBookGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is get book endpoint")
-		book := s.services.BookService().Get()
+
+		id := chi.URLParam(r, "bookID")
+		if id == "" {
+			fmt.Fprintln(w, "You must specifiy ID in url param")
+			return
+		}
+
+		book, err := s.services.BookService().Get(id)
+		if err != nil {
+			fmt.Fprintln(w, err)
+			return
+		}
 		fmt.Fprintln(w, book)
 	}
 }
 
+// handles POST /api/books/:bookID
 func (s *Server) handleBookAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is add book endpoint")
@@ -26,6 +41,7 @@ func (s *Server) handleBookAdd() http.HandlerFunc {
 	}
 }
 
+// handles PUT /api/books/:bookID
 func (s *Server) handleBookUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is update book endpoint")
@@ -39,6 +55,7 @@ func (s *Server) handleBookUpdate() http.HandlerFunc {
 	}
 }
 
+// handles DELETE /api/books/:bookID
 func (s *Server) handleBookDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is delete book endpoint")
@@ -51,6 +68,7 @@ func (s *Server) handleBookDelete() http.HandlerFunc {
 	}
 }
 
+// handles GET /api/books/all
 func (s *Server) handleBookGetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is get all books endpoint")
