@@ -20,10 +20,11 @@ func (s *Server) handleBookGet() http.HandlerFunc {
 
 		book, err := s.services.BookService().Get(id)
 		if err != nil {
-			fmt.Fprintln(w, err)
+			s.error(w, r, 500, err)
 			return
 		}
-		fmt.Fprintln(w, book)
+
+		s.respond(w, r, 200, book)
 	}
 }
 
@@ -31,13 +32,14 @@ func (s *Server) handleBookGet() http.HandlerFunc {
 func (s *Server) handleBookAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is add book endpoint")
-		book, err := s.services.BookService().Add()
 
+		book, err := s.services.BookService().Add()
 		if err != nil {
-			fmt.Fprintln(w, err)
+			s.error(w, r, 500, err)
+			return
 		}
 
-		fmt.Fprintln(w, book)
+		s.respond(w, r, 200, book)
 	}
 }
 
@@ -45,13 +47,14 @@ func (s *Server) handleBookAdd() http.HandlerFunc {
 func (s *Server) handleBookUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is update book endpoint")
-		book, err := s.services.BookService().Update()
 
+		book, err := s.services.BookService().Update()
 		if err != nil {
-			fmt.Fprintln(w, err)
+			s.error(w, r, 500, err)
+			return
 		}
 
-		fmt.Fprintln(w, book)
+		s.respond(w, r, 200, book)
 	}
 }
 
@@ -59,12 +62,14 @@ func (s *Server) handleBookUpdate() http.HandlerFunc {
 func (s *Server) handleBookDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is delete book endpoint")
+
 		err := s.services.BookService().Delete()
 		if err != nil {
-			fmt.Fprintln(w, err)
+			s.error(w, r, 500, err)
+			return
 		}
 
-		fmt.Fprintln(w, "Deleted")
+		s.respond(w, r, 200, "Deleted")
 	}
 }
 
@@ -72,11 +77,13 @@ func (s *Server) handleBookDelete() http.HandlerFunc {
 func (s *Server) handleBookGetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is get all books endpoint")
+
 		books, err := s.services.BookService().GetAll()
 		if err != nil {
-			fmt.Fprintln(w, err)
+			s.error(w, r, 500, err)
+			return
 		}
 
-		fmt.Fprintln(w, books)
+		s.respond(w, r, 200, books)
 	}
 }
