@@ -15,7 +15,7 @@ func (b *BookService) Get(ID string) (models.Book, error) {
 	return b.Get(ID)
 }
 
-func (b *BookService) Add() (models.Book, error) {
+func (b *BookService) Add(book models.Book) (models.Book, error) {
 	return models.Book{
 		ID:         "2",
 		Title:      "New book",
@@ -28,7 +28,7 @@ func (b *BookService) Add() (models.Book, error) {
 	}, nil
 }
 
-func (b *BookService) Update() (models.Book, error) {
+func (b *BookService) Update(book models.Book) (models.Book, error) {
 	return models.Book{
 		ID:         "1",
 		Title:      "First book updated",
@@ -41,7 +41,7 @@ func (b *BookService) Update() (models.Book, error) {
 	}, nil
 }
 
-func (b *BookService) Delete() error {
+func (b *BookService) Delete(ID string) error {
 	return nil
 }
 

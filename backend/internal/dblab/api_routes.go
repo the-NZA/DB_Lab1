@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/the-NZA/DB_Lab1/backend/internal/models"
 )
 
 // handles GET /api/books/:bookID
@@ -33,7 +34,7 @@ func (s *Server) handleBookAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is add book endpoint")
 
-		book, err := s.services.BookService().Add()
+		book, err := s.services.BookService().Add(models.Book{})
 		if err != nil {
 			s.error(w, r, 500, err)
 			return
@@ -48,7 +49,7 @@ func (s *Server) handleBookUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is update book endpoint")
 
-		book, err := s.services.BookService().Update()
+		book, err := s.services.BookService().Update(models.Book{})
 		if err != nil {
 			s.error(w, r, 500, err)
 			return
@@ -63,7 +64,7 @@ func (s *Server) handleBookDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, "This is delete book endpoint")
 
-		err := s.services.BookService().Delete()
+		err := s.services.BookService().Delete("")
 		if err != nil {
 			s.error(w, r, 500, err)
 			return

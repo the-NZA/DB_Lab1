@@ -101,3 +101,28 @@ func (b BookReporsitory) Add(book models.Book) (models.Book, error) {
 
 	return book, nil
 }
+
+// Update one book in books
+func (b BookReporsitory) Update(book models.Book) (models.Book, error) {
+	idx, err := b.findByID(book.ID)
+	if err != nil {
+		return book, fmt.Errorf("Book not found")
+	}
+
+	books[idx] = book
+
+	return books[idx], nil
+}
+
+// Delete one book from books
+func (b BookReporsitory) Delete(ID string) error {
+	idx, err := b.findByID(ID)
+	if err != nil {
+		return fmt.Errorf("Book not found")
+	}
+
+	books[idx] = books[len(books)-1]
+	books = books[:len(books)-1]
+
+	return nil
+}
