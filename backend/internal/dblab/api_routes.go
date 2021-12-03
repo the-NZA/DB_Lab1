@@ -13,7 +13,6 @@ func (s *Server) handleBookGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "bookID")
 		if id == "" {
-			fmt.Fprintln(w, "You must specifiy ID in url param")
 			s.error(w, r, http.StatusInternalServerError, fmt.Errorf("You must specify ID in url param"))
 			return
 		}
