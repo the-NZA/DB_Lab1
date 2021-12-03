@@ -113,3 +113,12 @@ func (g GenreRepository) Delete(ID string) error {
 
 	return nil
 }
+
+// Get all genres from genres
+func (g GenreRepository) GetAll() ([]models.Genre, error) {
+	if len(genres) < 1 {
+		return nil, fmt.Errorf("Genres not found")
+	}
+
+	return genres, nil
+}

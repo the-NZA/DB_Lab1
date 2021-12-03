@@ -20,4 +20,8 @@ type AuthorRepository interface {
 
 type GenreRepository interface {
 	Get(string) (models.Genre, error)
+	Add(models.Genre) (models.Genre, error)
+	Update(models.Genre) (models.Genre, error)
+	Delete(string) error
+	GetAll() ([]models.Genre, error)
 }

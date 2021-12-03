@@ -9,45 +9,26 @@ type GenreService struct {
 	repository storer.GenreRepository
 }
 
-func (b *GenreService) Get(ID string) (models.Genre, error) {
-	return b.repository.Get(ID)
+func (g *GenreService) Get(ID string) (models.Genre, error) {
+	return g.repository.Get(ID)
 }
 
-func (b *GenreService) Add(book models.Genre) (models.Genre, error) {
-	return models.Genre{
-		ID:      "2",
-		Title:   "New book",
-		Snippet: "This is new book",
-		Deleted: false,
-	}, nil
+func (g *GenreService) Add(genre models.Genre) (models.Genre, error) {
+	//validation here
+	return g.repository.Add(genre)
 }
 
-func (b *GenreService) Update(book models.Genre) (models.Genre, error) {
-	return models.Genre{
-		ID:      "1",
-		Title:   "First book updated",
-		Snippet: "This is first book updated",
-		Deleted: false,
-	}, nil
+func (g *GenreService) Update(genre models.Genre) (models.Genre, error) {
+	//validation here
+	return g.repository.Update(genre)
 }
 
-func (b *GenreService) Delete(ID string) error {
-	return nil
+func (g *GenreService) Delete(ID string) error {
+	//validation here
+	return g.repository.Delete(ID)
 }
 
-func (b *GenreService) GetAll() ([]models.Genre, error) {
-	return []models.Genre{
-		{
-			ID:      "1",
-			Title:   "First book",
-			Snippet: "This is first book",
-			Deleted: false,
-		},
-		{
-			ID:      "2",
-			Title:   "New book",
-			Snippet: "This is new book",
-			Deleted: false,
-		},
-	}, nil
+func (g *GenreService) GetAll() ([]models.Genre, error) {
+	//validation here
+	return g.repository.GetAll()
 }
