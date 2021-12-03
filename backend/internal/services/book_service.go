@@ -12,7 +12,7 @@ type BookService struct {
 }
 
 func (b *BookService) Get(ID string) (models.Book, error) {
-	return b.Get(ID)
+	return b.repository.Get(ID)
 }
 
 func (b *BookService) Add(book models.Book) (models.Book, error) {

@@ -11,21 +11,20 @@ import (
 // handles GET /api/books/:bookID
 func (s *Server) handleBookGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "This is get book endpoint")
-
 		id := chi.URLParam(r, "bookID")
 		if id == "" {
 			fmt.Fprintln(w, "You must specifiy ID in url param")
+			s.error(w, r, http.StatusInternalServerError, fmt.Errorf("You must specify ID in url param"))
 			return
 		}
 
 		book, err := s.services.BookService().Get(id)
 		if err != nil {
-			s.error(w, r, 500, err)
+			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, 200, book)
+		s.respond(w, r, http.StatusOK, book)
 	}
 }
 

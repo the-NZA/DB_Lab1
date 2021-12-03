@@ -18,8 +18,8 @@ func configureLogger(isDebug bool) *lgr.Logger {
 
 // respond method perform response with json encoding and optional data
 func (s *Server) respond(w http.ResponseWriter, r *http.Request, code int, data interface{}) {
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
+	w.Header().Set("Content-Type", "application/json")
 
 	if data != nil {
 		json.NewEncoder(w).Encode(data)

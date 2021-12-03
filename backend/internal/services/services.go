@@ -6,12 +6,10 @@ import (
 	"github.com/the-NZA/DB_Lab1/backend/internal/store/storer"
 )
 
-var ()
-
 type Services struct {
 	store  storer.Storer
 	config *config.Config
-	books  *BookService
+	books  BookServicer
 }
 
 func (s *Services) BookService() BookServicer {

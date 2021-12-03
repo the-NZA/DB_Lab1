@@ -37,16 +37,20 @@ func (s *Server) configureRouter() {
 	s.router.Get("/", s.handleIndexPage())
 
 	s.router.Route("/api", func(r chi.Router) {
+		r.Get("/", func(rw http.ResponseWriter, r *http.Request) {
+			rw.Write([]byte("This is API route"))
+		})
+
 		// Books endpoints
 		r.Route("/book", func(r chi.Router) {
-			// Get, Add, Update and Delete books by ID
-			r.Route("/{bookID}", func(r chi.Router) {
-				r.Get("/", s.handleBookGet())
-				r.Post("/", s.handleBookAdd())
-				r.Put("/", s.handleBookUpdate())
-				r.Delete("/", s.handleBookDelete())
+			r.Get("/", func(rw http.ResponseWriter, r *http.Request) {
+				rw.Write([]byte("This is book API route"))
 			})
-
+			// Get, Add, Update and Delete books by ID
+			r.Get("/{bookID}", s.handleBookGet())
+			r.Post("/", s.handleBookAdd())
+			r.Put("/{bookID}", s.handleBookUpdate())
+			r.Delete("/{bookID}", s.handleBookDelete())
 			r.Get("/all", s.handleBookGetAll())
 		})
 	})
