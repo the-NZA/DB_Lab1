@@ -9,19 +9,18 @@ type AuthorService struct {
 	repository storer.AuthorRepository
 }
 
-func (b *AuthorService) Get(ID string) (models.Author, error) {
-	return b.repository.Get(ID)
+func (a *AuthorService) Get(ID string) (models.Author, error) {
+	return a.repository.Get(ID)
 }
 
-func (b *AuthorService) Add(book models.Author) (models.Author, error) {
-	return models.Author{
-		ID:      "2",
-		Snippet: "This is new book",
-		Deleted: false,
-	}, nil
+func (a *AuthorService) Add(book models.Author) (models.Author, error) {
+	// validation here
+	return book, nil
 }
 
-func (b *AuthorService) Update(book models.Author) (models.Author, error) {
+func (a *AuthorService) Update(book models.Author) (models.Author, error) {
+	// validation here
+
 	return models.Author{
 		ID:      "1",
 		Snippet: "This is first book updated",
@@ -29,11 +28,11 @@ func (b *AuthorService) Update(book models.Author) (models.Author, error) {
 	}, nil
 }
 
-func (b *AuthorService) Delete(ID string) error {
+func (a *AuthorService) Delete(ID string) error {
 	return nil
 }
 
-func (b *AuthorService) GetAll() ([]models.Author, error) {
+func (a *AuthorService) GetAll() ([]models.Author, error) {
 	return []models.Author{
 		{
 			ID:      "1",

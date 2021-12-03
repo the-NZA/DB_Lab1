@@ -5,7 +5,7 @@ import "github.com/the-NZA/DB_Lab1/backend/internal/models"
 type Servicer interface {
 	BookService() BookServicer
 	GenreService() GenreServicer
-	// AuthorService() AuthorServicer
+	AuthorService() AuthorServicer
 }
 
 type BookServicer interface {

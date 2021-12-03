@@ -1,8 +1,6 @@
 package services
 
 import (
-	"time"
-
 	"github.com/the-NZA/DB_Lab1/backend/internal/models"
 	"github.com/the-NZA/DB_Lab1/backend/internal/store/storer"
 )
@@ -16,56 +14,20 @@ func (b *BookService) Get(ID string) (models.Book, error) {
 }
 
 func (b *BookService) Add(book models.Book) (models.Book, error) {
-	return models.Book{
-		ID:         "2",
-		Title:      "New book",
-		Snippet:    "This is new book",
-		GenreID:    "2",
-		PagesCnt:   2,
-		Year:       time.Now(),
-		BookLangID: "1",
-		Deleted:    false,
-	}, nil
+	// validation here
+	return b.repository.Add(book)
 }
 
 func (b *BookService) Update(book models.Book) (models.Book, error) {
-	return models.Book{
-		ID:         "1",
-		Title:      "First book updated",
-		Snippet:    "This is first book updated",
-		GenreID:    "1",
-		PagesCnt:   1,
-		Year:       time.Now(),
-		BookLangID: "1",
-		Deleted:    false,
-	}, nil
+	// validation here
+	return b.repository.Update(book)
 }
 
 func (b *BookService) Delete(ID string) error {
-	return nil
+	// validation here
+	return b.repository.Delete(ID)
 }
 
 func (b *BookService) GetAll() ([]models.Book, error) {
-	return []models.Book{
-		{
-			ID:         "1",
-			Title:      "First book",
-			Snippet:    "This is first book",
-			GenreID:    "1",
-			PagesCnt:   1,
-			Year:       time.Now(),
-			BookLangID: "1",
-			Deleted:    false,
-		},
-		{
-			ID:         "2",
-			Title:      "New book",
-			Snippet:    "This is new book",
-			GenreID:    "2",
-			PagesCnt:   2,
-			Year:       time.Now(),
-			BookLangID: "1",
-			Deleted:    false,
-		},
-	}, nil
+	return b.repository.GetAll()
 }
