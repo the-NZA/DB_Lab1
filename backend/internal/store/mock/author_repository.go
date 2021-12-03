@@ -67,7 +67,7 @@ func getNextAuthorID(a []models.Author) int {
 
 type AuthorRepository struct{}
 
-// find one genre by passed ID
+// find one author by passed ID
 func (a AuthorRepository) findByID(ID string) (int, error) {
 	for i := range authors {
 		if authors[i].ID == ID {
@@ -78,7 +78,7 @@ func (a AuthorRepository) findByID(ID string) (int, error) {
 	return -1, fmt.Errorf("Author not found")
 }
 
-// Get one genre from genres
+// Get one author from authors
 func (a AuthorRepository) Get(ID string) (models.Author, error) {
 	idx, err := a.findByID(ID)
 	if err != nil {
@@ -88,30 +88,30 @@ func (a AuthorRepository) Get(ID string) (models.Author, error) {
 	return authors[idx], nil
 }
 
-// Add one genre to genres
-func (a AuthorRepository) Add(genre models.Author) (models.Author, error) {
+// Add one author to authors
+func (a AuthorRepository) Add(author models.Author) (models.Author, error) {
 	newID := getNextAuthorID(authors)
 
-	genre.ID = strconv.Itoa(newID)
+	author.ID = strconv.Itoa(newID)
 
-	authors = append(authors, genre)
+	authors = append(authors, author)
 
-	return genre, nil
+	return author, nil
 }
 
-// Update one genre in genres
-func (a AuthorRepository) Update(genre models.Author) (models.Author, error) {
-	idx, err := a.findByID(genre.ID)
+// Update one author in authors
+func (a AuthorRepository) Update(author models.Author) (models.Author, error) {
+	idx, err := a.findByID(author.ID)
 	if err != nil {
-		return genre, fmt.Errorf("Author not found")
+		return author, fmt.Errorf("Author not found")
 	}
 
-	authors[idx] = genre
+	authors[idx] = author
 
 	return authors[idx], nil
 }
 
-// Delete one genre from genres
+// Delete one author from authors
 func (a AuthorRepository) Delete(ID string) error {
 	idx, err := a.findByID(ID)
 	if err != nil {
@@ -122,4 +122,13 @@ func (a AuthorRepository) Delete(ID string) error {
 	authors = authors[:len(authors)-1]
 
 	return nil
+}
+
+// Get all authors from authors
+func (a AuthorRepository) GetAll() ([]models.Author, error) {
+	if len(authors) < 1 {
+		return nil, fmt.Errorf("Authors not found")
+	}
+
+	return authors, nil
 }

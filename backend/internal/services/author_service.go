@@ -13,36 +13,21 @@ func (a *AuthorService) Get(ID string) (models.Author, error) {
 	return a.repository.Get(ID)
 }
 
-func (a *AuthorService) Add(book models.Author) (models.Author, error) {
+func (a *AuthorService) Add(author models.Author) (models.Author, error) {
 	// validation here
-	return book, nil
+	return a.repository.Add(author)
 }
 
-func (a *AuthorService) Update(book models.Author) (models.Author, error) {
+func (a *AuthorService) Update(author models.Author) (models.Author, error) {
 	// validation here
-
-	return models.Author{
-		ID:      "1",
-		Snippet: "This is first book updated",
-		Deleted: false,
-	}, nil
+	return a.repository.Update(author)
 }
 
 func (a *AuthorService) Delete(ID string) error {
-	return nil
+	//validation
+	return a.repository.Delete(ID)
 }
 
 func (a *AuthorService) GetAll() ([]models.Author, error) {
-	return []models.Author{
-		{
-			ID:      "1",
-			Snippet: "This is first book",
-			Deleted: false,
-		},
-		{
-			ID:      "2",
-			Snippet: "This is new book",
-			Deleted: false,
-		},
-	}, nil
+	return a.repository.GetAll()
 }
