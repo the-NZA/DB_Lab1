@@ -30,15 +30,13 @@ func (s *Server) handleBookGet() http.HandlerFunc {
 // handles POST /api/books/:bookID
 func (s *Server) handleBookAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "This is add book endpoint")
-
 		book, err := s.services.BookService().Add(models.Book{})
 		if err != nil {
-			s.error(w, r, 500, err)
+			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, 200, book)
+		s.respond(w, r, http.StatusOK, book)
 	}
 }
 
@@ -49,11 +47,11 @@ func (s *Server) handleBookUpdate() http.HandlerFunc {
 
 		book, err := s.services.BookService().Update(models.Book{})
 		if err != nil {
-			s.error(w, r, 500, err)
+			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, 200, book)
+		s.respond(w, r, http.StatusOK, book)
 	}
 }
 
@@ -64,11 +62,11 @@ func (s *Server) handleBookDelete() http.HandlerFunc {
 
 		err := s.services.BookService().Delete("")
 		if err != nil {
-			s.error(w, r, 500, err)
+			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, 200, "Deleted")
+		s.respond(w, r, http.StatusOK, "Deleted")
 	}
 }
 
@@ -79,10 +77,10 @@ func (s *Server) handleBookGetAll() http.HandlerFunc {
 
 		books, err := s.services.BookService().GetAll()
 		if err != nil {
-			s.error(w, r, 500, err)
+			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, 200, books)
+		s.respond(w, r, http.StatusOK, books)
 	}
 }
