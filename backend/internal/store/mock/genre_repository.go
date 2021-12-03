@@ -69,8 +69,8 @@ func (g GenreRepository) findByID(ID string) (int, error) {
 }
 
 // Get one genre from genres
-func (b GenreRepository) Get(ID string) (models.Genre, error) {
-	idx, err := b.findByID(ID)
+func (g GenreRepository) Get(ID string) (models.Genre, error) {
+	idx, err := g.findByID(ID)
 	if err != nil {
 		return models.Genre{}, fmt.Errorf("Genre not found")
 	}
@@ -79,7 +79,7 @@ func (b GenreRepository) Get(ID string) (models.Genre, error) {
 }
 
 // Add one genre to genres
-func (b GenreRepository) Add(genre models.Genre) (models.Genre, error) {
+func (g GenreRepository) Add(genre models.Genre) (models.Genre, error) {
 	newID := getNextGenreID(genres)
 
 	genre.ID = strconv.Itoa(newID)
@@ -90,8 +90,8 @@ func (b GenreRepository) Add(genre models.Genre) (models.Genre, error) {
 }
 
 // Update one genre in genres
-func (b GenreRepository) Update(genre models.Genre) (models.Genre, error) {
-	idx, err := b.findByID(genre.ID)
+func (g GenreRepository) Update(genre models.Genre) (models.Genre, error) {
+	idx, err := g.findByID(genre.ID)
 	if err != nil {
 		return genre, fmt.Errorf("Genre not found")
 	}
@@ -102,8 +102,8 @@ func (b GenreRepository) Update(genre models.Genre) (models.Genre, error) {
 }
 
 // Delete one genre from genres
-func (b GenreRepository) Delete(ID string) error {
-	idx, err := b.findByID(ID)
+func (g GenreRepository) Delete(ID string) error {
+	idx, err := g.findByID(ID)
 	if err != nil {
 		return fmt.Errorf("Genre not found")
 	}

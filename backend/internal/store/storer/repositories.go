@@ -7,6 +7,7 @@ type BookReporsitory interface {
 }
 
 type AuthorRepository interface {
+	Get(ID string) (models.Author, error)
 }
 
 type GenreRepository interface {

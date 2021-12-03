@@ -7,10 +7,11 @@ import (
 )
 
 type Services struct {
-	store  storer.Storer
-	config *config.Config
-	books  BookServicer
-	genres GenreServicer
+	store   storer.Storer
+	config  *config.Config
+	books   BookServicer
+	genres  GenreServicer
+	authors AuthorServicer
 }
 
 func (s *Services) BookService() BookServicer {
@@ -26,7 +27,15 @@ func (s *Services) BookService() BookServicer {
 }
 
 func (s *Services) AuthorService() AuthorServicer {
-	return nil
+	if s.authors != nil {
+		return s.authors
+	}
+
+	s.authors = &AuthorService{
+		repository: s.store.Authors(),
+	}
+
+	return s.authors
 }
 
 func (s *Services) GenreService() GenreServicer {
