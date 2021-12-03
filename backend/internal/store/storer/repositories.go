@@ -10,4 +10,5 @@ type AuthorRepository interface {
 }
 
 type GenreRepository interface {
+	Get(ID string) (models.Genre, error)
 }

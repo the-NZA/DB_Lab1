@@ -6,7 +6,8 @@ import (
 )
 
 type MockStore struct {
-	books *BookReporsitory
+	books  *BookRepository
+	genres *GenreRepository
 }
 
 func (s *MockStore) Books() storer.BookReporsitory {
@@ -14,7 +15,7 @@ func (s *MockStore) Books() storer.BookReporsitory {
 		return s.books
 	}
 
-	s.books = &BookReporsitory{}
+	s.books = &BookRepository{}
 
 	return s.books
 }
@@ -24,7 +25,13 @@ func (s *MockStore) Authors() storer.AuthorRepository {
 }
 
 func (s *MockStore) Genres() storer.GenreRepository {
-	return nil
+	if s.genres != nil {
+		return s.genres
+	}
+
+	s.genres = &GenreRepository{}
+
+	return s.genres
 }
 
 func NewStore(c *config.Config) (storer.Storer, error) {

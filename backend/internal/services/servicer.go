@@ -4,8 +4,8 @@ import "github.com/the-NZA/DB_Lab1/backend/internal/models"
 
 type Servicer interface {
 	BookService() BookServicer
+	GenreService() GenreServicer
 	// AuthorService() AuthorServicer
-	// GenreService() GenreServicer
 }
 
 type BookServicer interface {
@@ -17,17 +17,17 @@ type BookServicer interface {
 }
 
 type AuthorServicer interface {
-	Get()
-	Add()
-	Update()
-	Delete()
-	FindAll()
+	Get(string) (models.Author, error)
+	Add(models.Author) (models.Author, error)
+	Update(models.Author) (models.Author, error)
+	Delete(string) error
+	GetAll() ([]models.Book, error)
 }
 
 type GenreServicer interface {
-	Get()
-	Add()
-	Update()
-	Delete()
-	FindAll()
+	Get(string) (models.Genre, error)
+	Add(models.Genre) (models.Genre, error)
+	Update(models.Genre) (models.Genre, error)
+	Delete(string) error
+	GetAll() ([]models.Genre, error)
 }

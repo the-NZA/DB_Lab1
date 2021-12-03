@@ -10,6 +10,7 @@ type Services struct {
 	store  storer.Storer
 	config *config.Config
 	books  BookServicer
+	genres GenreServicer
 }
 
 func (s *Services) BookService() BookServicer {
@@ -29,7 +30,15 @@ func (s *Services) AuthorService() AuthorServicer {
 }
 
 func (s *Services) GenreService() GenreServicer {
-	return nil
+	if s.genres != nil {
+		return s.genres
+	}
+
+	s.genres = &GenreService{
+		repository: s.store.Genres(),
+	}
+
+	return s.genres
 }
 
 // NewServices create initiale new services structure

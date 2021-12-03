@@ -43,7 +43,7 @@ var books = []models.Book{
 }
 
 // Get next ID
-func getNextID(b []models.Book) int {
+func getNextBookID(b []models.Book) int {
 	if len(b) < 1 {
 		return 0
 	}
@@ -68,10 +68,10 @@ func getNextID(b []models.Book) int {
 	return next
 }
 
-type BookReporsitory struct{}
+type BookRepository struct{}
 
 // find one book by passed ID
-func (b BookReporsitory) findByID(ID string) (int, error) {
+func (b BookRepository) findByID(ID string) (int, error) {
 	for i := range books {
 		if books[i].ID == ID {
 			return i, nil
@@ -82,7 +82,7 @@ func (b BookReporsitory) findByID(ID string) (int, error) {
 }
 
 // Get one book from books
-func (b BookReporsitory) Get(ID string) (models.Book, error) {
+func (b BookRepository) Get(ID string) (models.Book, error) {
 	idx, err := b.findByID(ID)
 	if err != nil {
 		return models.Book{}, fmt.Errorf("Book not found")
@@ -92,8 +92,8 @@ func (b BookReporsitory) Get(ID string) (models.Book, error) {
 }
 
 // Add one book to books
-func (b BookReporsitory) Add(book models.Book) (models.Book, error) {
-	newID := getNextID(books)
+func (b BookRepository) Add(book models.Book) (models.Book, error) {
+	newID := getNextBookID(books)
 
 	book.ID = strconv.Itoa(newID)
 
@@ -103,7 +103,7 @@ func (b BookReporsitory) Add(book models.Book) (models.Book, error) {
 }
 
 // Update one book in books
-func (b BookReporsitory) Update(book models.Book) (models.Book, error) {
+func (b BookRepository) Update(book models.Book) (models.Book, error) {
 	idx, err := b.findByID(book.ID)
 	if err != nil {
 		return book, fmt.Errorf("Book not found")
@@ -115,7 +115,7 @@ func (b BookReporsitory) Update(book models.Book) (models.Book, error) {
 }
 
 // Delete one book from books
-func (b BookReporsitory) Delete(ID string) error {
+func (b BookRepository) Delete(ID string) error {
 	idx, err := b.findByID(ID)
 	if err != nil {
 		return fmt.Errorf("Book not found")
