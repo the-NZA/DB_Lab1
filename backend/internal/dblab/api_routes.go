@@ -159,3 +159,77 @@ func (s *Server) handleGenreGetAll() http.HandlerFunc {
 		s.respond(w, r, http.StatusOK, genres)
 	}
 }
+
+/*
+* Authors endpoints
+ */
+// handles GET /api/author/:authorID
+func (s *Server) handleAuthorGet() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id := chi.URLParam(r, "authorID")
+		if id == "" {
+			s.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
+			return
+		}
+
+		author, err := s.services.AuthorService().Get(id)
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		s.respond(w, r, http.StatusOK, author)
+	}
+}
+
+// handles POST /api/author/:authorID
+func (s *Server) handleAuthorAdd() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		author, err := s.services.AuthorService().Add(models.Author{})
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		s.respond(w, r, http.StatusCreated, author)
+	}
+}
+
+// handles PUT /api/author/:authorID
+func (s *Server) handleAuthorUpdate() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		author, err := s.services.AuthorService().Update(models.Author{})
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		s.respond(w, r, http.StatusOK, author)
+	}
+}
+
+// handles DELETE /api/author/:authorID
+func (s *Server) handleAuthorDelete() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := s.services.AuthorService().Delete("")
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		s.respond(w, r, http.StatusOK, "Deleted")
+	}
+}
+
+// handles GET /api/author/all
+func (s *Server) handleAuthorGetAll() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		authors, err := s.services.AuthorService().GetAll()
+		if err != nil {
+			s.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		s.respond(w, r, http.StatusOK, authors)
+	}
+}
