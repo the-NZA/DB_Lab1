@@ -27,9 +27,8 @@ func NewServer(c *config.Config, services services.Servicer) (*Server, error) {
 	return &Server{
 		config:   c,
 		services: services,
-		// store:  store,
-		logger: configureLogger(c.LogDebug),
-		router: chi.NewRouter(),
+		logger:   configureLogger(c.LogDebug),
+		router:   chi.NewRouter(),
 	}, nil
 }
 
@@ -37,14 +36,14 @@ func (s *Server) configureRouter() {
 	s.router.Get("/", s.handleIndexPage())
 
 	s.router.Route("/api", func(r chi.Router) {
-		r.Get("/", func(rw http.ResponseWriter, r *http.Request) {
-			rw.Write([]byte("This is API route"))
+		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+			s.respond(w, r, http.StatusOK, "This is API route")
 		})
 
 		// Books endpoints
 		r.Route("/book", func(r chi.Router) {
-			r.Get("/", func(rw http.ResponseWriter, r *http.Request) {
-				rw.Write([]byte("This is book API route"))
+			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+				s.respond(w, r, http.StatusOK, "This is books API route")
 			})
 			// Get, Add, Update and Delete books by ID
 			r.Get("/{bookID}", s.handleBookGet())
@@ -52,6 +51,34 @@ func (s *Server) configureRouter() {
 			r.Put("/{bookID}", s.handleBookUpdate())
 			r.Delete("/{bookID}", s.handleBookDelete())
 			r.Get("/all", s.handleBookGetAll())
+		})
+
+		// Genres endpoints
+		r.Route("/genre", func(r chi.Router) {
+			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+				s.respond(w, r, http.StatusOK, "This is genres API route")
+			})
+
+			// Get, Add, Update and Delete books by ID
+			r.Get("/{genreID}", s.handleGenreGet())
+			r.Post("/", s.handleGenreAdd())
+			r.Put("/{genreID}", s.handleGenreUpdate())
+			r.Delete("/{genreID}", s.handleGenreDelete())
+			r.Get("/all", s.handleGenreGetAll())
+		})
+
+		// Authors endpoints
+		r.Route("/author", func(r chi.Router) {
+			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+				s.respond(w, r, http.StatusOK, "This is authors API route")
+			})
+
+			// Get, Add, Update and Delete books by ID
+			r.Get("/{authorID}", s.handleAuthorGet())
+			r.Post("/", s.handleAuthorAdd())
+			r.Put("/{authorID}", s.handleAuthorUpdate())
+			r.Delete("/{authorID}", s.handleAuthorDelete())
+			r.Get("/all", s.handleAuthorGetAll())
 		})
 	})
 }

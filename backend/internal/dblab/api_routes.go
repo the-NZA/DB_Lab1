@@ -34,7 +34,7 @@ func (s *Server) handleBookGet() http.HandlerFunc {
 	}
 }
 
-// handles POST /api/book/:bookID
+// handles POST /api/book
 func (s *Server) handleBookAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		book, err := s.services.BookService().Add(models.Book{})
@@ -108,7 +108,7 @@ func (s *Server) handleGenreGet() http.HandlerFunc {
 	}
 }
 
-// handles POST /api/genre/:genreID
+// handles POST /api/genre
 func (s *Server) handleGenreAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		genre, err := s.services.GenreService().Add(models.Genre{})
@@ -182,7 +182,7 @@ func (s *Server) handleAuthorGet() http.HandlerFunc {
 	}
 }
 
-// handles POST /api/author/:authorID
+// handles POST /api/author
 func (s *Server) handleAuthorAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		author, err := s.services.AuthorService().Add(models.Author{})
