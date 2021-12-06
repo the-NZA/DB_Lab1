@@ -31,6 +31,7 @@ func main() {
 	}
 
 	<-done
+
 	log.Printf("[INFO] Server is down")
 }
 

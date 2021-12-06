@@ -23,7 +23,7 @@ func (b *BookService) Add(book models.Book) (models.Book, error) {
 }
 
 func (b *BookService) Update(book models.Book) (models.Book, error) {
-	// validation here
+	// validate updated book
 	if err := book.Validate(); err != nil {
 		return book, err
 	}

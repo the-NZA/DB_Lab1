@@ -14,21 +14,26 @@ func (g *GenreService) Get(ID string) (models.Genre, error) {
 }
 
 func (g *GenreService) Add(genre models.Genre) (models.Genre, error) {
-	//validation here
+	//validate new genre
+	if err := genre.Validate(); err != nil {
+		return genre, err
+	}
+
 	return g.repository.Add(genre)
 }
 
 func (g *GenreService) Update(genre models.Genre) (models.Genre, error) {
-	//validation here
+	//validate updated genre
+	if err := genre.Validate(); err != nil {
+		return genre, err
+	}
 	return g.repository.Update(genre)
 }
 
 func (g *GenreService) Delete(ID string) error {
-	//validation here
 	return g.repository.Delete(ID)
 }
 
 func (g *GenreService) GetAll() ([]models.Genre, error) {
-	//validation here
 	return g.repository.GetAll()
 }

@@ -14,17 +14,24 @@ func (a *AuthorService) Get(ID string) (models.Author, error) {
 }
 
 func (a *AuthorService) Add(author models.Author) (models.Author, error) {
-	// validation here
+	// validate new author
+	if err := author.Validate(); err != nil {
+		return author, err
+	}
+
 	return a.repository.Add(author)
 }
 
 func (a *AuthorService) Update(author models.Author) (models.Author, error) {
-	// validation here
+	// validate updated author
+	if err := author.Validate(); err != nil {
+		return author, err
+	}
+
 	return a.repository.Update(author)
 }
 
 func (a *AuthorService) Delete(ID string) error {
-	//validation
 	return a.repository.Delete(ID)
 }
 
