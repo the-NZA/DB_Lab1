@@ -5,10 +5,10 @@ import (
 )
 
 type Genre struct {
-	ID      string
-	Title   string
-	Snippet string
-	Deleted bool
+	ID      string `json:"id"`
+	Title   string `json:"title"`
+	Snippet string `json:"snippet"`
+	Deleted bool   `json:"deleted"`
 }
 
 // Validate fields which must always have values

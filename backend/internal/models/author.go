@@ -7,13 +7,13 @@ import (
 )
 
 type Author struct {
-	ID        string
-	Firstname string
-	Lastname  string
-	Surname   string
-	BirthDate time.Time
-	Snippet   string
-	Deleted   bool
+	ID        string    `json:"id"`
+	Firstname string    `json:"firstname"`
+	Lastname  string    `json:"lastname"`
+	Surname   string    `json:"surname"`
+	BirthDate time.Time `json:"birth_date"`
+	Snippet   string    `json:"snippet"`
+	Deleted   bool      `json:"deleted"`
 }
 
 // Validate fields which must always have values
