@@ -102,10 +102,12 @@ func (a *App) Start() error {
 }
 
 func (a *App) Shutdown(ctx context.Context) error {
+	// Close DB sonnection
 	err := a.services.Close()
 	if err != nil {
 		return err
 	}
 
+	// Shutdown server
 	return a.server.Shutdown(ctx)
 }

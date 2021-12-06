@@ -19,7 +19,6 @@ import (
 var (
 	configPath string
 	done       = make(chan struct{}, 1)
-	quit       = make(chan os.Signal, 1)
 )
 
 func init() {
@@ -66,24 +65,26 @@ func run() error {
 		return err
 	}
 
-	// Register signal listener
-	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-
 	// Run shutdown goroutin
-	go shutdown(app, quit, done)
+	go shutdown(app, done)
 
+	// Start app
 	return app.Start()
 }
 
 // shutdown performs app's killing action
-func shutdown(a *dblab.App, quit <-chan os.Signal, done chan<- struct{}) {
+func shutdown(a *dblab.App, done chan<- struct{}) {
+	// Register signal listener
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 
 	log.Printf("[INFO] Server is shutting down...\n")
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*15)
 	defer cancel()
 
+	// Try to gracefull shutdown
 	if err := a.Shutdown(ctx); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("Could not gracefully shutdown the server: %v\n", err)
 	}
