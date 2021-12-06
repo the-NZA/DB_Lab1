@@ -19,8 +19,11 @@ type Author struct {
 // Validate fields which must always have values
 func (a Author) Validate() error {
 	return validation.ValidateStruct(&a,
-		validation.Field("Firstname", validation.Required, validation.Length(1, 0)),
-		validation.Field("Lastname", validation.Required, validation.Length(1, 0)),
-		validation.Field("Deleted", validation.Required, validation.In(true, false)),
+		validation.Field(&a.Firstname, validation.Required, validation.Length(1, 0)),
+		validation.Field(&a.Lastname, validation.Required, validation.Length(1, 0)),
+		validation.Field(&a.Surname, validation.When(a.Surname != "", validation.Required, validation.Length(1, 0))),
+		validation.Field(&a.Snippet, validation.When(a.Snippet != "", validation.Required, validation.Length(1, 0))),
+		validation.Field(&a.BirthDate, validation.When(!a.BirthDate.IsZero(), validation.Required)),
+		validation.Field(&a.Deleted, validation.In(true, false)),
 	)
 }

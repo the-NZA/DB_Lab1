@@ -14,7 +14,9 @@ type Genre struct {
 // Validate fields which must always have values
 func (g Genre) Validate() error {
 	return validation.ValidateStruct(&g,
-		validation.Field("Title", validation.Required, validation.Length(1, 0)),
-		validation.Field("Deleted", validation.Required, validation.In(true, false)),
+		validation.Field(&g.ID, validation.When(g.ID != "", validation.Required, validation.Length(1, 0))),
+		validation.Field(&g.Title, validation.Required, validation.Length(1, 0)),
+		validation.Field(&g.Snippet, validation.When(g.Snippet != "", validation.Required, validation.Length(1, 0))),
+		validation.Field(&g.Deleted, validation.In(true, false)),
 	)
 }
