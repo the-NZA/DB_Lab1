@@ -17,7 +17,7 @@ func configureLogger(isDebug bool) *lgr.Logger {
 }
 
 // respond method perform response with json encoding and optional data
-func (s *Server) respond(w http.ResponseWriter, r *http.Request, code int, data interface{}) {
+func (a *App) respond(w http.ResponseWriter, r *http.Request, code int, data interface{}) {
 	w.WriteHeader(code)
 	w.Header().Set("Content-Type", "application/json")
 
@@ -27,6 +27,6 @@ func (s *Server) respond(w http.ResponseWriter, r *http.Request, code int, data 
 }
 
 // error method perform respoinse with error with wrapping it
-func (s *Server) error(w http.ResponseWriter, r *http.Request, code int, err error) {
-	s.respond(w, r, code, map[string]string{"error": err.Error()})
+func (a *App) error(w http.ResponseWriter, r *http.Request, code int, err error) {
+	a.respond(w, r, code, map[string]string{"error": err.Error()})
 }

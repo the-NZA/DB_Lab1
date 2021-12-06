@@ -1,7 +1,13 @@
 package main
 
 import (
+	"context"
 	"flag"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	log "github.com/go-pkgz/lgr"
 	"github.com/the-NZA/DB_Lab1/backend/internal/config"
@@ -12,6 +18,8 @@ import (
 
 var (
 	configPath string
+	done       = make(chan struct{}, 1)
+	quit       = make(chan os.Signal, 1)
 )
 
 func init() {
@@ -19,9 +27,12 @@ func init() {
 }
 
 func main() {
-	if err := run(); err != nil {
+	if err := run(); err != http.ErrServerClosed {
 		log.Fatalf("[ERROR] %v", err)
 	}
+
+	<-done
+	log.Printf("[INFO] Server is down")
 }
 
 // run starts application
@@ -55,5 +66,27 @@ func run() error {
 		return err
 	}
 
+	// Register signal listener
+	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	// Run shutdown goroutin
+	go shutdown(server, quit, done)
+
 	return server.Start()
+}
+
+// shutdown performs app's killing action
+func shutdown(s *dblab.App, quit <-chan os.Signal, done chan<- struct{}) {
+	<-quit
+
+	log.Printf("[INFO] Server is shutting down...\n")
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	if err := s.Shutdown(ctx); err != nil && err != http.ErrServerClosed {
+		log.Fatalf("Could not gracefully shutdown the server: %v\n", err)
+	}
+
+	close(done)
 }

@@ -17,7 +17,7 @@ var (
 * Books endpoints
  */
 // handles GET /api/book/:bookID
-func (s *Server) handleBookGet() http.HandlerFunc {
+func (s *App) handleBookGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "bookID")
 		if id == "" {
@@ -36,7 +36,7 @@ func (s *Server) handleBookGet() http.HandlerFunc {
 }
 
 // handles POST /api/book
-func (s *Server) handleBookAdd() http.HandlerFunc {
+func (s *App) handleBookAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
 			book models.Book
@@ -61,7 +61,7 @@ func (s *Server) handleBookAdd() http.HandlerFunc {
 }
 
 // handles PUT /api/book
-func (s *Server) handleBookUpdate() http.HandlerFunc {
+func (s *App) handleBookUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
 			book models.Book
@@ -85,7 +85,7 @@ func (s *Server) handleBookUpdate() http.HandlerFunc {
 }
 
 // handles DELETE /api/book/:bookID
-func (s *Server) handleBookDelete() http.HandlerFunc {
+func (s *App) handleBookDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "bookID")
 		if id == "" {
@@ -104,7 +104,7 @@ func (s *Server) handleBookDelete() http.HandlerFunc {
 }
 
 // handles GET /api/book/all
-func (s *Server) handleBookGetAll() http.HandlerFunc {
+func (s *App) handleBookGetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		books, err := s.services.BookService().GetAll()
 		if err != nil {
@@ -120,73 +120,73 @@ func (s *Server) handleBookGetAll() http.HandlerFunc {
 * Genres endpoints
  */
 // handles GET /api/genre/:genreID
-func (s *Server) handleGenreGet() http.HandlerFunc {
+func (a *App) handleGenreGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "genreID")
 		if id == "" {
-			s.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
+			a.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
 			return
 		}
 
-		genre, err := s.services.GenreService().Get(id)
+		genre, err := a.services.GenreService().Get(id)
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, genre)
+		a.respond(w, r, http.StatusOK, genre)
 	}
 }
 
 // handles POST /api/genre
-func (s *Server) handleGenreAdd() http.HandlerFunc {
+func (a *App) handleGenreAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		genre, err := s.services.GenreService().Add(models.Genre{})
+		genre, err := a.services.GenreService().Add(models.Genre{})
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusCreated, genre)
+		a.respond(w, r, http.StatusCreated, genre)
 	}
 }
 
 // handles PUT /api/genre
-func (s *Server) handleGenreUpdate() http.HandlerFunc {
+func (a *App) handleGenreUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		genre, err := s.services.GenreService().Update(models.Genre{})
+		genre, err := a.services.GenreService().Update(models.Genre{})
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, genre)
+		a.respond(w, r, http.StatusOK, genre)
 	}
 }
 
 // handles DELETE /api/genre/:genreID
-func (s *Server) handleGenreDelete() http.HandlerFunc {
+func (a *App) handleGenreDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := s.services.GenreService().Delete("")
+		err := a.services.GenreService().Delete("")
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, "Deleted")
+		a.respond(w, r, http.StatusOK, "Deleted")
 	}
 }
 
 // handles GET /api/genre/all
-func (s *Server) handleGenreGetAll() http.HandlerFunc {
+func (a *App) handleGenreGetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		genres, err := s.services.GenreService().GetAll()
+		genres, err := a.services.GenreService().GetAll()
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, genres)
+		a.respond(w, r, http.StatusOK, genres)
 	}
 }
 
@@ -194,72 +194,72 @@ func (s *Server) handleGenreGetAll() http.HandlerFunc {
 * Authors endpoints
  */
 // handles GET /api/author/:authorID
-func (s *Server) handleAuthorGet() http.HandlerFunc {
+func (a *App) handleAuthorGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "authorID")
 		if id == "" {
-			s.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
+			a.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
 			return
 		}
 
-		author, err := s.services.AuthorService().Get(id)
+		author, err := a.services.AuthorService().Get(id)
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, author)
+		a.respond(w, r, http.StatusOK, author)
 	}
 }
 
 // handles POST /api/author
-func (s *Server) handleAuthorAdd() http.HandlerFunc {
+func (a *App) handleAuthorAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		author, err := s.services.AuthorService().Add(models.Author{})
+		author, err := a.services.AuthorService().Add(models.Author{})
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusCreated, author)
+		a.respond(w, r, http.StatusCreated, author)
 	}
 }
 
 // handles PUT /api/author
-func (s *Server) handleAuthorUpdate() http.HandlerFunc {
+func (a *App) handleAuthorUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		author, err := s.services.AuthorService().Update(models.Author{})
+		author, err := a.services.AuthorService().Update(models.Author{})
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, author)
+		a.respond(w, r, http.StatusOK, author)
 	}
 }
 
 // handles DELETE /api/author/:authorID
-func (s *Server) handleAuthorDelete() http.HandlerFunc {
+func (a *App) handleAuthorDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := s.services.AuthorService().Delete("")
+		err := a.services.AuthorService().Delete("")
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, "Deleted")
+		a.respond(w, r, http.StatusOK, "Deleted")
 	}
 }
 
 // handles GET /api/author/all
-func (s *Server) handleAuthorGetAll() http.HandlerFunc {
+func (a *App) handleAuthorGetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		authors, err := s.services.AuthorService().GetAll()
+		authors, err := a.services.AuthorService().GetAll()
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, authors)
+		a.respond(w, r, http.StatusOK, authors)
 	}
 }
