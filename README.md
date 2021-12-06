@@ -39,3 +39,7 @@
 4. Языки книг
 	- id
 	- title
+5. Книги и авторы
+	- id
+	- book_id
+	- author_id

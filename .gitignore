@@ -1,5 +1,7 @@
 .DS_Store
 /dblab
 
+sqlite_data/
+
 /etc/*
 !/etc/dev.config.json
