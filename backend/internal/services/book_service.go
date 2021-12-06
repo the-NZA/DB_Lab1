@@ -24,11 +24,14 @@ func (b *BookService) Add(book models.Book) (models.Book, error) {
 
 func (b *BookService) Update(book models.Book) (models.Book, error) {
 	// validation here
+	if err := book.Validate(); err != nil {
+		return book, err
+	}
+
 	return b.repository.Update(book)
 }
 
 func (b *BookService) Delete(ID string) error {
-	// validation here
 	return b.repository.Delete(ID)
 }
 

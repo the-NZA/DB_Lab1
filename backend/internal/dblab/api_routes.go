@@ -25,6 +25,7 @@ func (s *App) handleBookGet() http.HandlerFunc {
 			return
 		}
 
+		// Try get book
 		book, err := s.services.BookService().Get(id)
 		if err != nil {
 			s.error(w, r, http.StatusInternalServerError, err)
@@ -49,6 +50,7 @@ func (s *App) handleBookAdd() http.HandlerFunc {
 			return
 		}
 
+		// Try save new book
 		book, err = s.services.BookService().Add(book)
 		if err != nil {
 			s.logger.Logf("[INFO] During book saving: %v\n", err)
@@ -73,6 +75,8 @@ func (s *App) handleBookUpdate() http.HandlerFunc {
 			s.error(w, r, http.StatusBadRequest, err)
 			return
 		}
+
+		// Try update book
 		book, err = s.services.BookService().Update(book)
 		if err != nil {
 			s.logger.Logf("[INFO] During book updating: %v\n", err)
@@ -93,6 +97,7 @@ func (s *App) handleBookDelete() http.HandlerFunc {
 			return
 		}
 
+		// Try delete book by ID
 		err := s.services.BookService().Delete(id)
 		if err != nil {
 			s.error(w, r, http.StatusInternalServerError, err)
@@ -106,6 +111,7 @@ func (s *App) handleBookDelete() http.HandlerFunc {
 // handles GET /api/book/all
 func (s *App) handleBookGetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		// Try get all books
 		books, err := s.services.BookService().GetAll()
 		if err != nil {
 			s.error(w, r, http.StatusInternalServerError, err)
