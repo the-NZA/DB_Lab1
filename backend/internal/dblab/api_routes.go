@@ -60,11 +60,22 @@ func (s *Server) handleBookAdd() http.HandlerFunc {
 	}
 }
 
-// handles PUT /api/book/:bookID
+// handles PUT /api/book
 func (s *Server) handleBookUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		book, err := s.services.BookService().Update(models.Book{})
+		var (
+			book models.Book
+			err  error
+		)
+
+		if err = json.NewDecoder(r.Body).Decode(&book); err != nil {
+			s.logger.Logf("[INFO] During body parse: %v\n", err)
+			s.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+		book, err = s.services.BookService().Update(book)
 		if err != nil {
+			s.logger.Logf("[INFO] During book updating: %v\n", err)
 			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -76,7 +87,13 @@ func (s *Server) handleBookUpdate() http.HandlerFunc {
 // handles DELETE /api/book/:bookID
 func (s *Server) handleBookDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := s.services.BookService().Delete("")
+		id := chi.URLParam(r, "bookID")
+		if id == "" {
+			s.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
+			return
+		}
+
+		err := s.services.BookService().Delete(id)
 		if err != nil {
 			s.error(w, r, http.StatusInternalServerError, err)
 			return
@@ -134,7 +151,7 @@ func (s *Server) handleGenreAdd() http.HandlerFunc {
 	}
 }
 
-// handles PUT /api/genre/:genreID
+// handles PUT /api/genre
 func (s *Server) handleGenreUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		genre, err := s.services.GenreService().Update(models.Genre{})
@@ -208,7 +225,7 @@ func (s *Server) handleAuthorAdd() http.HandlerFunc {
 	}
 }
 
-// handles PUT /api/author/:authorID
+// handles PUT /api/author
 func (s *Server) handleAuthorUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		author, err := s.services.AuthorService().Update(models.Author{})

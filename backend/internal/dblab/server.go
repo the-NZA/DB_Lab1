@@ -48,7 +48,7 @@ func (s *Server) configureRouter() {
 			// Get, Add, Update and Delete books by ID
 			r.Get("/{bookID}", s.handleBookGet())
 			r.Post("/", s.handleBookAdd())
-			r.Put("/{bookID}", s.handleBookUpdate())
+			r.Put("/", s.handleBookUpdate())
 			r.Delete("/{bookID}", s.handleBookDelete())
 			r.Get("/all", s.handleBookGetAll())
 		})
@@ -62,7 +62,7 @@ func (s *Server) configureRouter() {
 			// Get, Add, Update and Delete books by ID
 			r.Get("/{genreID}", s.handleGenreGet())
 			r.Post("/", s.handleGenreAdd())
-			r.Put("/{genreID}", s.handleGenreUpdate())
+			r.Put("/", s.handleGenreUpdate())
 			r.Delete("/{genreID}", s.handleGenreDelete())
 			r.Get("/all", s.handleGenreGetAll())
 		})
@@ -76,7 +76,7 @@ func (s *Server) configureRouter() {
 			// Get, Add, Update and Delete books by ID
 			r.Get("/{authorID}", s.handleAuthorGet())
 			r.Post("/", s.handleAuthorAdd())
-			r.Put("/{authorID}", s.handleAuthorUpdate())
+			r.Put("/", s.handleAuthorUpdate())
 			r.Delete("/{authorID}", s.handleAuthorDelete())
 			r.Get("/all", s.handleAuthorGetAll())
 		})
