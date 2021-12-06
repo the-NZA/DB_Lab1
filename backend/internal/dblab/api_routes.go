@@ -1,6 +1,7 @@
 package dblab
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
 
@@ -37,8 +38,20 @@ func (s *Server) handleBookGet() http.HandlerFunc {
 // handles POST /api/book
 func (s *Server) handleBookAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		book, err := s.services.BookService().Add(models.Book{})
+		var (
+			book models.Book
+			err  error
+		)
+
+		if err = json.NewDecoder(r.Body).Decode(&book); err != nil {
+			s.logger.Logf("[INFO] During body parse: %v\n", err)
+			s.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		book, err = s.services.BookService().Add(book)
 		if err != nil {
+			s.logger.Logf("[INFO] During book saving: %v\n", err)
 			s.error(w, r, http.StatusInternalServerError, err)
 			return
 		}

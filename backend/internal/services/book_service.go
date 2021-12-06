@@ -14,7 +14,11 @@ func (b *BookService) Get(ID string) (models.Book, error) {
 }
 
 func (b *BookService) Add(book models.Book) (models.Book, error) {
-	// validation here
+	// validate new book
+	if err := book.Validate(); err != nil {
+		return book, err
+	}
+
 	return b.repository.Add(book)
 }
 
