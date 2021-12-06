@@ -17,27 +17,28 @@ var (
 * Books endpoints
  */
 // handles GET /api/book/:bookID
-func (s *App) handleBookGet() http.HandlerFunc {
+func (a *App) handleBookGet() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "bookID")
 		if id == "" {
-			s.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
+			a.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
 			return
 		}
 
 		// Try get book
-		book, err := s.services.BookService().Get(id)
+		book, err := a.services.BookService().Get(id)
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.logger.Logf("[INFO] During book getting: %v\n", err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, book)
+		a.respond(w, r, http.StatusOK, book)
 	}
 }
 
 // handles POST /api/book
-func (s *App) handleBookAdd() http.HandlerFunc {
+func (a *App) handleBookAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
 			book models.Book
@@ -45,25 +46,25 @@ func (s *App) handleBookAdd() http.HandlerFunc {
 		)
 
 		if err = json.NewDecoder(r.Body).Decode(&book); err != nil {
-			s.logger.Logf("[INFO] During body parse: %v\n", err)
-			s.error(w, r, http.StatusBadRequest, err)
+			a.logger.Logf("[INFO] During body parse: %v\n", err)
+			a.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
 		// Try save new book
-		book, err = s.services.BookService().Add(book)
+		book, err = a.services.BookService().Add(book)
 		if err != nil {
-			s.logger.Logf("[INFO] During book saving: %v\n", err)
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.logger.Logf("[INFO] During book saving: %v\n", err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusCreated, book)
+		a.respond(w, r, http.StatusCreated, book)
 	}
 }
 
 // handles PUT /api/book
-func (s *App) handleBookUpdate() http.HandlerFunc {
+func (a *App) handleBookUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
 			book models.Book
@@ -71,54 +72,56 @@ func (s *App) handleBookUpdate() http.HandlerFunc {
 		)
 
 		if err = json.NewDecoder(r.Body).Decode(&book); err != nil {
-			s.logger.Logf("[INFO] During body parse: %v\n", err)
-			s.error(w, r, http.StatusBadRequest, err)
+			a.logger.Logf("[INFO] During body parse: %v\n", err)
+			a.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
 		// Try update book
-		book, err = s.services.BookService().Update(book)
+		book, err = a.services.BookService().Update(book)
 		if err != nil {
-			s.logger.Logf("[INFO] During book updating: %v\n", err)
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.logger.Logf("[INFO] During book updating: %v\n", err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, book)
+		a.respond(w, r, http.StatusOK, book)
 	}
 }
 
 // handles DELETE /api/book/:bookID
-func (s *App) handleBookDelete() http.HandlerFunc {
+func (a *App) handleBookDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		id := chi.URLParam(r, "bookID")
 		if id == "" {
-			s.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
+			a.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
 			return
 		}
 
 		// Try delete book by ID
-		err := s.services.BookService().Delete(id)
+		err := a.services.BookService().Delete(id)
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.logger.Logf("[INFO] During book deleting: %v\n", err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, "Deleted")
+		a.respond(w, r, http.StatusOK, "Deleted")
 	}
 }
 
 // handles GET /api/book/all
-func (s *App) handleBookGetAll() http.HandlerFunc {
+func (a *App) handleBookGetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// Try get all books
-		books, err := s.services.BookService().GetAll()
+		books, err := a.services.BookService().GetAll()
 		if err != nil {
-			s.error(w, r, http.StatusInternalServerError, err)
+			a.logger.Logf("[INFO] During all book getting: %v\n", err)
+			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		s.respond(w, r, http.StatusOK, books)
+		a.respond(w, r, http.StatusOK, books)
 	}
 }
 
@@ -134,8 +137,10 @@ func (a *App) handleGenreGet() http.HandlerFunc {
 			return
 		}
 
+		// Try get genre
 		genre, err := a.services.GenreService().Get(id)
 		if err != nil {
+			a.logger.Logf("[INFO] During genre getting: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -147,8 +152,21 @@ func (a *App) handleGenreGet() http.HandlerFunc {
 // handles POST /api/genre
 func (a *App) handleGenreAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		genre, err := a.services.GenreService().Add(models.Genre{})
+		var (
+			genre models.Genre
+			err   error
+		)
+
+		if err = json.NewDecoder(r.Body).Decode(&genre); err != nil {
+			a.logger.Logf("[INFO] During body parse: %v\n", err)
+			a.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		// Try save new genre
+		genre, err = a.services.GenreService().Add(genre)
 		if err != nil {
+			a.logger.Logf("[INFO] During genre saving: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -160,8 +178,21 @@ func (a *App) handleGenreAdd() http.HandlerFunc {
 // handles PUT /api/genre
 func (a *App) handleGenreUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		genre, err := a.services.GenreService().Update(models.Genre{})
+		var (
+			genre models.Genre
+			err   error
+		)
+
+		if err = json.NewDecoder(r.Body).Decode(&genre); err != nil {
+			a.logger.Logf("[INFO] During body parse: %v\n", err)
+			a.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		// Try update genre
+		genre, err = a.services.GenreService().Update(models.Genre{})
 		if err != nil {
+			a.logger.Logf("[INFO] During genre updating: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -173,8 +204,16 @@ func (a *App) handleGenreUpdate() http.HandlerFunc {
 // handles DELETE /api/genre/:genreID
 func (a *App) handleGenreDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		err := a.services.GenreService().Delete("")
+		id := chi.URLParam(r, "genreID")
+		if id == "" {
+			a.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
+			return
+		}
+
+		// Try delete genre by ID
+		err := a.services.GenreService().Delete(id)
 		if err != nil {
+			a.logger.Logf("[INFO] During genre deleting: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -186,8 +225,10 @@ func (a *App) handleGenreDelete() http.HandlerFunc {
 // handles GET /api/genre/all
 func (a *App) handleGenreGetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		// Try get all genres
 		genres, err := a.services.GenreService().GetAll()
 		if err != nil {
+			a.logger.Logf("[INFO] During all genre getting: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -208,8 +249,10 @@ func (a *App) handleAuthorGet() http.HandlerFunc {
 			return
 		}
 
+		// Try get author
 		author, err := a.services.AuthorService().Get(id)
 		if err != nil {
+			a.logger.Logf("[INFO] During author getting: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -221,8 +264,21 @@ func (a *App) handleAuthorGet() http.HandlerFunc {
 // handles POST /api/author
 func (a *App) handleAuthorAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		author, err := a.services.AuthorService().Add(models.Author{})
+		var (
+			author models.Author
+			err    error
+		)
+
+		if err = json.NewDecoder(r.Body).Decode(&author); err != nil {
+			a.logger.Logf("[INFO] During body parse: %v\n", err)
+			a.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		// Try save new author
+		author, err = a.services.AuthorService().Add(author)
 		if err != nil {
+			a.logger.Logf("[INFO] During author saving: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -234,8 +290,21 @@ func (a *App) handleAuthorAdd() http.HandlerFunc {
 // handles PUT /api/author
 func (a *App) handleAuthorUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		author, err := a.services.AuthorService().Update(models.Author{})
+		var (
+			author models.Author
+			err    error
+		)
+
+		if err = json.NewDecoder(r.Body).Decode(&author); err != nil {
+			a.logger.Logf("[INFO] During body parse: %v\n", err)
+			a.error(w, r, http.StatusBadRequest, err)
+			return
+		}
+
+		// Try update author
+		author, err = a.services.AuthorService().Update(author)
 		if err != nil {
+			a.logger.Logf("[INFO] During author updating: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -247,8 +316,16 @@ func (a *App) handleAuthorUpdate() http.HandlerFunc {
 // handles DELETE /api/author/:authorID
 func (a *App) handleAuthorDelete() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		id := chi.URLParam(r, "authorID")
+		if id == "" {
+			a.error(w, r, http.StatusInternalServerError, ErrNoIDSpecified)
+			return
+		}
+
+		// Try delete author by id
 		err := a.services.AuthorService().Delete("")
 		if err != nil {
+			a.logger.Logf("[INFO] During author deleting: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
@@ -260,8 +337,10 @@ func (a *App) handleAuthorDelete() http.HandlerFunc {
 // handles GET /api/author/all
 func (a *App) handleAuthorGetAll() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		// Try get all authors
 		authors, err := a.services.AuthorService().GetAll()
 		if err != nil {
+			a.logger.Logf("[INFO] During all author getting: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
