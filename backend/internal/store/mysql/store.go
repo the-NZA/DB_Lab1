@@ -25,6 +25,14 @@ func (s *MySQLStore) Genres() storer.GenreRepository {
 	return nil
 }
 
+func (s *MySQLStore) Close() error {
+	if s == nil {
+		return storer.ErrStoreNilOrEmpty
+	}
+
+	return s.db.Close()
+}
+
 func NewStore(c *config.Config) (storer.Storer, error) {
 	if c == nil {
 		return nil, config.ErrEmptyConfig

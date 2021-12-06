@@ -28,6 +28,14 @@ func (s *SQLiteStore) Genres() storer.GenreRepository {
 	return nil
 }
 
+func (s *SQLiteStore) Close() error {
+	if s == nil {
+		return storer.ErrStoreNilOrEmpty
+	}
+
+	return s.db.Close()
+}
+
 func NewStore(c *config.Config) (storer.Storer, error) {
 	if c == nil {
 		return nil, config.ErrEmptyConfig

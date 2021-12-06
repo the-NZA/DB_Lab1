@@ -2,7 +2,6 @@ package services
 
 import (
 	"github.com/the-NZA/DB_Lab1/backend/internal/config"
-	"github.com/the-NZA/DB_Lab1/backend/internal/store"
 	"github.com/the-NZA/DB_Lab1/backend/internal/store/storer"
 )
 
@@ -50,6 +49,10 @@ func (s *Services) GenreService() GenreServicer {
 	return s.genres
 }
 
+func (s *Services) Close() error {
+	return s.store.Close()
+}
+
 // NewServices create initiale new services structure
 func NewServices(c *config.Config, s storer.Storer) (Servicer, error) {
 	if c == nil {
@@ -57,7 +60,7 @@ func NewServices(c *config.Config, s storer.Storer) (Servicer, error) {
 	}
 
 	if s == nil {
-		return nil, store.ErrStoreNilOrEmpty
+		return nil, storer.ErrStoreNilOrEmpty
 	}
 
 	return &Services{

@@ -92,3 +92,7 @@ func (s *Server) Start() error {
 
 	return http.ListenAndServe(bindAddr, s.router)
 }
+
+func (s *Server) Shutdown() error {
+	return s.services.Close()
+}

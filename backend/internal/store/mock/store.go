@@ -41,6 +41,10 @@ func (s *MockStore) Genres() storer.GenreRepository {
 	return s.genres
 }
 
+func (s *MockStore) Close() error {
+	return nil
+}
+
 func NewStore(c *config.Config) (storer.Storer, error) {
 	if c == nil {
 		return nil, config.ErrEmptyConfig

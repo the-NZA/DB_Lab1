@@ -6,6 +6,7 @@ type Servicer interface {
 	BookService() BookServicer
 	GenreService() GenreServicer
 	AuthorService() AuthorServicer
+	Close() error
 }
 
 type BookServicer interface {
