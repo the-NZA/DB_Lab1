@@ -13,16 +13,15 @@ import (
 
 // App represents application's main structure
 type App struct {
-	config *config.Config
-	logger *lgr.Logger
-	// store    store.Storer
+	config   *config.Config
+	logger   *lgr.Logger
 	services services.Servicer
 	server   *http.Server
 	router   *chi.Mux
 }
 
 // Returns new configured server
-func NewServer(c *config.Config, services services.Servicer) (*App, error) {
+func NewApp(c *config.Config, services services.Servicer) (*App, error) {
 	if c == nil {
 		return nil, config.ErrEmptyConfig
 	}

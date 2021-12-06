@@ -60,8 +60,8 @@ func run() error {
 		return err
 	}
 
-	// Create new server
-	server, err := dblab.NewServer(config, services)
+	// Create new app
+	app, err := dblab.NewApp(config, services)
 	if err != nil {
 		return err
 	}
@@ -70,13 +70,13 @@ func run() error {
 	signal.Notify(quit, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	// Run shutdown goroutin
-	go shutdown(server, quit, done)
+	go shutdown(app, quit, done)
 
-	return server.Start()
+	return app.Start()
 }
 
 // shutdown performs app's killing action
-func shutdown(s *dblab.App, quit <-chan os.Signal, done chan<- struct{}) {
+func shutdown(a *dblab.App, quit <-chan os.Signal, done chan<- struct{}) {
 	<-quit
 
 	log.Printf("[INFO] Server is shutting down...\n")
@@ -84,7 +84,7 @@ func shutdown(s *dblab.App, quit <-chan os.Signal, done chan<- struct{}) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 
-	if err := s.Shutdown(ctx); err != nil && err != http.ErrServerClosed {
+	if err := a.Shutdown(ctx); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("Could not gracefully shutdown the server: %v\n", err)
 	}
 
