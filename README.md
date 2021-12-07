@@ -25,7 +25,7 @@
 	- snippet
 	- genre_id
 	- pages_cnt
-	- year
+	- pub_date
 	- book_lang_id
 	- deleted
 3. Авторы
