@@ -43,3 +43,4 @@
 	- id
 	- book_id
 	- author_id
+	- deleted

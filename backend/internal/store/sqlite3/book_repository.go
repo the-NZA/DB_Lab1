@@ -1,9 +1,25 @@
 package sqlite3
 
 import (
+	"strconv"
+
 	"github.com/jmoiron/sqlx"
 	"github.com/the-NZA/DB_Lab1/backend/internal/models"
 	"github.com/the-NZA/DB_Lab1/backend/internal/store/storetypes"
+)
+
+var (
+	insertBook = `INSERT INTO books (title, snippet, pages_cnt, pub_date, genre_id, book_lang_id) 
+			VALUES (?, ?, ?, ?, ?, ?)`
+	updateBook = `UPDATE books 
+			SET 	title = ?, 
+				snippet = ?, 
+				pages_cnt = ?, 
+				pub_date = ?, 
+				deleted = ?, 
+				genre_id = ?, 
+				book_lang_id = ? 
+			WHERE id = ?`
 )
 
 type BookRepository struct {
@@ -24,12 +40,49 @@ func (b BookRepository) Get(ID string) (models.Book, error) {
 
 // Add one book to books
 func (b BookRepository) Add(book models.Book) (models.Book, error) {
-	return models.Book{}, nil
+	// Try save new book
+	res, err := b.db.Exec(insertBook,
+		book.Title,
+		book.Snippet,
+		book.PagesCnt,
+		book.PublishDate,
+		book.GenreID,
+		book.BookLangID,
+	)
+	if err != nil {
+		return book, err
+	}
+
+	// Try get ID for inserted book
+	id, err := res.LastInsertId()
+	if err != nil {
+		return book, err
+	}
+
+	// Save string representation of ID
+	book.ID = strconv.FormatInt(id, 10)
+
+	return book, nil
 }
 
 // Update one book in books
 func (b BookRepository) Update(book models.Book) (models.Book, error) {
-	return models.Book{}, nil
+	// Try update book
+	_, err := b.db.Exec(updateBook,
+		book.Title,
+		book.Snippet,
+		book.PagesCnt,
+		book.PublishDate,
+		book.Deleted,
+		book.GenreID,
+		book.BookLangID,
+		book.ID,
+	)
+	if err != nil {
+		return book, err
+	}
+
+	return book, nil
 }
 
 // Delete one book from books
