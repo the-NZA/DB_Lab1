@@ -3,9 +3,9 @@ package sqlite3
 // "db_url": "file:sqlite_data/lab.db?foreign_keys=on",
 
 import (
-	"database/sql"
 	"fmt"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 
 	"github.com/the-NZA/DB_Lab1/backend/internal/config"
@@ -13,11 +13,20 @@ import (
 )
 
 type SQLiteStore struct {
-	db *sql.DB
+	db      *sqlx.DB
+	books   storer.BookReporsitory
+	authors storer.AuthorRepository
+	genres  storer.GenreRepository
 }
 
 func (s *SQLiteStore) Books() storer.BookReporsitory {
-	return nil
+	if s.books != nil {
+		return s.books
+	}
+
+	s.books = &BookRepository{db: s.db}
+
+	return s.books
 }
 
 func (s *SQLiteStore) Authors() storer.AuthorRepository {
@@ -43,7 +52,7 @@ func NewStore(c *config.Config) (storer.Storer, error) {
 
 	dburl := fmt.Sprintf("file:%s?foreign_keys=on", c.DBURL)
 
-	db, err := sql.Open(c.DBType, dburl)
+	db, err := sqlx.Connect(c.DBType, dburl)
 	if err != nil {
 		return nil, err
 	}

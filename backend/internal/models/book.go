@@ -7,14 +7,14 @@ import (
 )
 
 type Book struct {
-	ID         string    `json:"id"`
-	Title      string    `json:"title"`
-	Snippet    string    `json:"snippet"`
-	GenreID    string    `json:"genre_id"`
-	BookLangID string    `json:"book_lang_id"`
-	PagesCnt   uint      `json:"pages_cnt"`
-	Year       time.Time `json:"year"`
-	Deleted    bool      `json:"deleted"`
+	ID         string    `json:"id" db:"id"`
+	Title      string    `json:"title" db:"title"`
+	Snippet    string    `json:"snippet" db:"snippet"`
+	GenreID    string    `json:"genre_id" db:"genre_id"`
+	BookLangID string    `json:"book_lang_id" db:"book_lang_id"`
+	PagesCnt   uint      `json:"pages_cnt" db:"pages_cnt"`
+	Year       time.Time `json:"year" db:"year"`
+	Deleted    bool      `json:"deleted" db:"deleted"`
 }
 
 // Validate fields which must always have values

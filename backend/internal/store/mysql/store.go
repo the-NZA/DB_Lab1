@@ -1,16 +1,15 @@
 package mysql
 
 import (
-	"database/sql"
-
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 
 	"github.com/the-NZA/DB_Lab1/backend/internal/config"
 	"github.com/the-NZA/DB_Lab1/backend/internal/store/storer"
 )
 
 type MySQLStore struct {
-	db *sql.DB
+	db *sqlx.DB
 }
 
 func (s *MySQLStore) Books() storer.BookReporsitory {
@@ -38,7 +37,7 @@ func NewStore(c *config.Config) (storer.Storer, error) {
 		return nil, config.ErrEmptyConfig
 	}
 
-	db, err := sql.Open(c.DBType, c.DBURL)
+	db, err := sqlx.Connect(c.DBType, c.DBURL)
 	if err != nil {
 		return nil, err
 	}
