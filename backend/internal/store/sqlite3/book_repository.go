@@ -34,7 +34,9 @@ func (b BookRepository) Update(book models.Book) (models.Book, error) {
 
 // Delete one book from books
 func (b BookRepository) Delete(ID string) error {
-	return nil
+	_, err := b.db.Exec("UPDATE books SET deleted = true WHERE id = ?", ID)
+
+	return err
 }
 
 // Gell all books from books
