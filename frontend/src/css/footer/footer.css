@@ -1,0 +1,27 @@
+.footer {
+	padding: var(--offset);
+	color: rgb(var(--leanen));
+	font-weight: bold;
+
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.footer a {
+	color: rgb(var(--leanen));
+	text-decoration: none;
+	transition: 150ms all ease-in-out;
+}
+
+.footer a:hover {
+	color: rgb(var(--redsand));
+}
+
+.footer__credits {}
+
+.footer__credits p {
+	margin: 0;
+}
+
+.footer__link {}
