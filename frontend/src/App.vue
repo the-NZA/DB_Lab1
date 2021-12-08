@@ -1,6 +1,42 @@
 <script setup lang="ts">
+import { ref, reactive, onMounted } from "vue"
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import HelloWorld from './components/HelloWorld.vue'
+// import HelloWorld from './components/HelloWorld.vue'
+
+import FirstTab from "./components/FirstTab.vue"
+import SecondTab from "./components/SecondTab.vue"
+
+const tabview = ref()
+const tabs = reactive([0, 1, 2])
+const tabsHeaders = ref<HTMLButtonElement[]>([])
+const tabPannels = ref<HTMLDivElement[]>([])
+let selectedTab = ref(0)
+
+onMounted(() => {
+	console.log(tabview.value);
+})
+
+const selectTab = (e: MouseEvent) => {
+	selectedTab.value = parseInt((e.target as HTMLButtonElement).dataset["tabindex"] || "")
+
+	tabsHeaders.value.forEach((p, i) => {
+		if (i === selectedTab.value) {
+			p.classList.add("activetab")
+		} else {
+			p.classList.remove("activetab")
+		}
+	})
+
+	tabPannels.value.forEach((p, i) => {
+		if (i === selectedTab.value) {
+			p.classList.add("activepanel")
+		} else {
+			p.classList.remove("activepanel")
+		}
+	})
+}
+
+
 </script>
 
 <template>
@@ -11,8 +47,32 @@ import HelloWorld from './components/HelloWorld.vue'
 		</div>
 	</header>
 	<main class="app-main">
-		<img alt="Vue logo" src="./assets/logo.png" />
-		<hello-world msg="Hello Vue 3 + TypeScript + Vite" />
+		<div class="tabview" ref="tabview">
+			<div class="tabview__header">
+				<button
+					class="tabview_btn"
+					@click="selectTab"
+					v-for="t in tabs"
+					:data-tabindex="t"
+					:ref="(el: any) => {
+						if (el) {
+							tabsHeaders[t] = el;
+						}
+					}"
+				>Tab{{ t }}</button>
+			</div>
+
+			<div class="tabview__pannels">
+				<div
+					class="tabview__panel"
+					v-for="t in tabs"
+					v-show="t == selectedTab ? true : false"
+					:ref="(el: any) => { if (el) tabPannels[t] = el }"
+				>
+					<first-tab />
+				</div>
+			</div>
+		</div>
 	</main>
 	<footer class="app-footer">
 		<div class="footer wrapper">

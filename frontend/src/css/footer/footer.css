@@ -11,7 +11,7 @@
 .footer a {
 	color: rgb(var(--leanen));
 	text-decoration: none;
-	transition: 150ms all ease-in-out;
+	transition: var(--main-transition);
 }
 
 .footer a:hover {
