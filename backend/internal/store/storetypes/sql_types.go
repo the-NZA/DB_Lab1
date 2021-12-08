@@ -77,3 +77,26 @@ func (au *SQLAuthor) ToAuthorModel() models.Author {
 
 	return author
 }
+
+// SQLGenre type add NULL values support
+type SQLGenre struct {
+	ID      string         `db:"id"`
+	Title   string         `db:"title"`
+	Snippet sql.NullString `db:"snippet"`
+	Deleted bool           `db:"deleted"`
+}
+
+// Convert SQLGenre to application's Genre model
+func (g *SQLGenre) ToGenreModel() models.Genre {
+	genre := models.Genre{
+		ID:      g.ID,
+		Title:   g.Title,
+		Deleted: g.Deleted,
+	}
+
+	if g.Snippet.Valid {
+		genre.Snippet = g.Snippet.String
+	}
+
+	return genre
+}

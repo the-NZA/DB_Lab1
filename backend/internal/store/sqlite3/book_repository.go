@@ -28,14 +28,14 @@ type BookRepository struct {
 
 // Get one book from books
 func (b *BookRepository) Get(ID string) (models.Book, error) {
-	localBook := storetypes.SQLBook{}
+	book := storetypes.SQLBook{}
 
-	err := b.db.Get(&localBook, "SELECT * FROM books WHERE id = ? AND deleted != true", ID)
+	err := b.db.Get(&book, "SELECT * FROM books WHERE id = ? AND deleted != true", ID)
 	if err != nil {
 		return models.Book{}, err
 	}
 
-	return localBook.ToBookModel(), nil
+	return book.ToBookModel(), nil
 }
 
 // Add one book to books
@@ -102,7 +102,7 @@ func (b *BookRepository) GetAll() ([]models.Book, error) {
 		return nil, err
 	}
 
-	// Convert slice of SQLBooks to applications books
+	// Convert slice of SQLBooks to applications Book
 	var books = make([]models.Book, 0, len(sBooks))
 	for i := range sBooks {
 		books = append(books, sBooks[i].ToBookModel())
