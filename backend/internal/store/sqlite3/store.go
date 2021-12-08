@@ -20,11 +20,9 @@ type SQLiteStore struct {
 }
 
 func (s *SQLiteStore) Books() storer.BookReporsitory {
-	if s.books != nil {
-		return s.books
+	if s.books == nil {
+		s.books = &BookRepository{db: s.db}
 	}
-
-	s.books = &BookRepository{db: s.db}
 
 	return s.books
 }
@@ -34,7 +32,11 @@ func (s *SQLiteStore) Authors() storer.AuthorRepository {
 }
 
 func (s *SQLiteStore) Genres() storer.GenreRepository {
-	return nil
+	if s.genres == nil {
+		s.genres = &GenreRepository{db: s.db}
+	}
+
+	return s.genres
 }
 
 func (s *SQLiteStore) Close() error {

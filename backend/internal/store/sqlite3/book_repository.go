@@ -27,7 +27,7 @@ type BookRepository struct {
 }
 
 // Get one book from books
-func (b BookRepository) Get(ID string) (models.Book, error) {
+func (b *BookRepository) Get(ID string) (models.Book, error) {
 	localBook := storetypes.SQLBook{}
 
 	err := b.db.Get(&localBook, "SELECT * FROM books WHERE id = ? AND deleted != true", ID)
@@ -39,7 +39,7 @@ func (b BookRepository) Get(ID string) (models.Book, error) {
 }
 
 // Add one book to books
-func (b BookRepository) Add(book models.Book) (models.Book, error) {
+func (b *BookRepository) Add(book models.Book) (models.Book, error) {
 	// Try save new book
 	res, err := b.db.Exec(insertBook,
 		book.Title,
@@ -66,7 +66,7 @@ func (b BookRepository) Add(book models.Book) (models.Book, error) {
 }
 
 // Update one book in books
-func (b BookRepository) Update(book models.Book) (models.Book, error) {
+func (b *BookRepository) Update(book models.Book) (models.Book, error) {
 	// Try update book
 	_, err := b.db.Exec(updateBook,
 		book.Title,
@@ -86,14 +86,14 @@ func (b BookRepository) Update(book models.Book) (models.Book, error) {
 }
 
 // Delete one book from books
-func (b BookRepository) Delete(ID string) error {
+func (b *BookRepository) Delete(ID string) error {
 	_, err := b.db.Exec("UPDATE books SET deleted = true WHERE id = ?", ID)
 
 	return err
 }
 
 // Gell all books from books
-func (b BookRepository) GetAll() ([]models.Book, error) {
+func (b *BookRepository) GetAll() ([]models.Book, error) {
 	var sBooks []storetypes.SQLBook
 
 	// Get all books from database
