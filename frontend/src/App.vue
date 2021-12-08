@@ -3,39 +3,9 @@ import { ref, reactive, onMounted } from "vue"
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 // import HelloWorld from './components/HelloWorld.vue'
 
-import FirstTab from "./components/FirstTab.vue"
-import SecondTab from "./components/SecondTab.vue"
-
-const tabview = ref()
-const tabs = reactive([0, 1, 2])
-const tabsHeaders = ref<HTMLButtonElement[]>([])
-const tabPannels = ref<HTMLDivElement[]>([])
-let selectedTab = ref(0)
 
 onMounted(() => {
-	console.log(tabview.value);
 })
-
-const selectTab = (e: MouseEvent) => {
-	selectedTab.value = parseInt((e.target as HTMLButtonElement).dataset["tabindex"] || "")
-
-	tabsHeaders.value.forEach((p, i) => {
-		if (i === selectedTab.value) {
-			p.classList.add("activetab")
-		} else {
-			p.classList.remove("activetab")
-		}
-	})
-
-	tabPannels.value.forEach((p, i) => {
-		if (i === selectedTab.value) {
-			p.classList.add("activepanel")
-		} else {
-			p.classList.remove("activepanel")
-		}
-	})
-}
-
 
 </script>
 
@@ -46,33 +16,16 @@ const selectTab = (e: MouseEvent) => {
 			<h3 class="header__subtitle">По дисциплине "Программирование и администрирование в среде"</h3>
 		</div>
 	</header>
-	<main class="app-main">
-		<div class="tabview" ref="tabview">
-			<div class="tabview__header">
-				<button
-					class="tabview_btn"
-					@click="selectTab"
-					v-for="t in tabs"
-					:data-tabindex="t"
-					:ref="(el: any) => {
-						if (el) {
-							tabsHeaders[t] = el;
-						}
-					}"
-				>Tab{{ t }}</button>
-			</div>
 
-			<div class="tabview__pannels">
-				<div
-					class="tabview__panel"
-					v-for="t in tabs"
-					v-show="t == selectedTab ? true : false"
-					:ref="(el: any) => { if (el) tabPannels[t] = el }"
-				>
-					<first-tab />
-				</div>
-			</div>
-		</div>
+	<nav class="app-nav">
+		<router-link to="/">Home</router-link>
+		<router-link to="/second">Second</router-link>
+		<router-link to="/second">Third</router-link>
+		<router-link to="/second">Fourth</router-link>
+	</nav>
+
+	<main class="app-main">
+		<router-view></router-view>
 	</main>
 	<footer class="app-footer">
 		<div class="footer wrapper">
@@ -94,7 +47,7 @@ const selectTab = (e: MouseEvent) => {
 #app {
 	min-height: 100vh;
 	display: grid;
-	grid-template-rows: max-content 1fr max-content;
+	grid-template-rows: max-content max-content 1fr max-content;
 	gap: var(--offset);
 }
 
@@ -108,5 +61,49 @@ const selectTab = (e: MouseEvent) => {
 
 .app-footer {
 	background-color: rgb(var(--greyblue));
+}
+
+.app-nav {
+	max-width: max-content;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-evenly;
+
+	background-color: rgb(var(--leanen));
+	border-radius: var(--offset-quarter);
+	padding: calc(var(--offset-half) * 1.5);
+}
+
+.app-nav a {
+	display: block;
+	min-width: 100px;
+
+	padding: var(--offset-half);
+	margin-right: var(--offset);
+
+	color: var(--sapphire);
+	font-weight: bold;
+	text-decoration: none;
+	text-align: center;
+
+	background-color: rgb(var(--white));
+	transition: var(--main-transition);
+
+	border-radius: var(--offset-quarter);
+	box-shadow: 0px 4px 12px 2px rgba(var(--black), 0.1);
+}
+
+.app-nav a:last-of-type {
+	margin-right: 0;
+}
+
+.app-nav a:hover {
+	transform: scale(1.05);
+	color: rgb(var(--redsand));
+}
+
+.app-nav a.router-link-active {
+	color: rgb(var(--white));
+	background-color: rgb(var(--redsand));
 }
 </style>

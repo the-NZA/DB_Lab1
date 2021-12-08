@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
+import router from "./router"
 import App from './App.vue'
-
 
 // Import base css
 import "normalize.css"
@@ -14,4 +14,5 @@ import "./css/header/header.css"
 import "./css/footer/footer.css"
 
 createApp(App)
+.use(router)
 .mount('#app')
