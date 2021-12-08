@@ -28,7 +28,11 @@ func (s *SQLiteStore) Books() storer.BookReporsitory {
 }
 
 func (s *SQLiteStore) Authors() storer.AuthorRepository {
-	return nil
+	if s.authors == nil {
+		s.authors = &AuthorRepository{db: s.db}
+	}
+
+	return s.authors
 }
 
 func (s *SQLiteStore) Genres() storer.GenreRepository {
