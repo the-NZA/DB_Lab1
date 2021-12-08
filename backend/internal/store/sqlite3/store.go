@@ -56,7 +56,7 @@ func NewStore(c *config.Config) (storer.Storer, error) {
 		return nil, config.ErrEmptyConfig
 	}
 
-	dburl := fmt.Sprintf("file:%s?foreign_keys=on", c.DBURL)
+	dburl := fmt.Sprintf("file:%s?_foreign_keys=on", c.DBURL)
 
 	db, err := sqlx.Connect(c.DBType, dburl)
 	if err != nil {
