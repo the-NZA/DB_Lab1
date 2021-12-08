@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	insertGenre = `INSERT INTO books (title, snippet) VALUES (?, ?)`
-	updateGenre = `UPDATE books 
+	insertGenre = `INSERT INTO genres (title, snippet) VALUES (?, ?)`
+	updateGenre = `UPDATE genres 
 			SET 	title = ?, 
 				snippet = ?, 
 				deleted = ?, 
