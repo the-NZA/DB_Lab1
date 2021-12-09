@@ -1,8 +1,9 @@
 import { RouteRecordRaw, createRouter, createWebHistory} from 'vue-router'
 
 import Homepage from "../views/Homepage.vue"
-import FirstTab from "../components/FirstTab.vue"
-import SecondTab from "../components/SecondTab.vue"
+import Bookspage from "../views/Bookspage.vue"
+import Genrespage from "../views/Genrespage.vue"
+import Authorspage from "../views/Authorspage.vue"
 
 const routes: RouteRecordRaw[] = [
 	{
@@ -11,14 +12,19 @@ const routes: RouteRecordRaw[] = [
 		component: Homepage,
 	},
 	{
-		path: '/second',
-		name: 'Second view',
-		component: SecondTab,
+		path: '/books',
+		name: 'Books',
+		component: Bookspage,
 	},
 	{
-		path: '/third',
-		name: 'Third view',
-		component: FirstTab,
+		path: '/genres',
+		name: 'Genres',
+		component: Genrespage,
+	},
+	{
+		path: '/authors',
+		name: 'Authors',
+		component: Authorspage,
 	},
 ]
 

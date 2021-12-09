@@ -1,30 +1,19 @@
 <script setup lang="ts">
 	// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 	// import HelloWorld from './components/HelloWorld.vue'
-	import { ref, reactive, onMounted } from "vue";
-	import { useStore, Tap } from "./store/index";
+	import { ref, reactive, onBeforeMount, onMounted } from "vue";
+	import { useStore } from "./store/index";
+	import { Book } from "./types";
+	import { GET } from "./HTTP";
 
 	const store = useStore();
 
-	onMounted(() => {
-		console.log(store.getCount);
-		store.increment(3);
-		console.log(store.getCount);
-
-		const taps = store.getTaps;
-		console.log(taps);
-		store.addTap({
-			name: "First tap",
-			age: 23,
-		});
-
-		const newTap: Tap = {
-			name: "created tap",
-			age: 22,
-		};
-		store.addTap(newTap);
-
-		console.log(taps);
+	onBeforeMount(async () => {
+		await Promise.all([
+			store.loadAuthors(),
+			store.loadGenres(),
+			store.loadBooks(),
+		]);
 	});
 </script>
 
@@ -41,9 +30,9 @@
 
 	<nav class="app-nav">
 		<router-link to="/">Главная</router-link>
-		<router-link to="/second">Книги</router-link>
-		<router-link to="/third">Жанры</router-link>
-		<router-link to="/second">Авторы</router-link>
+		<router-link to="/books">Книги</router-link>
+		<router-link to="/genres">Жанры</router-link>
+		<router-link to="/authors">Авторы</router-link>
 	</nav>
 
 	<main class="app-main wrapper">
