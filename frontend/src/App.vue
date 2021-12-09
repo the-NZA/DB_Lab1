@@ -1,49 +1,75 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue"
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-// import HelloWorld from './components/HelloWorld.vue'
+	// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
+	// import HelloWorld from './components/HelloWorld.vue'
+	import { ref, reactive, onMounted } from "vue";
+	import { useStore, Tap } from "./store/index";
 
+	const store = useStore();
 
-onMounted(() => {
-})
+	onMounted(() => {
+		console.log(store.getCount);
+		store.increment(3);
+		console.log(store.getCount);
 
+		const taps = store.getTaps;
+		console.log(taps);
+		store.addTap({
+			name: "First tap",
+			age: 23,
+		});
+
+		const newTap: Tap = {
+			name: "created tap",
+			age: 22,
+		};
+		store.addTap(newTap);
+
+		console.log(taps);
+	});
 </script>
 
 <template>
 	<header class="app-header">
 		<div class="header wrapper">
 			<h1 class="header__title">Лабораторная работа №1</h1>
-			<h3 class="header__subtitle">По дисциплине "Программирование и администрирование в среде"</h3>
+			<h3 class="header__subtitle">
+				По дисциплине "Программирование и администрирование в
+				среде"
+			</h3>
 		</div>
 	</header>
 
 	<nav class="app-nav">
-		<router-link to="/">Home</router-link>
-		<router-link to="/second">Second</router-link>
-		<router-link to="/second">Third</router-link>
-		<router-link to="/second">Fourth</router-link>
+		<router-link to="/">Главная</router-link>
+		<router-link to="/second">Книги</router-link>
+		<router-link to="/third">Жанры</router-link>
+		<router-link to="/second">Авторы</router-link>
 	</nav>
 
-	<main class="app-main">
+	<main class="app-main wrapper">
 		<router-view></router-view>
 	</main>
 	<footer class="app-footer">
 		<div class="footer wrapper">
 			<div class="footer__credits">
-				<p>Выполнил студент группы 15.11Д-МО12/19б факультета ИМИСиЦЭ Козлов Роман</p>
+				<p>
+					Выполнил студент группы 15.11Д-МО12/19б факультета
+					ИМИСиЦЭ Козлов Роман
+				</p>
 			</div>
 			<div class="footer__link">
 				<a
 					href="https://github.com/the-NZA/DB_Lab1"
 					target="_blank"
 					title="Откроется в новой вкладке"
-				>Репозиторий</a>
+					>Репозиторий</a
+				>
 			</div>
 		</div>
 	</footer>
 </template>
 
-<style>
+<style lang="postcss">
 #app {
 	min-height: 100vh;
 	display: grid;
@@ -57,6 +83,8 @@ onMounted(() => {
 
 .app-main {
 	background-color: rgb(var(--white));
+	width: 100%;
+	padding: 0 var(--offset);
 }
 
 .app-footer {
@@ -72,6 +100,7 @@ onMounted(() => {
 	background-color: rgb(var(--leanen));
 	border-radius: var(--offset-quarter);
 	padding: calc(var(--offset-half) * 1.5);
+	box-shadow: 0px 2px 5px rgba(var(--black), 0.3);
 }
 
 .app-nav a {
@@ -98,12 +127,17 @@ onMounted(() => {
 }
 
 .app-nav a:hover {
-	transform: scale(1.05);
-	color: rgb(var(--redsand));
+	transform: scale(1.04);
+	color: rgb(var(--greyblue));
 }
 
 .app-nav a.router-link-active {
 	color: rgb(var(--white));
 	background-color: rgb(var(--redsand));
+}
+
+.app-nav a.router-link-active:hover {
+	transform: scale(1);
+	color: rgb(var(--leanen));
 }
 </style>
