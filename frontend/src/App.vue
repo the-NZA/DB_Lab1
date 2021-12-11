@@ -1,12 +1,14 @@
 <script setup lang="ts">
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-// import HelloWorld from './components/HelloWorld.vue'
-import { ref, reactive, onBeforeMount, onMounted } from "vue";
+import { ref, reactive, onBeforeMount, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
 import { useStore } from "./store/index";
-import { Book } from "./types";
-import { GET } from "./HTTP";
 
+const route = useRoute()
 const store = useStore();
+
+const needFooterTopMargin = computed(() => {
+	return route.fullPath !== "/";
+})
 
 onBeforeMount(async () => {
 	// Load all data from API
@@ -41,7 +43,8 @@ onBeforeMount(async () => {
 	<main class="app-main wrapper">
 		<router-view></router-view>
 	</main>
-	<footer class="app-footer">
+
+	<footer class="app-footer" :class="{ 'app-footer--margin-top': needFooterTopMargin }">
 		<div class="footer wrapper">
 			<div class="footer__credits">
 				<p>
@@ -80,5 +83,9 @@ onBeforeMount(async () => {
 
 .app-footer {
 	background-color: rgb(var(--greyblue));
+}
+
+.app-footer--margin-top {
+	margin-top: var(--offset);
 }
 </style>
