@@ -51,7 +51,7 @@
 <script lang="ts" setup>
 </script>
 
-<style lang="postcss" scoped>
+<style scoped>
 h2 {
 	margin: 0 0 var(--offset) 0;
 	text-transform: uppercase;

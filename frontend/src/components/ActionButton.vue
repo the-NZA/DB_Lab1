@@ -10,4 +10,4 @@
 import { defineProps } from 'vue';
 </script>
 
-<style lang="postcss"></style>
+<style></style>
