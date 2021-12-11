@@ -9,6 +9,7 @@
 	const store = useStore();
 
 	onBeforeMount(async () => {
+		// Load all data from API
 		await Promise.all([
 			store.loadAuthors(),
 			store.loadGenres(),

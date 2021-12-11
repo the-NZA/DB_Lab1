@@ -14,6 +14,10 @@ import "./css/header/header.css"
 // Import footer css
 import "./css/footer/footer.css"
 
+// Import AG-Grid styles
+import "ag-grid-community/dist/styles/ag-grid.css"
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+
 createApp(App)
 .use(createPinia())
 .use(router)

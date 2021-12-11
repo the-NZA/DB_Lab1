@@ -7,6 +7,9 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@ag-grid-community/all-modules": "^26.2.0",
+    "ag-grid-community": "^26.2.0",
+    "ag-grid-vue3": "^26.2.0",
     "pinia": "^2.0.6",
     "vue": "^3.2.16",
     "vue-router": "^4.0.12",
