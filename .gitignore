@@ -5,3 +5,5 @@ sqlite_data/
 
 /etc/*
 !/etc/dev.config.json
+
+docker-compose.*
