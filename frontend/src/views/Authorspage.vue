@@ -54,7 +54,6 @@ const columnApi = ref<ColumnApi>();
 // Conditional variables
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
-const multipleSelected = ref<boolean>(false);
 
 const rowData = reactive([
 	{
