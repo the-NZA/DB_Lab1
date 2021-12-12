@@ -28,15 +28,14 @@ import { storeToRefs } from "pinia";
 import GridButtonsVue from "../components/GridButtons.vue";
 import ActionsButtons from "../components/ActionsButtons.vue"
 import { AgGridVue } from "ag-grid-vue3";
-import { formatDate } from "../utils/date";
 import {
 	GridReadyEvent,
 	GridApi,
 	GridOptions,
 	ColumnApi,
-	RowSelectedEvent,
 	SelectionChangedEvent,
 } from "@ag-grid-community/all-modules";
+import { GenreRow } from "../types/grid";
 
 const store = useStore();
 const { isGenresLoaded, genres } = storeToRefs(store);
@@ -50,26 +49,16 @@ const columnApi = ref<ColumnApi>();
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
 
-const rowData = reactive([
+const rowData = reactive<GenreRow[]>([
 	{
 		id: "1",
-		firstname: "Ivan",
-		lastname: "Ivanov",
-		surname: "Ivanovich",
-		birth_date: formatDate(new Date),
-		snippet: "This is Ivan Ivanov aka Triple I",
+		title: "Super genre number 1",
+		snippet: "Snippet for super genre 1",
 	},
 	{
 		id: "2",
-		firstname: "Petr",
-		lastname: "Petrov",
-		surname: "Petrovich",
-		birth_date: new Date(1999, 8, 31).toLocaleDateString("ru", {
-			day: "2-digit",
-			month: "2-digit",
-			year: "numeric"
-		}),
-		snippet: "This is Petr Petrov aka Piper This is Petr Petrov aka Piper pThis is Petr Petrov aka Piper",
+		title: "Super genre number 2",
+		snippet: "Snippet for super genre 2",
 	},
 ]);
 

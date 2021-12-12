@@ -41,6 +41,7 @@ import {
 	RowSelectedEvent,
 	SelectionChangedEvent,
 } from "@ag-grid-community/all-modules";
+import { AuthorRow } from "../types/grid";
 
 // Reactive vars from store
 const store = useStore();
@@ -55,7 +56,7 @@ const columnApi = ref<ColumnApi>();
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
 
-const rowData = reactive([
+const rowData = reactive<AuthorRow[]>([
 	{
 		id: "1",
 		firstname: "Ivan",

@@ -34,7 +34,7 @@
 	display: block;
 	min-width: 100px;
 
-	padding: var(--offset-half);
+	padding: calc(var(--offset-quarter) * 1.5) var(--offset-half);
 	margin-right: var(--offset);
 
 	color: var(--sapphire);
@@ -45,7 +45,7 @@
 	background-color: rgb(var(--white));
 	transition: var(--main-transition);
 
-	border-radius: var(--offset-quarter);
+	border-radius: calc(var(--offset-quarter) / 2);
 	box-shadow: var(--main-shadow);
 }
 
@@ -54,7 +54,7 @@
 }
 
 .header__nav a:hover {
-	transform: scale(1.04);
+	transform: scale(1.03);
 	color: rgb(var(--greyblue));
 }
 

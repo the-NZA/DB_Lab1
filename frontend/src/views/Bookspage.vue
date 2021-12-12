@@ -34,9 +34,9 @@ import {
 	GridApi,
 	GridOptions,
 	ColumnApi,
-	RowSelectedEvent,
 	SelectionChangedEvent,
 } from "@ag-grid-community/all-modules";
+import { BookRow } from "../types/grid";
 
 const store = useStore();
 const { isBooksLoaded, books } = storeToRefs(store);
@@ -50,26 +50,24 @@ const columnApi = ref<ColumnApi>();
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
 
-const rowData = reactive([
+const rowData = reactive<BookRow[]>([
 	{
 		id: "1",
-		firstname: "Ivan",
-		lastname: "Ivanov",
-		surname: "Ivanovich",
-		birth_date: formatDate(new Date),
-		snippet: "This is Ivan Ivanov aka Triple I",
+		title: "Первая книга",
+		genre: "Роман",
+		pages_cnt: 123,
+		book_lang: "Русский",
+		pub_date: formatDate(new Date),
+		snippet: "Первая книга написана ради написания",
 	},
 	{
 		id: "2",
-		firstname: "Petr",
-		lastname: "Petrov",
-		surname: "Petrovich",
-		birth_date: new Date(1999, 8, 31).toLocaleDateString("ru", {
-			day: "2-digit",
-			month: "2-digit",
-			year: "numeric"
-		}),
-		snippet: "This is Petr Petrov aka Piper This is Petr Petrov aka Piper pThis is Petr Petrov aka Piper",
+		title: "Книга для второго игрока",
+		genre: "Фантастика",
+		pages_cnt: 883,
+		book_lang: "Русский",
+		pub_date: formatDate(new Date(2019, 3, 21)),
+		snippet: "Игроку номер два нужно не только быть готовым, но и в готовности",
 	},
 ]);
 
