@@ -1,10 +1,4 @@
 <template>
-	<!-- <template v-if="isBooksLoaded">
-		<div v-for="book in books" :key="book.id">
-			{{ book }}
-		</div>
-	</template>-->
-
 	<actions-buttons
 		:canEdit="singleSelected"
 		:canDelete="hasSelected"
@@ -18,6 +12,7 @@
 		class="ag-theme-alpine"
 		:gridOptions="gridOptions"
 		:context="actionContext"
+		:rowData="getBooksRows"
 	></ag-grid-vue>
 </template>
 
@@ -28,7 +23,6 @@ import { storeToRefs } from "pinia";
 import GridButtonsVue from "../components/GridButtons.vue";
 import ActionsButtons from "../components/ActionsButtons.vue"
 import { AgGridVue } from "ag-grid-vue3";
-import { formatDate } from "../utils/date";
 import {
 	GridReadyEvent,
 	GridApi,
@@ -36,10 +30,9 @@ import {
 	ColumnApi,
 	SelectionChangedEvent,
 } from "@ag-grid-community/all-modules";
-import { BookRow } from "../types/grid";
 
 const store = useStore();
-const { isBooksLoaded, books } = storeToRefs(store);
+const { isBooksLoaded, getBooksRows } = storeToRefs(store);
 
 // Context for action buttons
 const actionContext = ref({});
@@ -49,27 +42,6 @@ const columnApi = ref<ColumnApi>();
 // Conditional variables
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
-
-const rowData = reactive<BookRow[]>([
-	{
-		id: "1",
-		title: "Первая книга",
-		genre: "Роман",
-		pages_cnt: 123,
-		book_lang: "Русский",
-		pub_date: formatDate(new Date),
-		snippet: "Первая книга написана ради написания",
-	},
-	{
-		id: "2",
-		title: "Книга для второго игрока",
-		genre: "Фантастика",
-		pages_cnt: 883,
-		book_lang: "Русский",
-		pub_date: formatDate(new Date(2019, 3, 21)),
-		snippet: "Игроку номер два нужно не только быть готовым, но и в готовности",
-	},
-]);
 
 const handleAdd = () => {
 	console.log("add was pressed");
@@ -168,7 +140,6 @@ const gridOptions = ref<GridOptions>({
 			minWidth: 110,
 		}
 	],
-	rowData: rowData,
 	frameworkComponents: {
 		gridBtn: GridButtonsVue
 	},

@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { Book, Genre, Author } from "../types";
 import { GET } from "../HTTP"
+import { AuthorRow, BookRow, GenreRow } from "../types/grid";
+import { formatDate } from "../utils/date";
 
 export const useStore = defineStore("main", {
 	state: () => ({
@@ -39,9 +41,51 @@ export const useStore = defineStore("main", {
 		},
 		getGenres(): Genre[] {
 			return this.genres
+		},
+		getGenresRows(): GenreRow[] {
+			return this.genres.map((genre):GenreRow => {
+				return {
+					id: genre.id,
+					title: genre.title,
+					snippet: genre.snippet,
+				}
+			})
+		},
+		getBooksRows(): BookRow[] {
+			return this.books.map((book): BookRow => {
+				return {
+					id: book.id,
+					title: book.title,
+					snippet: book.snippet,
+					pages_cnt: book.pages_cnt,
+					pub_date: formatDate(new Date), // ! FIX THIS
+					book_lang: "Русский",
+					genre: "Роман"
+				}	
+			})
+		},
+		getAuthorsRows(): AuthorRow[] {
+			return this.authors.map((author): AuthorRow => {
+				return {
+					id: author.id,
+					firstname: author.firstname,
+					lastname: author.lastname,
+					surname: author.surname,
+					snippet: author.snippet,
+					birth_date: formatDate(new Date), // ! FIX THIS
+				}
+			})
 		}
 	},
 	actions: {
+		addGenre(): void {
+			this.genres.push({
+				id: "23",
+				deleted: false,
+				snippet: "werqwer",
+				title:"test genre",
+			})
+		},
 		async loadBooks() {
 			try {
 				const allBooks = await GET<Book[]>("api/book/all");

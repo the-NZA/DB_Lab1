@@ -1,13 +1,7 @@
 <template>
-	<!-- <template v-if="isAuthorsLoaded">
-		<div v-for="author in authors" :key="author.id">
-			{{ author }}
-		</div>
-	</template>-->
 	<!-- <button @click="getSelectedRows">Get Selected Rows</button>
 	<button v-show="hasSelected" @click="clearSelection">Clear selection</button>
-	<button @click="addNewRow">add new row</button>
-	<button @click="clearGrid">Clear grid</button>-->
+	-->
 
 	<actions-buttons
 		:canEdit="singleSelected"
@@ -22,6 +16,7 @@
 		class="ag-theme-alpine"
 		:gridOptions="gridOptions"
 		:context="actionContext"
+		:rowData="getAuthorsRows"
 	></ag-grid-vue>
 </template>
 
@@ -32,20 +27,17 @@ import { storeToRefs } from "pinia";
 import GridButtonsVue from "../components/GridButtons.vue";
 import ActionsButtons from "../components/ActionsButtons.vue"
 import { AgGridVue } from "ag-grid-vue3";
-import { formatDate } from "../utils/date";
 import {
 	GridReadyEvent,
 	GridApi,
 	GridOptions,
 	ColumnApi,
-	RowSelectedEvent,
 	SelectionChangedEvent,
 } from "@ag-grid-community/all-modules";
-import { AuthorRow } from "../types/grid";
 
 // Reactive vars from store
 const store = useStore();
-const { isAuthorsLoaded, authors } = storeToRefs(store);
+const { isAuthorsLoaded, getAuthorsRows } = storeToRefs(store);
 
 // Context for action buttons
 const actionContext = ref({});
@@ -55,47 +47,6 @@ const columnApi = ref<ColumnApi>();
 // Conditional variables
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
-
-const rowData = reactive<AuthorRow[]>([
-	{
-		id: "1",
-		firstname: "Ivan",
-		lastname: "Ivanov",
-		surname: "Ivanovich",
-		birth_date: formatDate(new Date),
-		snippet: "This is Ivan Ivanov aka Triple I",
-	},
-	{
-		id: "2",
-		firstname: "Petr",
-		lastname: "Petrov",
-		surname: "Petrovich",
-		birth_date: new Date(1999, 8, 31).toLocaleDateString("ru", {
-			day: "2-digit",
-			month: "2-digit",
-			year: "numeric"
-		}),
-		snippet: "This is Petr Petrov aka Piper This is Petr Petrov aka Piper pThis is Petr Petrov aka Piper",
-	},
-]);
-
-const addNewRow = () => {
-	rowData.push({
-		id: Math.random().toString(),
-		firstname: "New firstnaem",
-		lastname: "New lastnaem",
-		surname: "New surnaem",
-		birth_date: new Date().toDateString(),
-		snippet: "default snippet",
-	});
-
-	gridApi.value?.setRowData(rowData);
-};
-
-const clearGrid = () => {
-	rowData.splice(0, rowData.length);
-	gridApi.value?.setRowData(rowData);
-};
 
 const getSelectedRows = () => {
 	const selected = gridApi.value?.getSelectedRows();
@@ -194,7 +145,6 @@ const gridOptions = ref<GridOptions>({
 			minWidth: 110,
 		}
 	],
-	rowData: rowData,
 	frameworkComponents: {
 		gridBtn: GridButtonsVue
 	},

@@ -1,10 +1,4 @@
 <template>
-	<!-- <template v-if="isGenresLoaded">
-		<div v-for="genre in genres" :key="genre.id">
-			{{ genre }}
-		</div>
-	</template>-->
-
 	<actions-buttons
 		:canEdit="singleSelected"
 		:canDelete="hasSelected"
@@ -18,11 +12,12 @@
 		class="ag-theme-alpine"
 		:gridOptions="gridOptions"
 		:context="actionContext"
+		:rowData="getGenresRows"
 	></ag-grid-vue>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, computed } from "vue";
+import { ref, reactive, onBeforeMount, onMounted, computed, watch } from "vue";
 import { useStore } from "../store";
 import { storeToRefs } from "pinia";
 import GridButtonsVue from "../components/GridButtons.vue";
@@ -35,35 +30,22 @@ import {
 	ColumnApi,
 	SelectionChangedEvent,
 } from "@ag-grid-community/all-modules";
-import { GenreRow } from "../types/grid";
 
 const store = useStore();
-const { isGenresLoaded, genres } = storeToRefs(store);
+const { isGenresLoaded, getGenresRows } = storeToRefs(store);
 
 // Context for action buttons
 const actionContext = ref({});
 const gridApi = ref<GridApi>();
 const columnApi = ref<ColumnApi>();
 
-// Conditional variables
+// Conditional variables for buttons
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
 
-const rowData = reactive<GenreRow[]>([
-	{
-		id: "1",
-		title: "Super genre number 1",
-		snippet: "Snippet for super genre 1",
-	},
-	{
-		id: "2",
-		title: "Super genre number 2",
-		snippet: "Snippet for super genre 2",
-	},
-]);
-
 const handleAdd = () => {
 	console.log("add was pressed");
+	store.addGenre()
 }
 
 const handleEdit = () => {
@@ -74,6 +56,7 @@ const handleDelete = () => {
 	console.log("delete was pressed");
 }
 
+// Handle selection changed event
 const onSelectionChanged = (e: SelectionChangedEvent) => {
 	const cnt = e.api.getSelectedRows().length
 	switch (cnt) {
@@ -99,6 +82,7 @@ const onGridReady = (params: GridReadyEvent) => {
 	columnApi.value = params.columnApi;
 };
 
+// Current grid options
 const gridOptions = ref<GridOptions>({
 	onSelectionChanged: onSelectionChanged,
 	onGridReady: onGridReady,
@@ -136,7 +120,6 @@ const gridOptions = ref<GridOptions>({
 			width: 105,
 		}
 	],
-	rowData: rowData,
 	frameworkComponents: {
 		gridBtn: GridButtonsVue
 	},
@@ -159,11 +142,6 @@ onBeforeMount(() => {
 		editFunc: editFunc,
 	};
 });
-
-
-
-
-
 </script>
 
 <style>
