@@ -1,0 +1,23 @@
+:root {
+	--ag-header-foreground-color: rgb(var(--sapphire));
+	--ag-header-background-color: rgb(var(--leanen));
+	--ag-row-hover-color: rgba(var(--redsand), 0.25);
+}
+
+.ag-theme-alpine {
+	box-shadow: var(--main-shadow);
+	border-radius: var(--offset-quarter);
+}
+
+.ag-theme-alpine .ag-root-wrapper {
+	/* border: 1px solid rgb(var(--sapphire)) !important; */
+	border-radius: var(--offset-quarter);
+}
+
+.ag-cell-wrapper .ag-selection-checkbox {
+	margin-right: 18px !important;
+}
+
+.ag-cell-wrap-text {
+	word-break: normal !important;
+}
