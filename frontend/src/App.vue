@@ -6,7 +6,7 @@ import { useStore } from "./store/index";
 const route = useRoute()
 const store = useStore();
 
-const needFooterTopMargin = computed(() => {
+const isNotHomePage = computed(() => {
 	return route.fullPath !== "/";
 })
 
@@ -40,13 +40,14 @@ onBeforeMount(async () => {
 		</div>
 	</header>
 
-	<main class="app-main wrapper">
+	<main class="app-main wrapper" :class="{ 'grid-main': isNotHomePage }">
 		<router-view></router-view>
 	</main>
 
-	<footer class="app-footer" :class="{ 'app-footer--margin-top': needFooterTopMargin }">
+	<footer class="app-footer">
 		<div class="footer wrapper">
 			<div class="footer__credits">
+				isNotHomePage
 				<p>
 					Выполнил студент группы 15.11Д-МО12/19б факультета
 					ИМИСиЦЭ Козлов Роман
@@ -87,5 +88,11 @@ onBeforeMount(async () => {
 
 .app-footer--margin-top {
 	margin-top: var(--offset);
+}
+
+.grid-main {
+	display: grid;
+	grid-template-rows: max-content 1fr;
+	gap: var(--offset);
 }
 </style>

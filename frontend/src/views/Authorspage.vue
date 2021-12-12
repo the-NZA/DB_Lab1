@@ -4,17 +4,18 @@
 			{{ author }}
 		</div>
 	</template>-->
-	<button @click="getSelectedRows">Get Selected Rows</button>
+	<!-- <button @click="getSelectedRows">Get Selected Rows</button>
 	<button v-show="hasSelected" @click="clearSelection">Clear selection</button>
 	<button @click="addNewRow">add new row</button>
-	<button @click="clearGrid">Clear grid</button>
+	<button @click="clearGrid">Clear grid</button>-->
 
-	<!-- 
-		Buttons to add: 
-			1. Add new item – Always
-			2. Edit – If selected only 1 item 
-			3. Delete – If selected at least 1 item
-	-->
+	<actions-buttons
+		:canEdit="singleSelected"
+		:canDelete="hasSelected"
+		@add-pressed="handleAdd"
+		@edit-pressed="handleEdit"
+		@delete-pressed="handleDelete"
+	></actions-buttons>
 
 	<ag-grid-vue
 		style="width: 100%; height: 100%;"
@@ -29,6 +30,7 @@ import { ref, reactive, onBeforeMount, computed } from "vue";
 import { useStore } from "../store";
 import { storeToRefs } from "pinia";
 import GridButtonsVue from "../components/GridButtons.vue";
+import ActionsButtons from "../components/ActionsButtons.vue"
 import { AgGridVue } from "ag-grid-vue3";
 import { formatDate } from "../utils/date";
 import {
@@ -37,6 +39,7 @@ import {
 	GridOptions,
 	ColumnApi,
 	RowSelectedEvent,
+	SelectionChangedEvent,
 } from "@ag-grid-community/all-modules";
 
 // Reactive vars from store
@@ -50,6 +53,8 @@ const columnApi = ref<ColumnApi>();
 
 // Conditional variables
 const hasSelected = ref<boolean>(false);
+const singleSelected = ref<boolean>(false);
+const multipleSelected = ref<boolean>(false);
 
 const rowData = reactive([
 	{
@@ -101,17 +106,36 @@ const clearSelection = () => {
 	gridApi.value?.deselectAll();
 };
 
-// Row Selected event
-const onRowSelected = (e: RowSelectedEvent) => {
-	// console.log(e);
+const handleAdd = () => {
+	console.log("add was pressed");
+}
 
-	// Set have or haven't selected rows var
-	if (gridApi.value && gridApi.value.getSelectedRows().length > 0) {
-		hasSelected.value = true;
-	} else {
-		hasSelected.value = false;
+const handleEdit = () => {
+	console.log("edit was pressed");
+}
+
+const handleDelete = () => {
+	console.log("delete was pressed");
+}
+
+const onSelectionChanged = (e: SelectionChangedEvent) => {
+	const cnt = e.api.getSelectedRows().length
+	switch (cnt) {
+		case 0:
+			hasSelected.value = false;
+			singleSelected.value = false;
+			break;
+		case 1:
+			hasSelected.value = true;
+			singleSelected.value = true;
+			break;
+		default:
+			hasSelected.value = true;
+			singleSelected.value = false;
+			break;
+
 	}
-};
+}
 
 // Save grid and column API on grid ready event
 const onGridReady = (params: GridReadyEvent) => {
@@ -120,7 +144,7 @@ const onGridReady = (params: GridReadyEvent) => {
 };
 
 const gridOptions = ref<GridOptions>({
-	onRowSelected: onRowSelected,
+	onSelectionChanged: onSelectionChanged,
 	onGridReady: onGridReady,
 	rowSelection: "multiple",
 	suppressCellSelection: true,
@@ -165,6 +189,7 @@ const gridOptions = ref<GridOptions>({
 			field: "actions",
 			headerName: "Действия",
 			cellRenderer: "gridBtn",
+			// cellClass: ["test", "test2"], // Use for grid action buttons
 			flex: 0.5,
 			minWidth: 110,
 		}
