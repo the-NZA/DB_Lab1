@@ -1,9 +1,9 @@
 <template>
 	<span class="grid-buttons">
-		<button @click="editFunc" class="grid-button editBtn">
+		<button v-if="canEdit" @click="editFunc" class="grid-button editBtn">
 			<img src="../assets/edit.svg" alt="Edit" />
 		</button>
-		<button @click="deleteFunc" class="grid-button deleteBtn">
+		<button v-if="canDelete" @click="deleteFunc" class="grid-button deleteBtn">
 			<img src="../assets/delete.svg" alt="Delete" />
 		</button>
 	</span>
@@ -11,13 +11,25 @@
 
 <script lang="ts">
 import { ICellRendererParams } from "@ag-grid-community/all-modules";
+import { ref } from 'vue'
 
 export default {
 	name: "DeleteButton",
 	setup(props: any) {
 		const params: ICellRendererParams = props.params;
+		const canEdit = ref(false);
+		const canDelete = ref(false);
+
+		if (params.context.deleteFunc) {
+			canDelete.value = true;
+		}
+
+		if (params.context.editFunc) {
+			canEdit.value = true;
+		}
 
 		const deleteFunc = () => {
+
 			params.context.deleteFunc(params.data.id);
 		};
 
@@ -25,7 +37,7 @@ export default {
 			params.context.editFunc(params.data.id);
 		}
 
-		return { editFunc, deleteFunc };
+		return { editFunc, deleteFunc, canEdit, canDelete };
 	},
 };
 </script>
@@ -35,7 +47,6 @@ export default {
 	display: flex;
 	min-height: 40px;
 	align-items: center;
-	justify-content: space-between;
 }
 
 .grid-button {

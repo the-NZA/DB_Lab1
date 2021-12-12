@@ -30,6 +30,7 @@ import { useStore } from "../store";
 import { storeToRefs } from "pinia";
 import GridButtonsVue from "../components/GridButtons.vue";
 import { AgGridVue } from "ag-grid-vue3";
+import { formatDate } from "../utils/date";
 import {
 	GridReadyEvent,
 	GridApi,
@@ -56,7 +57,7 @@ const rowData = reactive([
 		firstname: "Ivan",
 		lastname: "Ivanov",
 		surname: "Ivanovich",
-		birth_date: new Date().toDateString(),
+		birth_date: formatDate(new Date),
 		snippet: "This is Ivan Ivanov aka Triple I",
 	},
 	{
@@ -64,7 +65,11 @@ const rowData = reactive([
 		firstname: "Petr",
 		lastname: "Petrov",
 		surname: "Petrovich",
-		birth_date: new Date(1999, 8, 31).toDateString(),
+		birth_date: new Date(1999, 8, 31).toLocaleDateString("ru", {
+			day: "2-digit",
+			month: "2-digit",
+			year: "numeric"
+		}),
 		snippet: "This is Petr Petrov aka Piper This is Petr Petrov aka Piper pThis is Petr Petrov aka Piper",
 	},
 ]);
@@ -161,6 +166,7 @@ const gridOptions = ref<GridOptions>({
 			headerName: "Действия",
 			cellRenderer: "gridBtn",
 			flex: 0.5,
+			minWidth: 110,
 		}
 	],
 	rowData: rowData,
@@ -189,27 +195,4 @@ onBeforeMount(() => {
 </script>
 
 <style>
-:root {
-	--ag-header-foreground-color: rgb(var(--sapphire));
-	--ag-header-background-color: rgb(var(--leanen));
-	--ag-row-hover-color: rgba(var(--redsand), 0.25);
-}
-
-.ag-theme-alpine {
-	box-shadow: var(--main-shadow);
-	border-radius: var(--offset-quarter);
-}
-
-.ag-theme-alpine .ag-root-wrapper {
-	/* border: 1px solid rgb(var(--sapphire)) !important; */
-	border-radius: var(--offset-quarter);
-}
-
-.ag-cell-wrapper .ag-selection-checkbox {
-	margin-right: 18px !important;
-}
-
-.ag-cell-wrap-text {
-	word-break: normal !important;
-}
 </style>

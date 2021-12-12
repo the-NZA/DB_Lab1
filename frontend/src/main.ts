@@ -16,7 +16,8 @@ import "./css/footer/footer.css"
 
 // Import AG-Grid styles
 import "ag-grid-community/dist/styles/ag-grid.css"
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css"
+import "./css/ag-grid-styles.css"
 
 createApp(App)
 .use(createPinia())
