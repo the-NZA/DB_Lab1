@@ -20,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-
 const emit = defineEmits<{
 	(e: "addPressed"): void
 	(e: "editPressed"): void

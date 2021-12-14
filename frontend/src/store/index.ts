@@ -42,6 +42,15 @@ export const useStore = defineStore("main", {
 		getGenres(): Genre[] {
 			return this.genres
 		},
+		getGenreByID: (state) => {
+			return (id?: string): Genre | undefined => {
+				if(!id) {
+					return undefined
+				}
+
+				return state.genres.find(item => item.id === id)
+			}
+		},
 		getGenresRows(): GenreRow[] {
 			return this.genres.map((genre): GenreRow => {
 				return {

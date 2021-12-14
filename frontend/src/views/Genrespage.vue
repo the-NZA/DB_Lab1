@@ -14,6 +14,10 @@
 		:context="actionContext"
 		:rowData="getGenresRows"
 	></ag-grid-vue>
+
+	<modal-view :showModal="showModal" @savePressed="handleSaveGenre" @closePressed="handleCloseModal">
+		<genre-editor :genre_id="selectedGenreID" />
+	</modal-view>
 </template>
 
 <script lang="ts" setup>
@@ -22,6 +26,8 @@ import { useStore } from "../store";
 import { storeToRefs } from "pinia";
 import GridButtonsVue from "../components/GridButtons.vue";
 import ActionsButtons from "../components/ActionsButtons.vue"
+import ModalView from "../components/ModalView.vue";
+import GenreEditor from "../components/GenreEditor.vue";
 import { AgGridVue } from "ag-grid-vue3";
 import {
 	GridReadyEvent,
@@ -43,10 +49,23 @@ const columnApi = ref<ColumnApi>();
 // Conditional variables for buttons
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
+const showModal = ref<boolean>(false);
+const selectedGenreID = ref<string | undefined>();
+
+const handleCloseModal = () => {
+	showModal.value = false;
+}
+
+const handleSaveGenre = () => {
+	console.log("save was pressed");
+	showModal.value = false;
+
+}
 
 const handleAdd = () => {
-	console.log("add was pressed");
-	store.addGenre()
+	selectedGenreID.value = undefined;
+	showModal.value = true;
+	// store.addGenre()
 }
 
 const handleEdit = () => {
@@ -56,7 +75,8 @@ const handleEdit = () => {
 		return;
 	}
 
-	console.log("edit was pressed");
+	selectedGenreID.value = (selected[0] as GenreRow).id
+	showModal.value = true;
 }
 
 const handleDelete = () => {
@@ -146,7 +166,9 @@ const deleteFunc = (id: string) => {
 	}
 };
 const editFunc = (id: string) => {
-	alert(`from edit ${id}`);
+	selectedGenreID.value = id
+	showModal.value = true
+	// alert(`from edit ${id}`);
 };
 
 // Before Mount Event handler
