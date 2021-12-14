@@ -323,7 +323,7 @@ func (a *App) handleAuthorDelete() http.HandlerFunc {
 		}
 
 		// Try delete author by id
-		err := a.services.AuthorService().Delete("")
+		err := a.services.AuthorService().Delete(id)
 		if err != nil {
 			a.logger.Logf("[INFO] During author deleting: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
