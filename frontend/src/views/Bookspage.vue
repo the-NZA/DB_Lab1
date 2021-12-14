@@ -30,6 +30,7 @@ import {
 	ColumnApi,
 	SelectionChangedEvent,
 } from "@ag-grid-community/all-modules";
+import { BookRow } from "../types/grid";
 
 const store = useStore();
 const { isBooksLoaded, getBooksRows } = storeToRefs(store);
@@ -48,11 +49,23 @@ const handleAdd = () => {
 }
 
 const handleEdit = () => {
+	const selected = gridApi.value?.getSelectedRows()
+	if (selected?.length !== 1) {
+		console.log("Выбрано более одного элемента. Редактирование недоступно.");
+		return;
+	}
+
 	console.log("edit was pressed");
 }
 
 const handleDelete = () => {
-	console.log("delete was pressed");
+	const selected = gridApi.value?.getSelectedRows()
+
+	if (confirm("Вы уверены, что хотите удалить выбранные книги?")) {
+		selected?.forEach((book: BookRow) => {
+			store.deleteBook(book.id);
+		})
+	}
 }
 
 const onSelectionChanged = (e: SelectionChangedEvent) => {
@@ -148,7 +161,9 @@ const gridOptions = ref<GridOptions>({
 // Actions funcs which passed to ag-grid
 // and called after button pressed
 const deleteFunc = (id: string) => {
-	alert(`from delete ${id}`);
+	if (confirm("Вы действительно хотите удалить выбранную книгу?")) {
+		store.deleteBook(id);
+	}
 };
 const editFunc = (id: string) => {
 	alert(`from edit ${id}`);

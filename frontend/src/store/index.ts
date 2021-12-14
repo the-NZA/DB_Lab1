@@ -163,6 +163,8 @@ export const useStore = defineStore("main", {
 		async deleteAuthor(id: string) {
 			try {
 				const resp = await DELETE(`/api/author/${id}`)
+				console.log(resp);
+				
 				if (!resp.ok) {
 					console.log(resp);
 

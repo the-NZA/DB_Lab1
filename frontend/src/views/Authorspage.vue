@@ -34,6 +34,7 @@ import {
 	ColumnApi,
 	SelectionChangedEvent,
 } from "@ag-grid-community/all-modules";
+import { AuthorRow } from "../types/grid";
 
 // Reactive vars from store
 const store = useStore();
@@ -62,11 +63,23 @@ const handleAdd = () => {
 }
 
 const handleEdit = () => {
+	const selected = gridApi.value?.getSelectedRows()
+	if (selected?.length !== 1) {
+		console.log("Выбрано более одного элемента. Редактирование недоступно.");
+		return;
+	}
+
 	console.log("edit was pressed");
 }
 
 const handleDelete = () => {
-	console.log("delete was pressed");
+	const selected = gridApi.value?.getSelectedRows()
+
+	if (confirm("Вы уверены, что хотите удалить выбранных авторов?")) {
+		selected?.forEach((author: AuthorRow) => {
+			store.deleteAuthor(author.id);
+		})
+	}
 }
 
 const onSelectionChanged = (e: SelectionChangedEvent) => {
@@ -153,7 +166,9 @@ const gridOptions = ref<GridOptions>({
 // Actions funcs which passed to ag-grid
 // and called after button pressed
 const deleteFunc = (id: string) => {
-	alert(`from delete ${id}`);
+	if (confirm("Вы действительно хотите удалить выбранного автора?")) {
+		store.deleteAuthor(id);
+	}
 };
 const editFunc = (id: string) => {
 	alert(`from edit ${id}`);
