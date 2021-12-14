@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { Book, Genre, Author } from "../types";
-import { GET } from "../HTTP"
+import { GET, DELETE } from "../HTTP"
 import { AuthorRow, BookRow, GenreRow } from "../types/grid";
 import { formatDate } from "../utils/date";
 
@@ -43,7 +43,7 @@ export const useStore = defineStore("main", {
 			return this.genres
 		},
 		getGenresRows(): GenreRow[] {
-			return this.genres.map((genre):GenreRow => {
+			return this.genres.map((genre): GenreRow => {
 				return {
 					id: genre.id,
 					title: genre.title,
@@ -61,7 +61,7 @@ export const useStore = defineStore("main", {
 					pub_date: formatDate(new Date), // ! FIX THIS
 					book_lang: "Русский",
 					genre: "Роман"
-				}	
+				}
 			})
 		},
 		getAuthorsRows(): AuthorRow[] {
@@ -78,14 +78,7 @@ export const useStore = defineStore("main", {
 		}
 	},
 	actions: {
-		addGenre(): void {
-			this.genres.push({
-				id: "23",
-				deleted: false,
-				snippet: "werqwer",
-				title:"test genre",
-			})
-		},
+		/* BOOKS */
 		async loadBooks() {
 			try {
 				const allBooks = await GET<Book[]>("api/book/all");
@@ -95,6 +88,29 @@ export const useStore = defineStore("main", {
 				console.error(error);
 			}
 		},
+		async deleteBook(id: string) {
+			try {
+				const resp = await DELETE(`/api/book/${id}`)
+				if (!resp.ok) {
+					console.log(resp);
+
+					throw new Error(resp.statusText)
+
+				}
+
+				const res = resp.json()
+				// console.log(res);
+
+				this.books= this.books.filter((book): boolean => {
+					return book.id != id;
+				})
+
+			} catch (err) {
+				console.error(err);
+			}
+		},
+
+		/* GENRES */
 		async loadGenres() {
 			try {
 				const allGenres = await GET<Genre[]>("api/genre/all");
@@ -104,6 +120,37 @@ export const useStore = defineStore("main", {
 				console.error(error);
 			}
 		},
+		addGenre(): void {
+			this.genres.push({
+				id: "23",
+				deleted: false,
+				snippet: "werqwer",
+				title: "test genre",
+			})
+		},
+		async deleteGenre(id: string) {
+			try {
+				const resp = await DELETE(`/api/genre/${id}`)
+				if (!resp.ok) {
+					console.log(resp);
+
+					throw new Error(resp.statusText)
+
+				}
+
+				const res = resp.json()
+				// console.log(res);
+
+				this.genres= this.genres.filter((genre): boolean => {
+					return genre.id != id;
+				})
+
+			} catch (err) {
+				console.error(err);
+			}
+		},
+
+		/* AUTHORS */
 		async loadAuthors() {
 			try {
 				const allAuthors = await GET<Author[]>("api/author/all");
@@ -111,6 +158,27 @@ export const useStore = defineStore("main", {
 				this.authorsLoaded = true
 			} catch (error) {
 				console.error(error);
+			}
+		},
+		async deleteAuthor(id: string) {
+			try {
+				const resp = await DELETE(`/api/author/${id}`)
+				if (!resp.ok) {
+					console.log(resp);
+
+					throw new Error(resp.statusText)
+
+				}
+
+				const res = resp.json()
+				// console.log(res);
+
+				this.authors = this.authors.filter((author): boolean => {
+					return author.id != id;
+				})
+
+			} catch (err) {
+				console.error(err);
 			}
 		},
 	}

@@ -14,7 +14,7 @@ import { ICellRendererParams } from "@ag-grid-community/all-modules";
 import { ref } from 'vue'
 
 export default {
-	name: "DeleteButton",
+	name: "GridButtons",
 	setup(props: any) {
 		const params: ICellRendererParams = props.params;
 		const canEdit = ref(false);

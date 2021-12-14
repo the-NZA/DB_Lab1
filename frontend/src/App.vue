@@ -56,7 +56,6 @@ onBeforeMount(async () => {
 		<footer class="app-footer">
 			<div class="footer wrapper">
 				<div class="footer__credits">
-					isNotHomePage
 					<p>
 						Выполнил студент группы 15.11Д-МО12/19б факультета
 						ИМИСиЦЭ Козлов Роман
