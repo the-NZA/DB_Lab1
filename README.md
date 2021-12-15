@@ -26,7 +26,6 @@
 	- genre_id
 	- pages_cnt
 	- pub_year
-	- book_lang_id
 	- deleted
 3. Авторы
 	- id
@@ -35,10 +34,7 @@
 	- surname
 	- snippet
 	- deleted
-4. Языки книг
-	- id
-	- title
-5. Книги и авторы
+4. Книги и авторы
 	- id
 	- book_id
 	- author_id
