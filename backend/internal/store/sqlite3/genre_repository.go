@@ -5,7 +5,6 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/the-NZA/DB_Lab1/backend/internal/models"
-	"github.com/the-NZA/DB_Lab1/backend/internal/store/storetypes"
 )
 
 var (
@@ -23,7 +22,7 @@ type GenreRepository struct {
 
 // Get one genre
 func (g *GenreRepository) Get(ID string) (models.Genre, error) {
-	genre := storetypes.SQLGenre{}
+	genre := models.Genre{}
 
 	// Try get one genre
 	err := g.db.Get(&genre, "SELECT * FROM genres WHERE id = ? AND deleted != true", ID)
@@ -31,7 +30,7 @@ func (g *GenreRepository) Get(ID string) (models.Genre, error) {
 		return models.Genre{}, err
 	}
 
-	return genre.ToGenreModel(), nil
+	return genre, nil
 }
 
 // Add new genre
@@ -79,18 +78,12 @@ func (g *GenreRepository) Delete(ID string) error {
 
 // Get all genres
 func (g *GenreRepository) GetAll() ([]models.Genre, error) {
-	var sGenres []storetypes.SQLGenre
+	var genres []models.Genre
 
 	// Get all genres from database
-	err := g.db.Select(&sGenres, "SELECT * FROM genres WHERE deleted != true")
+	err := g.db.Select(&genres, "SELECT * FROM genres WHERE deleted != true")
 	if err != nil {
 		return nil, err
-	}
-
-	// Convert slice of SQLGenre to applications Genre
-	var genres = make([]models.Genre, 0, len(sGenres))
-	for i := range sGenres {
-		genres = append(genres, sGenres[i].ToGenreModel())
 	}
 
 	return genres, nil
