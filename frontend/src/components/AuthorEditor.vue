@@ -90,15 +90,13 @@ onBeforeMount(() => {
 		if (author) {
 			title.value = AuthorEditorTitle.Edit
 			buttonText.value = SaveButtonValue.Update
+
+			currentAuthor.firstname = author.firstname
+			currentAuthor.lastname = author.lastname
+			currentAuthor.surname = author.surname
+			currentAuthor.snippet = author.snippet
 		}
 
-		console.log(author);
-
-
-		currentAuthor.firstname = (author && author.firstname != undefined) ? author?.firstname : ""
-		currentAuthor.lastname = (author && author.lastname != undefined) ? author?.lastname : ""
-		currentAuthor.surname = (author && author.surname != undefined) ? author?.surname : ""
-		currentAuthor.snippet = (author && author.snippet != undefined) ? author?.snippet : ""
 	}
 })
 

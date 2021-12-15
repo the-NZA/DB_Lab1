@@ -109,7 +109,6 @@ const onSelectionChanged = (e: SelectionChangedEvent) => {
 			hasSelected.value = true;
 			singleSelected.value = false;
 			break;
-
 	}
 }
 

@@ -66,10 +66,11 @@ onBeforeMount(() => {
 		if (genre) {
 			title.value = GenreEditorTitle.Edit
 			buttonText.value = SaveButtonValue.Update
+
+			currentGenre.title = genre.title
+			currentGenre.snippet = genre.snippet
 		}
 
-		currentGenre.title = (genre && genre.title != undefined) ? genre?.title : ""
-		currentGenre.snippet = (genre && genre.snippet != undefined) ? genre?.snippet : ""
 
 	}
 })
