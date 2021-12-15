@@ -129,12 +129,6 @@ const gridOptions = ref<GridOptions>({
 			maxWidth: 140,
 		},
 		{
-			field: "book_lang",
-			headerName: "Язык",
-			minWidth: 120,
-			maxWidth: 140,
-		},
-		{
 			field: "pages_cnt",
 			headerName: "Страниц",
 			width: 100,
