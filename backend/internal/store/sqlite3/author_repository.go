@@ -9,7 +9,7 @@ import (
 
 var (
 	insertAuthor = `INSERT INTO authors (firstname, lastname, surname,  snippet) 
-				VALUES (?, ?, ?, ?, ?)`
+				VALUES (?, ?, ?, ?)`
 	updateAuthor = `UPDATE authors
 			SET 	firstname = ?, 
 				lastname = ?,
