@@ -190,7 +190,7 @@ func (a *App) handleGenreUpdate() http.HandlerFunc {
 		}
 
 		// Try update genre
-		genre, err = a.services.GenreService().Update(models.Genre{})
+		genre, err = a.services.GenreService().Update(genre)
 		if err != nil {
 			a.logger.Logf("[INFO] During genre updating: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)

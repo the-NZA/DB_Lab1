@@ -12,7 +12,7 @@ var (
 	updateGenre = `UPDATE genres 
 			SET 	title = ?, 
 				snippet = ?, 
-				deleted = ?, 
+				deleted = ? 
 			WHERE id = ?`
 )
 
@@ -56,7 +56,7 @@ func (g *GenreRepository) Add(genre models.Genre) (models.Genre, error) {
 // Update genre
 func (g *GenreRepository) Update(genre models.Genre) (models.Genre, error) {
 	// Try update genre
-	_, err := g.db.Exec(updateBook,
+	_, err := g.db.Exec(updateGenre,
 		genre.Title,
 		genre.Snippet,
 		genre.Deleted,

@@ -16,7 +16,7 @@ var (
 				pages_cnt = ?, 
 				pub_year = ?, 
 				deleted = ?, 
-				genre_id = ?, 
+				genre_id = ? 
 			WHERE id = ?`
 )
 

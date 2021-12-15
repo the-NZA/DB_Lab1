@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/go-pkgz/lgr"
 	"github.com/the-NZA/DB_Lab1/backend/internal/models"
 	"github.com/the-NZA/DB_Lab1/backend/internal/store/storer"
 )
@@ -23,6 +24,7 @@ func (g *GenreService) Add(genre models.Genre) (models.Genre, error) {
 }
 
 func (g *GenreService) Update(genre models.Genre) (models.Genre, error) {
+	lgr.Printf("DEBUG %v\n", genre)
 	//validate updated genre
 	if err := genre.Validate(); err != nil {
 		return genre, err

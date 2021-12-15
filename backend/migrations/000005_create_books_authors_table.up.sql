@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS book_author (
+CREATE TABLE IF NOT EXISTS books_authors (
   id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
   book_id integer NOT NULL,
   author_id integer NOT NULL,

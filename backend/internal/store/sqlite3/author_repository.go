@@ -15,7 +15,7 @@ var (
 				lastname = ?,
 				surname = ?,
 				snippet = ?, 
-				deleted = ?, 
+				deleted = ? 
 			WHERE id = ?`
 )
 
