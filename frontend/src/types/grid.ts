@@ -9,9 +9,8 @@ export type BookRow = {
 	title: string,
 	snippet: string,
 	genre: string,
-	book_lang: string,
 	pages_cnt: number,
-	pub_date: string,
+	pub_year: number,
 }
 
 export type AuthorRow = {
@@ -19,6 +18,5 @@ export type AuthorRow = {
 	firstname: string,
 	lastname: string,
 	surname: string,
-	birth_date: string,
 	snippet: string,
 }

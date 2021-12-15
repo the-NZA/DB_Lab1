@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"time"
 
 	"github.com/the-NZA/DB_Lab1/backend/internal/models"
 )
@@ -15,7 +14,6 @@ var authors = []models.Author{
 		Firstname: "Ivan",
 		Lastname:  "Ivanov",
 		Surname:   "Ivanovich",
-		BirthDate: time.Now(),
 		Snippet:   "This is one of the best Ivan Ivanov in the whole world",
 		Deleted:   false,
 	},
@@ -24,7 +22,6 @@ var authors = []models.Author{
 		Firstname: "Semen",
 		Lastname:  "Semenov",
 		Surname:   "Semenovich",
-		BirthDate: time.Now(),
 		Snippet:   "This is one of the best Semen Semenov in the whole world",
 		Deleted:   false,
 	},
@@ -33,7 +30,6 @@ var authors = []models.Author{
 		Firstname: "Kirill",
 		Lastname:  "Kirillov",
 		Surname:   "Kirillovich",
-		BirthDate: time.Now(),
 		Snippet:   "This is one of the best Kirill Kirillov in the whole world",
 		Deleted:   false,
 	},

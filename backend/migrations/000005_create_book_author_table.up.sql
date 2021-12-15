@@ -5,4 +5,4 @@ CREATE TABLE IF NOT EXISTS book_author (
   deleted boolean NOT NULL DEFAULT(false),
   FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
   FOREIGN KEY (author_id) REFERENCES authors (id) ON DELETE NO ACTION ON UPDATE NO ACTION
-) COMMENT "Отношение книг и авторов";
+);

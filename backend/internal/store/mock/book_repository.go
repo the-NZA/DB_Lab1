@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"time"
 
 	"github.com/the-NZA/DB_Lab1/backend/internal/models"
 )
@@ -16,8 +15,7 @@ var books = []models.Book{
 		Snippet:     "First book description",
 		GenreID:     "1",
 		PagesCnt:    100,
-		PublishDate: time.Now(),
-		BookLangID:  "1",
+		PublishYear: 2013,
 		Deleted:     false,
 	},
 	{
@@ -26,8 +24,7 @@ var books = []models.Book{
 		Snippet:     "Second book description",
 		GenreID:     "2",
 		PagesCnt:    120,
-		PublishDate: time.Now(),
-		BookLangID:  "1",
+		PublishYear: 1993,
 		Deleted:     false,
 	},
 	{
@@ -36,8 +33,7 @@ var books = []models.Book{
 		Snippet:     "Third book description",
 		GenreID:     "1",
 		PagesCnt:    110,
-		PublishDate: time.Now(),
-		BookLangID:  "1",
+		PublishYear: 2015,
 		Deleted:     false,
 	},
 }

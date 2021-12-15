@@ -3,4 +3,4 @@ CREATE TABLE IF NOT EXISTS genres (
 	title text UNIQUE NOT NULL,
 	snippet text,
 	deleted boolean NOT NULL DEFAULT(false)
-) COMMENT 'Информация о жанрах';
+);

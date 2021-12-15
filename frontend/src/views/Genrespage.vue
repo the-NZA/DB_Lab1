@@ -53,19 +53,17 @@ const columnApi = ref<ColumnApi>();
 // Conditional variables for buttons
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
+
 const showModal = ref<boolean>(false);
-const showModalContent = ref<boolean>(false);
 const selectedGenreID = ref<string | undefined>();
 
 const handleCloseModal = () => {
 	showModal.value = false;
-	showModalContent.value = false
 }
 
 const handleSaveGenre = () => {
 	console.log("save was pressed");
 	showModal.value = false;
-
 }
 
 const handleAdd = () => {
@@ -174,7 +172,6 @@ const deleteFunc = (id: string) => {
 const editFunc = (id: string) => {
 	selectedGenreID.value = id
 	showModal.value = true
-	// alert(`from edit ${id}`);
 };
 
 // Before Mount Event handler

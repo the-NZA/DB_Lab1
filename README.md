@@ -25,7 +25,7 @@
 	- snippet
 	- genre_id
 	- pages_cnt
-	- pub_date
+	- pub_year
 	- book_lang_id
 	- deleted
 3. Авторы
@@ -33,7 +33,6 @@
 	- firstname
 	- lastname
 	- surname
-	- birth_date
 	- snippet
 	- deleted
 4. Языки книг

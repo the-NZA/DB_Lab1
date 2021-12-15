@@ -1,10 +1,10 @@
 <template>
-	<div class="editor genreeditor">
-		<div class="editor__header genreeditor__header">
+	<div class="editor">
+		<div class="editor__header">
 			<h2>{{ title }}</h2>
 			<button @click="emit('closePressed')"></button>
 		</div>
-		<div class="editor__body edfields genreeditor__body">
+		<div class="editor__body edfields">
 			<div class="edfields__field">
 				<label class="edfields__label" for="edtitle">Название</label>
 				<input
@@ -26,7 +26,7 @@
 				></textarea>
 			</div>
 		</div>
-		<div class="editor__footer genreeditor__footer">
+		<div class="editor__footer">
 			<button @click="saveGenre">{{ buttonText }}</button>
 		</div>
 	</div>
@@ -79,7 +79,6 @@ const saveGenre = () => {
 		emit('savePressed')
 	}, 500)
 }
-
 
 </script>
 

@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { Book, Genre, Author } from "../types";
 import { GET, DELETE } from "../HTTP"
 import { AuthorRow, BookRow, GenreRow } from "../types/grid";
-import { formatDate } from "../utils/date";
 
 export const useStore = defineStore("main", {
 	state: () => ({
@@ -35,7 +34,11 @@ export const useStore = defineStore("main", {
 			return this.authors
 		},
 		getAuthorByID: (state) => {
-			return (id: string): Author | undefined => {
+			return (id?: string): Author | undefined => {
+				if(!id) {
+					return undefined
+				}
+
 				return state.authors.find(item => item.id === id)
 			}
 		},
@@ -67,9 +70,8 @@ export const useStore = defineStore("main", {
 					title: book.title,
 					snippet: book.snippet,
 					pages_cnt: book.pages_cnt,
-					pub_date: formatDate(new Date), // ! FIX THIS
-					book_lang: "Русский",
-					genre: "Роман"
+					pub_year: book.pub_year,
+					genre: "Роман" // TODO: Find at genres by id and insert here
 				}
 			})
 		},
@@ -81,7 +83,6 @@ export const useStore = defineStore("main", {
 					lastname: author.lastname,
 					surname: author.surname,
 					snippet: author.snippet,
-					birth_date: formatDate(new Date), // ! FIX THIS
 				}
 			})
 		}
@@ -91,6 +92,7 @@ export const useStore = defineStore("main", {
 		async loadBooks() {
 			try {
 				const allBooks = await GET<Book[]>("api/book/all");
+
 				this.books = allBooks;
 				this.booksLoaded = true
 			} catch (error) {
@@ -163,6 +165,7 @@ export const useStore = defineStore("main", {
 		async loadAuthors() {
 			try {
 				const allAuthors = await GET<Author[]>("api/author/all");
+
 				this.authors = allAuthors;
 				this.authorsLoaded = true
 			} catch (error) {

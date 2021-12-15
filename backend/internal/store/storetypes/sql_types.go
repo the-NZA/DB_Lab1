@@ -12,20 +12,19 @@ type SQLBook struct {
 	Title       string         `db:"title"`
 	Snippet     sql.NullString `db:"snippet"`
 	GenreID     string         `db:"genre_id"`
-	BookLangID  string         `db:"book_lang_id"`
 	PagesCnt    sql.NullInt32  `db:"pages_cnt"`
-	PublishDate sql.NullTime   `db:"pub_date"`
+	PublishYear int            `db:"pub_year"`
 	Deleted     bool           `db:"deleted"`
 }
 
 // Convert SQLBook to application's Book model
 func (sb *SQLBook) ToBookModel() models.Book {
 	book := models.Book{
-		ID:         sb.ID,
-		Title:      sb.Title,
-		GenreID:    sb.GenreID,
-		BookLangID: sb.BookLangID,
-		Deleted:    sb.Deleted,
+		ID:          sb.ID,
+		Title:       sb.Title,
+		GenreID:     sb.GenreID,
+		Deleted:     sb.Deleted,
+		PublishYear: sb.PublishYear,
 	}
 
 	if sb.Snippet.Valid {
@@ -34,10 +33,6 @@ func (sb *SQLBook) ToBookModel() models.Book {
 
 	if sb.PagesCnt.Valid {
 		book.PagesCnt = uint(sb.PagesCnt.Int32)
-	}
-
-	if sb.PublishDate.Valid {
-		book.PublishDate = sb.PublishDate.Time
 	}
 
 	return book
@@ -49,7 +44,6 @@ type SQLAuthor struct {
 	Firstname string         `db:"firstname"`
 	Lastname  string         `db:"lastname"`
 	Surname   sql.NullString `db:"surname"`
-	BirthDate sql.NullTime   `db:"birth_date"`
 	Snippet   sql.NullString `db:"snippet"`
 	Deleted   bool           `db:"deleted"`
 }
@@ -65,10 +59,6 @@ func (au *SQLAuthor) ToAuthorModel() models.Author {
 
 	if au.Snippet.Valid {
 		author.Snippet = au.Snippet.String
-	}
-
-	if au.BirthDate.Valid {
-		author.BirthDate = au.BirthDate.Time
 	}
 
 	if au.Surname.Valid {

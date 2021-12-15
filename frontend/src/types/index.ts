@@ -3,9 +3,8 @@ export type Book = {
 	title: string,
 	snippet: string,
 	genre_id: string,
-	book_lang_id: string,
 	pages_cnt: number,
-	pub_date: Date,
+	pub_year: number,
 	deleted: boolean,
 }
 
@@ -21,7 +20,6 @@ export type Author = {
 	firstname: string,
 	lastname: string,
 	surname: string,
-	birth_date: Date,
 	snippet: string,
 	deleted: boolean,
 }

@@ -5,17 +5,15 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"github.com/the-NZA/DB_Lab1/backend/internal/models"
-	"github.com/the-NZA/DB_Lab1/backend/internal/store/storetypes"
 )
 
 var (
-	insertAuthor = `INSERT INTO authors (firstname, lastname, surname, birth_date, snippet) 
+	insertAuthor = `INSERT INTO authors (firstname, lastname, surname,  snippet) 
 				VALUES (?, ?, ?, ?, ?)`
 	updateAuthor = `UPDATE authors
 			SET 	firstname = ?, 
 				lastname = ?,
 				surname = ?,
-				birth_date = ?,
 				snippet = ?, 
 				deleted = ?, 
 			WHERE id = ?`
@@ -27,14 +25,14 @@ type AuthorRepository struct {
 
 // Get one author from db
 func (a *AuthorRepository) Get(ID string) (models.Author, error) {
-	author := storetypes.SQLAuthor{}
+	author := models.Author{}
 
 	err := a.db.Get(&author, "SELECT * FROM authors WHERE id = ? AND deleted != true", ID)
 	if err != nil {
 		return models.Author{}, err
 	}
 
-	return author.ToAuthorModel(), nil
+	return author, nil
 }
 
 // Add one author
@@ -44,7 +42,6 @@ func (a *AuthorRepository) Add(author models.Author) (models.Author, error) {
 		author.Firstname,
 		author.Lastname,
 		author.Surname,
-		author.BirthDate,
 		author.Snippet,
 	)
 	if err != nil {
@@ -70,7 +67,6 @@ func (a *AuthorRepository) Update(author models.Author) (models.Author, error) {
 		author.Firstname,
 		author.Lastname,
 		author.Surname,
-		author.BirthDate,
 		author.Snippet,
 		author.Deleted,
 		author.ID,
@@ -91,18 +87,12 @@ func (a *AuthorRepository) Delete(ID string) error {
 
 // Gell all authors
 func (a *AuthorRepository) GetAll() ([]models.Author, error) {
-	var sAuthors []storetypes.SQLAuthor
+	var authors []models.Author
 
 	// Get all authors from database
-	err := a.db.Select(&sAuthors, "SELECT * FROM authors WHERE deleted != true")
+	err := a.db.Select(&authors, "SELECT * FROM authors WHERE deleted != true")
 	if err != nil {
 		return nil, err
-	}
-
-	// Convert slice of SQLAuthors to applications Author
-	var authors = make([]models.Author, 0, len(sAuthors))
-	for i := range sAuthors {
-		authors = append(authors, sAuthors[i].ToAuthorModel())
 	}
 
 	return authors, nil

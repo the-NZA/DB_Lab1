@@ -1,8 +1,4 @@
 <template>
-	<!-- <button @click="getSelectedRows">Get Selected Rows</button>
-	<button v-show="hasSelected" @click="clearSelection">Clear selection</button>
-	-->
-
 	<actions-buttons
 		:canEdit="singleSelected"
 		:canDelete="hasSelected"
@@ -18,6 +14,14 @@
 		:context="actionContext"
 		:rowData="getAuthorsRows"
 	></ag-grid-vue>
+
+	<modal-view :showModal="showModal">
+		<author-editor
+			:author_id="selectedAuthorID"
+			@savePressed="handleSaveAuthor"
+			@closePressed="handleCloseModal"
+		/>
+	</modal-view>
 </template>
 
 <script lang="ts" setup>
@@ -26,6 +30,8 @@ import { useStore } from "../store";
 import { storeToRefs } from "pinia";
 import GridButtonsVue from "../components/GridButtons.vue";
 import ActionsButtons from "../components/ActionsButtons.vue"
+import ModalView from "../components/ModalView.vue";
+import AuthorEditor from "../components/AuthorEditor.vue";
 import { AgGridVue } from "ag-grid-vue3";
 import {
 	GridReadyEvent,
@@ -49,17 +55,21 @@ const columnApi = ref<ColumnApi>();
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
 
-const getSelectedRows = () => {
-	const selected = gridApi.value?.getSelectedRows();
-	console.log(selected);
-};
+const showModal = ref<boolean>(false);
+const selectedAuthorID = ref<string | undefined>();
 
-const clearSelection = () => {
-	gridApi.value?.deselectAll();
-};
+const handleCloseModal = () => {
+	showModal.value = false;
+}
+
+const handleSaveAuthor = () => {
+	console.log("save was pressed");
+	showModal.value = false;
+}
 
 const handleAdd = () => {
-	console.log("add was pressed");
+	selectedAuthorID.value = undefined;
+	showModal.value = true;
 }
 
 const handleEdit = () => {
@@ -69,7 +79,8 @@ const handleEdit = () => {
 		return;
 	}
 
-	console.log("edit was pressed");
+	selectedAuthorID.value = (selected[0] as AuthorRow).id
+	showModal.value = true;
 }
 
 const handleDelete = () => {
@@ -140,11 +151,6 @@ const gridOptions = ref<GridOptions>({
 			flex: 1,
 		},
 		{
-			field: "birth_date",
-			headerName: "Дата рождения",
-			maxWidth: 140,
-		},
-		{
 			field: "snippet",
 			headerName: "Описание",
 			flex: 2,
@@ -171,7 +177,8 @@ const deleteFunc = (id: string) => {
 	}
 };
 const editFunc = (id: string) => {
-	alert(`from edit ${id}`);
+	selectedAuthorID.value = id
+	showModal.value = true
 };
 
 // Before Mount Event handler

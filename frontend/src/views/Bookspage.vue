@@ -140,8 +140,8 @@ const gridOptions = ref<GridOptions>({
 			width: 100,
 		},
 		{
-			field: "pub_date",
-			headerName: "Дата публикации",
+			field: "pub_year",
+			headerName: "Год публикации",
 			maxWidth: 155,
 		},
 		{

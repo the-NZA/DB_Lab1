@@ -4,7 +4,8 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 	year: "numeric",
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date?: Date): string {
+	
 	if (date) {
 		return date.toLocaleDateString("ru", dateOptions)
 	}
