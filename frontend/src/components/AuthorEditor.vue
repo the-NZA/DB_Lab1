@@ -39,17 +39,6 @@
 			</div>
 
 			<div class="edfields__field">
-				<label class="edfields__label" for="edbirthdate">Дата рождения</label>
-				<input
-					class="edfields__input"
-					id="edbirthdate"
-					v-model="currentAuthor.birth_date"
-					type="date"
-					placeholder="Введите дату рождения автора"
-				/>
-			</div>
-
-			<div class="edfields__field">
 				<label class="edfields__label" for="edsnippet">Описание</label>
 				<textarea
 					class="edfields__input edfields__textarea"
@@ -89,7 +78,6 @@ const currentAuthor = reactive<Author>({
 	lastname: "",
 	surname: "",
 	snippet: "",
-	birth_date: "",
 	deleted: false,
 })
 
@@ -97,8 +85,6 @@ const title = ref<AuthorEditorTitle>(AuthorEditorTitle.Create)
 const buttonText = ref<SaveButtonValue>(SaveButtonValue.Save)
 
 onBeforeMount(() => {
-	console.log(store.getAuthorByID(props.author_id));
-
 	if (props.author_id) {
 		const author = store.getAuthorByID(props.author_id);
 		if (author) {
@@ -113,7 +99,6 @@ onBeforeMount(() => {
 		currentAuthor.lastname = (author && author.lastname != undefined) ? author?.lastname : ""
 		currentAuthor.surname = (author && author.surname != undefined) ? author?.surname : ""
 		currentAuthor.snippet = (author && author.snippet != undefined) ? author?.snippet : ""
-		currentAuthor.birth_date = (author && author.birth_date != undefined) ? author?.birth_date : ""
 	}
 })
 
