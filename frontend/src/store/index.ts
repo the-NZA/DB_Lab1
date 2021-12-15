@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { Book, Genre, Author } from "../types";
-import { GET, DELETE } from "../HTTP"
+import { GET, POST, PUT, DELETE } from "../HTTP"
 import { AuthorRow, BookRow, GenreRow } from "../types/grid";
 
 export const useStore = defineStore("main", {
@@ -35,7 +35,7 @@ export const useStore = defineStore("main", {
 		},
 		getAuthorByID: (state) => {
 			return (id?: string): Author | undefined => {
-				if(!id) {
+				if (!id) {
 					return undefined
 				}
 
@@ -47,7 +47,7 @@ export const useStore = defineStore("main", {
 		},
 		getGenreByID: (state) => {
 			return (id?: string): Genre | undefined => {
-				if(!id) {
+				if (!id) {
 					return undefined
 				}
 
@@ -112,9 +112,7 @@ export const useStore = defineStore("main", {
 				const res = resp.json()
 				// console.log(res);
 
-				this.books= this.books.filter((book): boolean => {
-					return book.id != id;
-				})
+				this.books = this.books.filter((book): boolean => book.id != id)
 
 			} catch (err) {
 				console.error(err);
@@ -131,13 +129,26 @@ export const useStore = defineStore("main", {
 				console.error(error);
 			}
 		},
-		addGenre(): void {
-			this.genres.push({
-				id: "23",
-				deleted: false,
-				snippet: "werqwer",
-				title: "test genre",
-			})
+		async addGenre(genre: Genre) {
+			try {
+				const res = await POST<Genre>(genre, "/api/genre")
+				this.genres.push(res)
+			}
+			catch(err) {
+				console.error(err);
+			}
+		},
+		async updateGenre(updated_genre: Genre) {
+			try {
+				const res = await PUT<Genre>(updated_genre, "/api/genre")
+				const idx = this.genres.findIndex(genre => genre.id === res.id)
+
+				// Update store through slice with spreads
+				this.genres = [...this.genres.slice(0, idx), res, ...this.genres.slice(idx + 1)]
+			}
+			catch(err) {
+				console.error(err);
+			}
 		},
 		async deleteGenre(id: string) {
 			try {
@@ -152,9 +163,7 @@ export const useStore = defineStore("main", {
 				const res = resp.json()
 				// console.log(res);
 
-				this.genres= this.genres.filter((genre): boolean => {
-					return genre.id != id;
-				})
+				this.genres = this.genres.filter((genre): boolean => genre.id != id )
 
 			} catch (err) {
 				console.error(err);
@@ -176,7 +185,7 @@ export const useStore = defineStore("main", {
 			try {
 				const resp = await DELETE(`/api/author/${id}`)
 				console.log(resp);
-				
+
 				if (!resp.ok) {
 					console.log(resp);
 
@@ -187,9 +196,7 @@ export const useStore = defineStore("main", {
 				const res = resp.json()
 				// console.log(res);
 
-				this.authors = this.authors.filter((author): boolean => {
-					return author.id != id;
-				})
+				this.authors = this.authors.filter((author): boolean => author.id != id)
 
 			} catch (err) {
 				console.error(err);

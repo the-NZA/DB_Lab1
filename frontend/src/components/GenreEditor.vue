@@ -37,6 +37,7 @@ import { ref, onBeforeMount, reactive } from 'vue';
 import { useStore } from "../store"
 import { Genre } from '../types';
 import { GenreEditorTitle, SaveButtonValue } from '../types/enums';
+import { POST } from "../HTTP"
 
 const props = defineProps({
 	genre_id: {
@@ -51,7 +52,7 @@ const emit = defineEmits<{
 
 const store = useStore()
 const currentGenre = reactive<Genre>({
-	id: "0",
+	id: "",
 	title: "",
 	snippet: "",
 	deleted: false,
@@ -67,18 +68,24 @@ onBeforeMount(() => {
 			title.value = GenreEditorTitle.Edit
 			buttonText.value = SaveButtonValue.Update
 
+			currentGenre.id = genre.id
+			currentGenre.deleted = genre.deleted
 			currentGenre.title = genre.title
 			currentGenre.snippet = genre.snippet
 		}
-
-
 	}
 })
 
-const saveGenre = () => {
-	setTimeout(() => {
-		emit('savePressed')
-	}, 500)
+const saveGenre = async () => {
+	if (title.value === GenreEditorTitle.Create) {
+		// If create new genre
+		await store.addGenre(currentGenre)
+	} else {
+		// Update existing 
+		await store.updateGenre(currentGenre)
+	}
+
+	emit('savePressed')
 }
 
 </script>

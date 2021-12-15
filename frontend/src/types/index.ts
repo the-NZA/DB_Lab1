@@ -23,3 +23,9 @@ export type Author = {
 	snippet: string,
 	deleted: boolean,
 }
+
+export type BooksAuthors = {
+	id: string,
+	book_id: string,
+	author_id: string,
+}
