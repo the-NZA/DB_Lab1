@@ -15,8 +15,12 @@
 		:rowData="getGenresRows"
 	></ag-grid-vue>
 
-	<modal-view :showModal="showModal" @savePressed="handleSaveGenre" @closePressed="handleCloseModal">
-		<genre-editor :genre_id="selectedGenreID" />
+	<modal-view :showModal="showModal">
+		<genre-editor
+			:genre_id="selectedGenreID"
+			@savePressed="handleSaveGenre"
+			@closePressed="handleCloseModal"
+		/>
 	</modal-view>
 </template>
 
@@ -50,10 +54,12 @@ const columnApi = ref<ColumnApi>();
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
 const showModal = ref<boolean>(false);
+const showModalContent = ref<boolean>(false);
 const selectedGenreID = ref<string | undefined>();
 
 const handleCloseModal = () => {
 	showModal.value = false;
+	showModalContent.value = false
 }
 
 const handleSaveGenre = () => {
