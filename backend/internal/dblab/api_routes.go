@@ -275,6 +275,9 @@ func (a *App) handleAuthorAdd() http.HandlerFunc {
 			return
 		}
 
+		// Reset ID and Deleted flag for new author
+		author.ID, author.Deleted = "", false
+
 		// Try save new author
 		author, err = a.services.AuthorService().Add(author)
 		if err != nil {
