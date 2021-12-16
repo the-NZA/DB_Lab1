@@ -1,0 +1,156 @@
+<template>
+	<div class="editor">
+		<div class="editor__header">
+			<h2>{{ title }}</h2>
+			<button @click="emit('closePressed')"></button>
+		</div>
+		<div class="editor__body edfields">
+			<div class="edfields__field">
+				<label class="edfields__label" for="edtitle">Название</label>
+				<input
+					class="edfields__input"
+					id="edtitle"
+					v-model="currentBook.title"
+					type="text"
+					placeholder="Введите название книги"
+				/>
+			</div>
+
+			<div class="edfields__field">
+				<label class="edfields__label" for="edgenre">Жанр</label>
+				<multiselect
+					v-model="selectedGenre"
+					:options="genres"
+					track-by="id"
+					label="title"
+					:allow-empty="false"
+					:searcheble="true"
+					deselectLabel
+					selectLabel
+					selectedLabel="Выбранный"
+					placeholder="Выберите жанр"
+				></multiselect>
+			</div>
+
+			<div class="edfields__field">
+				<label class="edfields__label" for="edsnippet">Описание</label>
+				<textarea
+					class="edfields__input edfields__textarea"
+					id="edsnippet"
+					v-model="currentBook.snippet"
+					placeholder="Введите описание автора"
+				></textarea>
+			</div>
+
+			<div class="edfields__field">
+				<label class="edfields__label" for="edpubyear">Год публикации</label>
+				<input
+					type="number"
+					step="1"
+					class="edfields__input"
+					id="edpubyear"
+					v-model="currentBook.pub_year"
+					placeholder="Введите дату публикации"
+				/>
+			</div>
+
+			<div class="edfields__field">
+				<label class="edfields__label" for="edpagescnt">Количество страниц</label>
+				<input
+					type="number"
+					step="1"
+					class="edfields__input"
+					id="edpagescnt"
+					v-model="currentBook.pages_cnt"
+					placeholder="Введите количество страниц"
+				/>
+			</div>
+		</div>
+		<div class="editor__footer">
+			<button @click="saveBook">{{ buttonText }}</button>
+		</div>
+	</div>
+</template>
+
+<script lang="ts" setup>
+import { ref, onBeforeMount, reactive, computed, onMounted } from 'vue';
+import Multiselect from 'vue-multiselect'
+import { useStore } from "../store"
+import { Book, Genre } from '../types';
+import { BookEditorTitle, SaveButtonValue } from '../types/enums';
+
+const props = defineProps({
+	book_id: {
+		type: String,
+	},
+})
+
+const emit = defineEmits<{
+	(e: "savePressed"): void
+	(e: "closePressed"): void
+}>()
+
+const store = useStore()
+
+const genres = ref<Genre[]>([])
+const selectedGenre = ref<Genre>()
+const currentBook = reactive<Book>({
+	id: "",
+	title: "",
+	snippet: "",
+	genre_id: "",
+	pages_cnt: 0,
+	pub_year: 0,
+	deleted: false,
+})
+
+const title = ref<BookEditorTitle>(BookEditorTitle.Create)
+const buttonText = ref<SaveButtonValue>(SaveButtonValue.Save)
+
+onBeforeMount(() => {
+	genres.value = store.getGenres
+
+	if (props.book_id) {
+		const book = store.getBookByID(props.book_id);
+		if (book) {
+			title.value = BookEditorTitle.Edit
+			buttonText.value = SaveButtonValue.Update
+
+			currentBook.id = book.id
+			currentBook.title = book.title
+			currentBook.snippet = book.snippet
+			currentBook.pages_cnt = book.pages_cnt
+			currentBook.pub_year = book.pub_year
+			currentBook.genre_id = book.genre_id
+
+			// Get initial value for selectedGenre
+			genres.value.forEach(genre => {
+				if (genre.id === currentBook.genre_id) {
+					selectedGenre.value = genre
+					return
+				}
+			})
+		}
+	}
+})
+
+const saveBook = async () => {
+	currentBook.genre_id = selectedGenre.value!.id
+
+	if (title.value === BookEditorTitle.Create) {
+		// If create new genre
+		await store.addBook(currentBook)
+
+	} else {
+		// Update existing 
+		await store.updateBook(currentBook)
+		// console.log(currentBook);
+	}
+
+	emit('savePressed')
+}
+
+</script>
+
+<style>
+</style>

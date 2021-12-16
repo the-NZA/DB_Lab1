@@ -99,6 +99,27 @@ export const useStore = defineStore("main", {
 				console.error(error);
 			}
 		},
+		async addBook(book: Book) {
+			try {
+				const res = await POST<Book>(book, "/api/book")
+				this.books.push(res)
+			}
+			catch (err) {
+				console.error(err);
+			}
+		},
+		async updateBook(updated_book: Book) {
+			try {
+				const res = await PUT<Book>(updated_book, "/api/book")
+				const idx = this.books.findIndex(book => book.id === res.id)
+
+				// Update store through slice with spreads
+				this.books = [...this.books.slice(0, idx), res, ...this.books.slice(idx + 1)]
+			}
+			catch (err) {
+				console.error(err);
+			}
+		},
 		async deleteBook(id: string) {
 			try {
 				const resp = await DELETE(`/api/book/${id}`)
@@ -134,7 +155,7 @@ export const useStore = defineStore("main", {
 				const res = await POST<Genre>(genre, "/api/genre")
 				this.genres.push(res)
 			}
-			catch(err) {
+			catch (err) {
 				console.error(err);
 			}
 		},
@@ -146,7 +167,7 @@ export const useStore = defineStore("main", {
 				// Update store through slice with spreads
 				this.genres = [...this.genres.slice(0, idx), res, ...this.genres.slice(idx + 1)]
 			}
-			catch(err) {
+			catch (err) {
 				console.error(err);
 			}
 		},
@@ -163,7 +184,7 @@ export const useStore = defineStore("main", {
 				const res = resp.json()
 				// console.log(res);
 
-				this.genres = this.genres.filter((genre): boolean => genre.id != id )
+				this.genres = this.genres.filter((genre): boolean => genre.id != id)
 
 			} catch (err) {
 				console.error(err);

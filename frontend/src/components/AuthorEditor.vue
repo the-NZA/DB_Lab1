@@ -73,7 +73,7 @@ const emit = defineEmits<{
 
 const store = useStore()
 const currentAuthor = reactive<Author>({
-	id: "0",
+	id: "",
 	firstname: "",
 	lastname: "",
 	surname: "",

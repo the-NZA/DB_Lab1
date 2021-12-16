@@ -18,6 +18,9 @@ import "./css/footer/footer.css"
 import "./css/editor/editor.css"
 import "./css/editor/edfields.css"
 
+// Import vue-multiselect styles
+import "vue-multiselect/dist/vue-multiselect.css"
+import "./css/multiselect/multiselect.css"
 
 // Import AG-Grid styles
 import "ag-grid-community/dist/styles/ag-grid.css"

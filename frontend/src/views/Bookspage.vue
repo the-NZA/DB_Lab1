@@ -14,6 +14,14 @@
 		:context="actionContext"
 		:rowData="getBooksRows"
 	></ag-grid-vue>
+
+	<modal-view :showModal="showModal">
+		<book-editor
+			:book_id="selectedBookID"
+			@savePressed="handleSaveBook"
+			@closePressed="handleCloseModal"
+		/>
+	</modal-view>
 </template>
 
 <script lang="ts" setup>
@@ -22,6 +30,8 @@ import { useStore } from "../store";
 import { storeToRefs } from "pinia";
 import GridButtonsVue from "../components/GridButtons.vue";
 import ActionsButtons from "../components/ActionsButtons.vue"
+import ModalView from "../components/ModalView.vue";
+import BookEditor from "../components/BookEditor.vue";
 import { AgGridVue } from "ag-grid-vue3";
 import {
 	GridReadyEvent,
@@ -44,8 +54,21 @@ const columnApi = ref<ColumnApi>();
 const hasSelected = ref<boolean>(false);
 const singleSelected = ref<boolean>(false);
 
+const showModal = ref<boolean>(false);
+const selectedBookID = ref<string | undefined>();
+
+const handleCloseModal = () => {
+	showModal.value = false;
+}
+
+const handleSaveBook = () => {
+	console.log("save was pressed");
+	showModal.value = false;
+}
+
 const handleAdd = () => {
-	console.log("add was pressed");
+	selectedBookID.value = undefined;
+	showModal.value = true;
 }
 
 const handleEdit = () => {
@@ -55,7 +78,8 @@ const handleEdit = () => {
 		return;
 	}
 
-	console.log("edit was pressed");
+	selectedBookID.value = (selected[0] as BookRow).id
+	showModal.value = true;
 }
 
 const handleDelete = () => {
@@ -160,7 +184,8 @@ const deleteFunc = (id: string) => {
 	}
 };
 const editFunc = (id: string) => {
-	alert(`from edit ${id}`);
+	selectedBookID.value = id
+	showModal.value = true
 };
 
 // Before Mount Event handler
