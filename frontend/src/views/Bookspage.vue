@@ -143,7 +143,7 @@ const gridOptions = ref<GridOptions>({
 		{
 			field: "snippet",
 			headerName: "Описание",
-			flex: 2,
+			flex: 3,
 			minWidth: 450,
 		},
 		{
@@ -156,19 +156,21 @@ const gridOptions = ref<GridOptions>({
 			field: "pages_cnt",
 			headerName: "Страниц",
 			width: 100,
+			cellClass: ["centered"],
 		},
 		{
 			field: "pub_year",
 			headerName: "Год публикации",
 			maxWidth: 155,
+			cellClass: ["centered"],
 		},
 		{
 			field: "actions",
 			headerName: "Действия",
 			cellRenderer: "gridBtn",
-			// cellClass: ["test", "test2"], // Use for grid action buttons
-			flex: 0.5,
-			minWidth: 110,
+			minWidth: 115,
+			maxWidth: 120,
+			flex: 0.5
 		}
 	],
 	frameworkComponents: {

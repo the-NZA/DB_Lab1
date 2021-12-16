@@ -7,6 +7,7 @@
 .ag-theme-alpine {
 	box-shadow: var(--main-shadow);
 	border-radius: var(--offset-quarter);
+	min-height: calc(var(--site-width) / 3);
 }
 
 .ag-theme-alpine .ag-root-wrapper {
@@ -20,4 +21,8 @@
 
 .ag-cell-wrap-text {
 	word-break: normal !important;
+}
+
+.centered > div {
+	justify-content: center;
 }

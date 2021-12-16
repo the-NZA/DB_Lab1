@@ -152,8 +152,8 @@ const gridOptions = ref<GridOptions>({
 			field: "actions",
 			headerName: "Действия",
 			cellRenderer: "gridBtn",
-			// cellClass: ["test", "test2"], // Use for grid action buttons
-			width: 105,
+			minWidth: 115,
+			flex: 0.5
 		}
 	],
 	frameworkComponents: {
