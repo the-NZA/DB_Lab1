@@ -41,6 +41,10 @@ func (s *MockStore) Genres() storer.GenreRepository {
 	return s.genres
 }
 
+func (s *MockStore) BooksAuthors() storer.BookAuthorRepository {
+	return nil
+}
+
 func (s *MockStore) Close() error {
 	return nil
 }

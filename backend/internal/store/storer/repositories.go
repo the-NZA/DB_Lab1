@@ -25,3 +25,7 @@ type GenreRepository interface {
 	Delete(string) error
 	GetAll() ([]models.Genre, error)
 }
+
+type BookAuthorRepository interface {
+	GetByIDs(string, string) ([]models.BookAuthor, error)
+}

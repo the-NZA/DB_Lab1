@@ -24,6 +24,10 @@ func (s *MySQLStore) Genres() storer.GenreRepository {
 	return nil
 }
 
+func (s *MySQLStore) BooksAuthors() storer.BookAuthorRepository {
+	return nil
+}
+
 func (s *MySQLStore) Close() error {
 	if s == nil {
 		return storer.ErrStoreNilOrEmpty

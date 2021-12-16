@@ -10,7 +10,9 @@ import (
 )
 
 var (
-	ErrNoIDSpecified = errors.New("You must specify ID in URL param")
+	ErrNoIDSpecified  = errors.New("You must specify ID in URL param")
+	ErrNoQueryParams  = errors.New("You must specify at least 1 query param")
+	ErrLenQueryParams = errors.New("Query param length must be 1 or greater")
 )
 
 /*
@@ -349,5 +351,43 @@ func (a *App) handleAuthorGetAll() http.HandlerFunc {
 		}
 
 		a.respond(w, r, http.StatusOK, authors)
+	}
+}
+
+/*
+* BookAuthor handlers
+ */
+
+// handle /api/book-author?author_id=AuthorID&book_id=BookID
+func (a *App) handleGetBookAuthor() http.HandlerFunc {
+	const (
+		authorParam = "author_id"
+		bookParam   = "book_id"
+	)
+
+	return func(w http.ResponseWriter, r *http.Request) {
+		hasAuthorID := r.URL.Query().Has(authorParam)
+		hasBookID := r.URL.Query().Has(bookParam)
+
+		if !hasAuthorID && !hasBookID {
+			a.error(w, r, http.StatusBadRequest, ErrNoQueryParams)
+			return
+		}
+
+		authorID := r.URL.Query().Get(authorParam)
+		bookID := r.URL.Query().Get(bookParam)
+
+		if hasAuthorID && len(authorID) == 0 || hasBookID && len(bookID) == 0 {
+			a.error(w, r, http.StatusBadRequest, ErrLenQueryParams)
+			return
+		}
+
+		booksAuthors, err := a.services.BooksAuthors().GetByIDs(bookID, authorID)
+		if err != nil {
+			a.error(w, r, http.StatusInternalServerError, err)
+			return
+		}
+
+		a.respond(w, r, http.StatusOK, booksAuthors)
 	}
 }

@@ -13,10 +13,11 @@ import (
 )
 
 type SQLiteStore struct {
-	db      *sqlx.DB
-	books   storer.BookReporsitory
-	authors storer.AuthorRepository
-	genres  storer.GenreRepository
+	db           *sqlx.DB
+	books        storer.BookReporsitory
+	authors      storer.AuthorRepository
+	genres       storer.GenreRepository
+	booksAuthors storer.BookAuthorRepository
 }
 
 func (s *SQLiteStore) Books() storer.BookReporsitory {
@@ -41,6 +42,14 @@ func (s *SQLiteStore) Genres() storer.GenreRepository {
 	}
 
 	return s.genres
+}
+
+func (s *SQLiteStore) BooksAuthors() storer.BookAuthorRepository {
+	if s.booksAuthors == nil {
+		s.booksAuthors = &BooksAuthorsRepository{db: s.db}
+	}
+
+	return s.booksAuthors
 }
 
 func (s *SQLiteStore) Close() error {

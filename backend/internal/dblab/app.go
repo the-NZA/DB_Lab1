@@ -91,6 +91,8 @@ func (a *App) configureRouter() {
 			r.Delete("/{authorID}", a.handleAuthorDelete())
 			r.Get("/all", a.handleAuthorGetAll())
 		})
+
+		r.Get("/book-author", a.handleGetBookAuthor())
 	})
 }
 
