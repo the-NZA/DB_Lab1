@@ -142,12 +142,14 @@ func (a *AuthorRepository) Update(awb models.AuthorWithBooks) (models.AuthorWith
 		awb.Author.ID,
 	)
 	if err != nil {
+		tx.Rollback()
 		return awb, err
 	}
 
 	// Commit transaction
 	err = tx.Commit()
 	if err != nil {
+		tx.Rollback()
 		return awb, err
 	}
 
@@ -156,9 +158,32 @@ func (a *AuthorRepository) Update(awb models.AuthorWithBooks) (models.AuthorWith
 
 // Delete one author
 func (a *AuthorRepository) Delete(ID string) error {
-	_, err := a.db.Exec("UPDATE authors SET deleted = true WHERE id = ?", ID)
+	// Start transaction
+	tx, err := a.db.Beginx()
+	if err != nil {
+		return err
+	}
 
-	return err
+	_, err = tx.Exec("UPDATE authors SET deleted = true WHERE id = ?", ID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Remove previous information about author if it exists and books relations
+	_, err = tx.Exec("DELETE FROM books_authors WHERE author_id = ?", ID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Commit transaction
+	err = tx.Commit()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // Gell all authors
