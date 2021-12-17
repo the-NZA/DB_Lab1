@@ -12,7 +12,7 @@ type Servicer interface {
 
 type BookServicer interface {
 	Get(string) (models.Book, error)
-	Add(models.Book) (models.Book, error)
+	Add(models.BookWithAuthors) (models.BookWithAuthors, error)
 	Update(models.Book) (models.Book, error)
 	Delete(string) error
 	GetAll() ([]models.Book, error)

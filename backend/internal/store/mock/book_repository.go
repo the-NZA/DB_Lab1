@@ -88,14 +88,14 @@ func (b BookRepository) Get(ID string) (models.Book, error) {
 }
 
 // Add one book to books
-func (b BookRepository) Add(book models.Book) (models.Book, error) {
+func (b BookRepository) Add(ba models.BookWithAuthors) (models.BookWithAuthors, error) {
 	newID := getNextBookID(books)
 
-	book.ID = strconv.Itoa(newID)
+	ba.Book.ID = strconv.Itoa(newID)
 
-	books = append(books, book)
+	books = append(books, ba.Book)
 
-	return book, nil
+	return ba, nil
 }
 
 // Update one book in books

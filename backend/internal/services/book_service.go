@@ -13,13 +13,13 @@ func (b *BookService) Get(ID string) (models.Book, error) {
 	return b.repository.Get(ID)
 }
 
-func (b *BookService) Add(book models.Book) (models.Book, error) {
-	// validate new book
-	if err := book.Validate(); err != nil {
-		return book, err
+func (b *BookService) Add(ba models.BookWithAuthors) (models.BookWithAuthors, error) {
+	// validate new book with authors
+	if err := ba.Validate(); err != nil {
+		return ba, err
 	}
 
-	return b.repository.Add(book)
+	return b.repository.Add(ba)
 }
 
 func (b *BookService) Update(book models.Book) (models.Book, error) {

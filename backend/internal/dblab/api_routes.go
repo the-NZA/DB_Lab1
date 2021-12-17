@@ -43,25 +43,28 @@ func (a *App) handleBookGet() http.HandlerFunc {
 func (a *App) handleBookAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			book models.Book
-			err  error
+			req models.BookWithAuthors
+			err error
 		)
 
-		if err = json.NewDecoder(r.Body).Decode(&book); err != nil {
+		if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 			a.logger.Logf("[INFO] During body parse: %v\n", err)
 			a.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
-		// Try save new book
-		book, err = a.services.BookService().Add(book)
+		// Reset book ID
+		req.Book.ID = ""
+
+		// Try save new book with authors IDs
+		req, err = a.services.BookService().Add(req)
 		if err != nil {
 			a.logger.Logf("[INFO] During book saving: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		a.respond(w, r, http.StatusCreated, book)
+		a.respond(w, r, http.StatusCreated, req)
 	}
 }
 
