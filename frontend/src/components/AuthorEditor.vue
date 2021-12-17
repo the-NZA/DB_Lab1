@@ -126,12 +126,24 @@ onBeforeMount(() => {
 })
 
 const saveAuthor = async () => {
+	const booksIDs: string[] = []
+
+	selectedBooks.value.forEach(book => {
+		booksIDs.push(book.id)
+	})
+
 	if (title.value === AuthorEditorTitle.Create) {
 		// If create new genre
-		await store.addAuthor(currentAuthor)
+		await store.addAuthor({
+			author: currentAuthor,
+			books_ids: booksIDs,
+		})
 	} else {
 		// Update existing 
-		await store.updateAuthor(currentAuthor)
+		await store.updateAuthor({
+			author: currentAuthor,
+			books_ids: booksIDs,
+		})
 	}
 
 	emit('savePressed')

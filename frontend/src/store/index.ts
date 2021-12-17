@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Book, Genre, Author, BookAuthor, BookWithAuthors } from "../types";
+import { Book, Genre, Author, BookAuthor, BookWithAuthors, AuthorWithBooks } from "../types";
 import { GET, POST, PUT, DELETE } from "../HTTP"
 import { AuthorRow, BookRow, GenreRow } from "../types/grid";
 
@@ -200,11 +200,11 @@ export const useStore = defineStore("main", {
 					console.log(resp);
 
 					throw new Error(resp.statusText)
-
 				}
 
-				const res = resp.json()
+				// const res = resp.json()
 				// console.log(res);
+				await this.loadBooksAuthors()
 
 				this.books = this.books.filter((book): boolean => book.id != id)
 
@@ -251,10 +251,9 @@ export const useStore = defineStore("main", {
 					console.log(resp);
 
 					throw new Error(resp.statusText)
-
 				}
 
-				const res = resp.json()
+				// const res = resp.json()
 				// console.log(res);
 
 				this.genres = this.genres.filter((genre): boolean => genre.id != id)
@@ -275,22 +274,26 @@ export const useStore = defineStore("main", {
 				console.error(error);
 			}
 		},
-		async addAuthor(author: Author) {
+		async addAuthor(ab: AuthorWithBooks) {
 			try {
-				const res = await POST<Author>(author, "/api/author")
-				this.authors.push(res)
+				const res = await POST<AuthorWithBooks>(ab, "/api/author")
+				await this.loadBooksAuthors()
+
+				this.authors.push(res.author)
 			}
 			catch (err) {
 				console.error(err);
 			}
 		},
-		async updateAuthor(updated_author: Author) {
+		async updateAuthor(ab: AuthorWithBooks) {
 			try {
-				const res = await PUT<Author>(updated_author, "/api/author")
-				const idx = this.authors.findIndex(author => author.id === res.id)
+				const res = await PUT<AuthorWithBooks>(ab, "/api/author")
+				const idx = this.authors.findIndex(author => author.id === res.author.id)
 
 				// Update store through slice with spreads
-				this.authors = [...this.authors.slice(0, idx), res, ...this.authors.slice(idx + 1)]
+				this.authors = [...this.authors.slice(0, idx), res.author, ...this.authors.slice(idx + 1)]
+
+				await this.loadBooksAuthors()
 			}
 			catch (err) {
 				console.error(err);
@@ -299,8 +302,6 @@ export const useStore = defineStore("main", {
 		async deleteAuthor(id: string) {
 			try {
 				const resp = await DELETE(`/api/author/${id}`)
-				console.log(resp);
-
 				if (!resp.ok) {
 					console.log(resp);
 
@@ -308,8 +309,9 @@ export const useStore = defineStore("main", {
 
 				}
 
-				const res = resp.json()
+				// const res = resp.json()
 				// console.log(res);
+				await this.loadBooksAuthors()
 
 				this.authors = this.authors.filter((author): boolean => author.id != id)
 
