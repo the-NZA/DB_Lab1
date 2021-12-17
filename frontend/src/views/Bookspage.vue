@@ -147,6 +147,14 @@ const gridOptions = ref<GridOptions>({
 			minWidth: 450,
 		},
 		{
+			field: "authors",
+			headerName: "Автор(ы)",
+			minWidth: 110,
+			maxWidth: 115,
+			cellClass: ["authors"]
+
+		},
+		{
 			field: "genre",
 			headerName: "Жанр",
 			minWidth: 120,

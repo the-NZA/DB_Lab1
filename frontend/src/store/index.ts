@@ -56,6 +56,26 @@ export const useStore = defineStore("main", {
 				return state.genres.find(item => item.id === id)
 			}
 		},
+		getAuthorsByBookID: (state) => {
+			return (book_id: string) => {
+				const booksAuthorsIDs = state.booksAuthors.filter(ba => ba.book_id === book_id)
+				const authors: string[] = []
+
+				for (const ba of booksAuthorsIDs) {
+					const author = state.authors.find(item => item.id === ba.author_id)
+					if (author) {
+						let formatedAuthor = author.surname.length === 0 ? `${author.lastname} ${author.firstname[0].toUpperCase()}.` : `${author.lastname} ${author.firstname[0].toUpperCase()}. ${author.surname[0].toUpperCase()}.`
+
+						authors.push(formatedAuthor.charAt(0).toUpperCase() + formatedAuthor.slice(1))
+					}
+				}
+
+				// authors.push("Kozlov R.K.")
+				// authors.push("Kozlov R.K.")
+
+				return authors.join(", ")
+			}
+		},
 		getGenresRows(): GenreRow[] {
 			return this.genres.map((genre): GenreRow => {
 				return {
@@ -74,6 +94,7 @@ export const useStore = defineStore("main", {
 					pages_cnt: book.pages_cnt,
 					pub_year: book.pub_year,
 					genre: this.getGenreByID(book.genre_id)!.title,
+					authors: this.getAuthorsByBookID(book.id),
 				}
 			})
 		},
@@ -246,7 +267,7 @@ export const useStore = defineStore("main", {
 				console.error(err);
 			}
 		},
-		
+
 		/* BOOKS AUTHORS */
 		async loadBooksAuthors() {
 			try {

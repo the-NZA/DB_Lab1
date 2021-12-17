@@ -23,6 +23,21 @@
 	word-break: normal !important;
 }
 
+/* .ag-theme-alpine .ag-cell, 
+.ag-theme-alpine .ag-full-width-row .ag-cell-wrapper.ag-row-group {
+	line-height: 25px;
+} */
+
 .centered > div {
 	justify-content: center;
+}
+
+.authors {
+	min-height: 100%;
+	display: flex;
+	align-items: center;
+}
+
+.authors span {
+	line-height: 25px;
 }
