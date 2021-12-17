@@ -36,28 +36,64 @@ func (a *AuthorRepository) Get(ID string) (models.Author, error) {
 }
 
 // Add one author
-func (a *AuthorRepository) Add(author models.Author) (models.Author, error) {
+func (a *AuthorRepository) Add(awb models.AuthorWithBooks) (models.AuthorWithBooks, error) {
 	// Try save new author
-	res, err := a.db.Exec(insertAuthor,
-		author.Firstname,
-		author.Lastname,
-		author.Surname,
-		author.Snippet,
+
+	// Start transaction
+	tx, err := a.db.Beginx()
+	if err != nil {
+		return awb, err
+	}
+
+	// Save new author
+	res, err := tx.Exec(insertAuthor,
+		awb.Author.Firstname,
+		awb.Author.Lastname,
+		awb.Author.Surname,
+		awb.Author.Snippet,
 	)
 	if err != nil {
-		return author, err
+		tx.Rollback()
+		return awb, err
 	}
 
 	// Try get ID for inserted author
 	id, err := res.LastInsertId()
 	if err != nil {
-		return author, err
+		tx.Rollback()
+		return awb, err
 	}
 
 	// Save string representation of ID
-	author.ID = strconv.FormatInt(id, 10)
+	awb.Author.ID = strconv.FormatInt(id, 10)
 
-	return author, nil
+	// If passed any book id for new author
+	if len(awb.BooksIDs) > 0 {
+		// Remove previous information about author if it exists and books relations
+		_, err = tx.Exec("DELETE FROM books_authors WHERE author_id = ?", awb.Author.ID)
+		if err != nil {
+			tx.Rollback()
+			return awb, err
+		}
+
+		// Insert information about author and books relations
+		for i := range awb.BooksIDs {
+			_, err = tx.Exec("INSERT INTO books_authors (book_id, author_id) VALUES (?, ?)", awb.BooksIDs[i], awb.Author.ID)
+			if err != nil {
+				tx.Rollback()
+				return awb, err
+			}
+		}
+	}
+
+	// Commit transaction
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return awb, err
+	}
+
+	return awb, nil
 }
 
 // Update one author

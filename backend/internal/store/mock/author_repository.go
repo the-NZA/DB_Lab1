@@ -85,12 +85,12 @@ func (a AuthorRepository) Get(ID string) (models.Author, error) {
 }
 
 // Add one author to authors
-func (a AuthorRepository) Add(author models.Author) (models.Author, error) {
+func (a AuthorRepository) Add(author models.AuthorWithBooks) (models.AuthorWithBooks, error) {
 	newID := getNextAuthorID(authors)
 
-	author.ID = strconv.Itoa(newID)
+	author.Author.ID = strconv.Itoa(newID)
 
-	authors = append(authors, author)
+	authors = append(authors, author.Author)
 
 	return author, nil
 }

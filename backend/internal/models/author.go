@@ -23,3 +23,18 @@ func (a Author) Validate() error {
 		validation.Field(&a.Deleted, validation.In(true, false)),
 	)
 }
+
+type AuthorWithBooks struct {
+	Author   Author   `json:"author"`
+	BooksIDs []string `json:"books_ids"`
+}
+
+func (awb AuthorWithBooks) Validate() error {
+	err := awb.Author.Validate()
+	if err != nil {
+		return err
+	}
+
+	return validation.ValidateStruct(&awb,
+		validation.Field(&awb.BooksIDs, validation.NotNil))
+}

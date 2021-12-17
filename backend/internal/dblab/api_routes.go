@@ -270,28 +270,28 @@ func (a *App) handleAuthorGet() http.HandlerFunc {
 func (a *App) handleAuthorAdd() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			author models.Author
-			err    error
+			req models.AuthorWithBooks
+			err error
 		)
 
-		if err = json.NewDecoder(r.Body).Decode(&author); err != nil {
+		if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 			a.logger.Logf("[INFO] During body parse: %v\n", err)
 			a.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
 		// Reset ID and Deleted flag for new author
-		author.ID, author.Deleted = "", false
+		req.Author.ID, req.Author.Deleted = "", false
 
 		// Try save new author
-		author, err = a.services.AuthorService().Add(author)
+		req, err = a.services.AuthorService().Add(req)
 		if err != nil {
 			a.logger.Logf("[INFO] During author saving: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		a.respond(w, r, http.StatusCreated, author)
+		a.respond(w, r, http.StatusCreated, req)
 	}
 }
 

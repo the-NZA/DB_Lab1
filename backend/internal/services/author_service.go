@@ -13,7 +13,7 @@ func (a *AuthorService) Get(ID string) (models.Author, error) {
 	return a.repository.Get(ID)
 }
 
-func (a *AuthorService) Add(author models.Author) (models.Author, error) {
+func (a *AuthorService) Add(author models.AuthorWithBooks) (models.AuthorWithBooks, error) {
 	// validate new author
 	if err := author.Validate(); err != nil {
 		return author, err

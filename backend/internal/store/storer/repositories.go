@@ -12,7 +12,7 @@ type BookReporsitory interface {
 
 type AuthorRepository interface {
 	Get(string) (models.Author, error)
-	Add(models.Author) (models.Author, error)
+	Add(models.AuthorWithBooks) (models.AuthorWithBooks, error)
 	Update(models.Author) (models.Author, error)
 	Delete(string) error
 	GetAll() ([]models.Author, error)
