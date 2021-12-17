@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Book, Genre, Author, BookAuthor } from "../types";
+import { Book, Genre, Author, BookAuthor, BookWithAuthors } from "../types";
 import { GET, POST, PUT, DELETE } from "../HTTP"
 import { AuthorRow, BookRow, GenreRow } from "../types/grid";
 
@@ -168,22 +168,26 @@ export const useStore = defineStore("main", {
 				console.error(error);
 			}
 		},
-		async addBook(book: Book) {
+		async addBook(ba: BookWithAuthors) {
 			try {
-				const res = await POST<Book>(book, "/api/book")
-				this.books.push(res)
+				const res = await POST<BookWithAuthors>(ba, "/api/book")
+				await this.loadBooksAuthors()
+
+				this.books.push(res.book)
 			}
 			catch (err) {
 				console.error(err);
 			}
 		},
-		async updateBook(updated_book: Book) {
+		async updateBook(ba: BookWithAuthors) {
 			try {
-				const res = await PUT<Book>(updated_book, "/api/book")
-				const idx = this.books.findIndex(book => book.id === res.id)
+				const res = await PUT<BookWithAuthors>(ba, "/api/book")
+				const idx = this.books.findIndex(book => book.id === res.book.id)
 
 				// Update store through slice with spreads
-				this.books = [...this.books.slice(0, idx), res, ...this.books.slice(idx + 1)]
+				this.books = [...this.books.slice(0, idx), res.book, ...this.books.slice(idx + 1)]
+
+				await this.loadBooksAuthors()
 			}
 			catch (err) {
 				console.error(err);

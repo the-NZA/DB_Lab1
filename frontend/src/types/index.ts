@@ -29,3 +29,8 @@ export type BookAuthor = {
 	book_id: string,
 	author_id: string,
 }
+
+export type BookWithAuthors = {
+	book: Book,
+	authors_ids: string[],
+}
