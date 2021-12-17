@@ -179,7 +179,6 @@ const saveBook = async () => {
 			book: currentBook,
 			authors_ids: authorsIDs,
 		})
-		// console.log(currentBook);
 	}
 
 	emit('savePressed')
