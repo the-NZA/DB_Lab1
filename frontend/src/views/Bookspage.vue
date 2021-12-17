@@ -148,11 +148,11 @@ const gridOptions = ref<GridOptions>({
 		},
 		{
 			field: "authors",
-			headerName: "Автор(ы)",
+			headerName: "Авторы",
 			minWidth: 110,
-			maxWidth: 115,
+			flex: 1,
+			// maxWidth: 115,
 			cellClass: ["authors"]
-
 		},
 		{
 			field: "genre",

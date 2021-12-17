@@ -19,5 +19,6 @@ export type AuthorRow = {
 	firstname: string,
 	lastname: string,
 	surname: string,
+	books: string,
 	snippet: string,
 }

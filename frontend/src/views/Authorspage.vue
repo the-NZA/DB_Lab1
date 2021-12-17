@@ -138,22 +138,34 @@ const gridOptions = ref<GridOptions>({
 			checkboxSelection: true,
 			headerCheckboxSelection: true,
 			headerName: "Имя",
+			minWidth: 110,
 			flex: 1,
 		},
 		{
 			field: "lastname",
 			headerName: "Фамилия",
+			minWidth: 110,
 			flex: 1,
 		},
 		{
 			field: "surname",
 			headerName: "Отчество",
+			minWidth: 110,
 			flex: 1,
+		},
+		{
+			field: "books",
+			headerName: "Книги",
+			minWidth: 110,
+			flex: 1,
+			// maxWidth: 115,
+			cellClass: ["authors"]
 		},
 		{
 			field: "snippet",
 			headerName: "Описание",
 			flex: 2,
+			minWidth: 380,
 		},
 		{
 			field: "actions",

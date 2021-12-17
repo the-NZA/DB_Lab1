@@ -70,10 +70,23 @@ export const useStore = defineStore("main", {
 					}
 				}
 
-				// authors.push("Kozlov R.K.")
-				// authors.push("Kozlov R.K.")
-
 				return authors.join(", ")
+			}
+		},
+		getBooksByAuthorID: (state) => {
+			return (author_id: string) => {
+				const booksAuthorsIDs = state.booksAuthors.filter(ba => ba.author_id === author_id)
+				const books: string[] = []
+
+				for (const ba of booksAuthorsIDs) {
+					const book = state.books.find(item => item.id === ba.book_id)
+
+					if (book){
+						books.push(`${book.title.charAt(0).toUpperCase() + book.title.slice(1)}`)
+					}
+				}
+
+				return books.join(", ")
 			}
 		},
 		getGenresRows(): GenreRow[] {
@@ -106,6 +119,7 @@ export const useStore = defineStore("main", {
 					lastname: author.lastname,
 					surname: author.surname,
 					snippet: author.snippet,
+					books: this.getBooksByAuthorID(author.id),
 				}
 			})
 		}
