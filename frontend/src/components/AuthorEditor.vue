@@ -39,6 +39,25 @@
 			</div>
 
 			<div class="edfields__field">
+				<label class="edfields__label" for="edbooks">Книги</label>
+				<multiselect
+					v-model="selectedBooks"
+					:options="store.getBooks"
+					track-by="id"
+					label="title"
+					:multiple="true"
+					:allow-empty="true"
+					:searcheble="true"
+					:close-on-select="false"
+					deselectLabel
+					selectLabel
+					selectedLabel="Выбранный"
+					placeholder="Выберите книги"
+					id="edbooks"
+				></multiselect>
+			</div>
+
+			<div class="edfields__field">
 				<label class="edfields__label" for="edsnippet">Описание</label>
 				<textarea
 					class="edfields__input edfields__textarea"
@@ -56,8 +75,9 @@
 
 <script lang="ts" setup>
 import { ref, onBeforeMount, reactive } from 'vue';
+import Multiselect from 'vue-multiselect'
 import { useStore } from "../store"
-import { Author } from '../types';
+import { Author, Book } from '../types';
 import { AuthorEditorTitle, SaveButtonValue } from '../types/enums';
 
 const props = defineProps({
@@ -72,6 +92,8 @@ const emit = defineEmits<{
 }>()
 
 const store = useStore()
+
+const selectedBooks = ref<Book[]>([])
 const currentAuthor = reactive<Author>({
 	id: "",
 	firstname: "",
@@ -96,6 +118,8 @@ onBeforeMount(() => {
 			currentAuthor.lastname = author.lastname
 			currentAuthor.surname = author.surname
 			currentAuthor.snippet = author.snippet
+
+			selectedBooks.value = store.getBooksByAuthorID(author.id)
 		}
 
 	}

@@ -59,12 +59,44 @@ export const useStore = defineStore("main", {
 		getAuthorsByBookID: (state) => {
 			return (book_id: string) => {
 				const booksAuthorsIDs = state.booksAuthors.filter(ba => ba.book_id === book_id)
+				const authors: Author[] = []
+
+				for (const ba of booksAuthorsIDs) {
+					const author = state.authors.find(item => item.id === ba.author_id)
+					if (author) {
+						authors.push(author)
+					}
+				}
+
+				return authors
+			}
+		},
+		getBooksByAuthorID: (state) => {
+			return (author_id: string) => {
+				const booksAuthorsIDs =  state.booksAuthors.filter(ba => ba.author_id === author_id)
+				const books: Book[] = []
+
+				for (const ba of booksAuthorsIDs) {
+					const book = state.books.find(item => item.id === ba.book_id)
+					if (book){
+						books.push(book)
+					}
+				}
+
+				return books
+			}
+		},
+		getAuthorsStringByBookID: (state) => {
+			return (book_id: string) => {
+				const booksAuthorsIDs = state.booksAuthors.filter(ba => ba.book_id === book_id)
 				const authors: string[] = []
 
 				for (const ba of booksAuthorsIDs) {
 					const author = state.authors.find(item => item.id === ba.author_id)
 					if (author) {
-						let formatedAuthor = author.surname.length === 0 ? `${author.lastname} ${author.firstname[0].toUpperCase()}.` : `${author.lastname} ${author.firstname[0].toUpperCase()}. ${author.surname[0].toUpperCase()}.`
+						let formatedAuthor = author.surname.length === 0 
+						? `${author.lastname} ${author.firstname[0].toUpperCase()}.` 
+						: `${author.lastname} ${author.firstname[0].toUpperCase()}. ${author.surname[0].toUpperCase()}.`
 
 						authors.push(formatedAuthor.charAt(0).toUpperCase() + formatedAuthor.slice(1))
 					}
@@ -73,7 +105,7 @@ export const useStore = defineStore("main", {
 				return authors.join(", ")
 			}
 		},
-		getBooksByAuthorID: (state) => {
+		getBooksStringByAuthorID: (state) => {
 			return (author_id: string) => {
 				const booksAuthorsIDs = state.booksAuthors.filter(ba => ba.author_id === author_id)
 				const books: string[] = []
@@ -107,7 +139,7 @@ export const useStore = defineStore("main", {
 					pages_cnt: book.pages_cnt,
 					pub_year: book.pub_year,
 					genre: this.getGenreByID(book.genre_id)!.title,
-					authors: this.getAuthorsByBookID(book.id),
+					authors: this.getAuthorsStringByBookID(book.id),
 				}
 			})
 		},
@@ -119,7 +151,7 @@ export const useStore = defineStore("main", {
 					lastname: author.lastname,
 					surname: author.surname,
 					snippet: author.snippet,
-					books: this.getBooksByAuthorID(author.id),
+					books: this.getBooksStringByAuthorID(author.id),
 				}
 			})
 		}

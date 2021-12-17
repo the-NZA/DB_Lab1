@@ -29,6 +29,26 @@
 					selectLabel
 					selectedLabel="Выбранный"
 					placeholder="Выберите жанр"
+					id="edgenre"
+				></multiselect>
+			</div>
+
+			<div class="edfields__field">
+				<label class="edfields__label" for="edauthors">Авторы</label>
+				<multiselect
+					v-model="selectedAuthors"
+					:options="store.getAuthors"
+					track-by="id"
+					:custom-label="customAuthorsSelectLabel"
+					:multiple="true"
+					:allow-empty="true"
+					:searcheble="true"
+					:close-on-select="false"
+					deselectLabel
+					selectLabel
+					selectedLabel="Выбранный"
+					placeholder="Выберите авторов"
+					id="edauthors"
 				></multiselect>
 			</div>
 
@@ -76,7 +96,7 @@
 import { ref, onBeforeMount, reactive, computed, onMounted } from 'vue';
 import Multiselect from 'vue-multiselect'
 import { useStore } from "../store"
-import { Book, Genre } from '../types';
+import { Author, Book, Genre } from '../types';
 import { BookEditorTitle, SaveButtonValue } from '../types/enums';
 
 const props = defineProps({
@@ -94,6 +114,7 @@ const store = useStore()
 
 const genres = ref<Genre[]>([])
 const selectedGenre = ref<Genre>()
+const selectedAuthors = ref<Author[]>([])
 const currentBook = reactive<Book>({
 	id: "",
 	title: "",
@@ -130,6 +151,8 @@ onBeforeMount(() => {
 					return
 				}
 			})
+
+			selectedAuthors.value = store.getAuthorsByBookID(book.id)
 		}
 	}
 })
@@ -148,6 +171,12 @@ const saveBook = async () => {
 	}
 
 	emit('savePressed')
+}
+
+const customAuthorsSelectLabel = (author: Author): string => {
+	return author.surname.length === 0
+		? `${author.lastname} ${author.firstname}`
+		: `${author.lastname} ${author.firstname} ${author.surname}`
 }
 
 </script>

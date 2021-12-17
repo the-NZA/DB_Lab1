@@ -36,6 +36,7 @@
 }
 
 .multiselect__select {
+	height: 100%;
 	top: 50%;
 	transform: translateY(-50%);
 	margin: 0;
@@ -51,4 +52,17 @@
 	margin: 0;
 	padding: 0;
 	line-height: 1.15;
+}
+
+.multiselect__tags-wrap {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.multiselect__tag {
+	margin-bottom: 0;
+}
+
+.multiselect--active .multiselect__tag {
+	margin-bottom: var(--offset-half);
 }
