@@ -99,15 +99,15 @@ func (b BookRepository) Add(ba models.BookWithAuthors) (models.BookWithAuthors, 
 }
 
 // Update one book in books
-func (b BookRepository) Update(book models.Book) (models.Book, error) {
-	idx, err := b.findByID(book.ID)
+func (b BookRepository) Update(ba models.BookWithAuthors) (models.BookWithAuthors, error) {
+	idx, err := b.findByID(ba.Book.ID)
 	if err != nil {
-		return book, fmt.Errorf("Book not found")
+		return ba, fmt.Errorf("Book not found")
 	}
 
-	books[idx] = book
+	books[idx] = ba.Book
 
-	return books[idx], nil
+	return ba, nil
 }
 
 // Delete one book from books

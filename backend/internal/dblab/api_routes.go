@@ -72,25 +72,25 @@ func (a *App) handleBookAdd() http.HandlerFunc {
 func (a *App) handleBookUpdate() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var (
-			book models.Book
-			err  error
+			req models.BookWithAuthors
+			err error
 		)
 
-		if err = json.NewDecoder(r.Body).Decode(&book); err != nil {
+		if err = json.NewDecoder(r.Body).Decode(&req); err != nil {
 			a.logger.Logf("[INFO] During body parse: %v\n", err)
 			a.error(w, r, http.StatusBadRequest, err)
 			return
 		}
 
 		// Try update book
-		book, err = a.services.BookService().Update(book)
+		req, err = a.services.BookService().Update(req)
 		if err != nil {
 			a.logger.Logf("[INFO] During book updating: %v\n", err)
 			a.error(w, r, http.StatusInternalServerError, err)
 			return
 		}
 
-		a.respond(w, r, http.StatusOK, book)
+		a.respond(w, r, http.StatusOK, req)
 	}
 }
 

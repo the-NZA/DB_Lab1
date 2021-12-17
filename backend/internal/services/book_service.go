@@ -22,13 +22,13 @@ func (b *BookService) Add(ba models.BookWithAuthors) (models.BookWithAuthors, er
 	return b.repository.Add(ba)
 }
 
-func (b *BookService) Update(book models.Book) (models.Book, error) {
+func (b *BookService) Update(ba models.BookWithAuthors) (models.BookWithAuthors, error) {
 	// validate updated book
-	if err := book.Validate(); err != nil {
-		return book, err
+	if err := ba.Validate(); err != nil {
+		return ba, err
 	}
 
-	return b.repository.Update(book)
+	return b.repository.Update(ba)
 }
 
 func (b *BookService) Delete(ID string) error {

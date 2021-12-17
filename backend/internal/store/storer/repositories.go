@@ -5,7 +5,7 @@ import "github.com/the-NZA/DB_Lab1/backend/internal/models"
 type BookReporsitory interface {
 	Get(string) (models.Book, error)
 	Add(models.BookWithAuthors) (models.BookWithAuthors, error)
-	Update(models.Book) (models.Book, error)
+	Update(models.BookWithAuthors) (models.BookWithAuthors, error)
 	Delete(string) error
 	GetAll() ([]models.Book, error)
 }

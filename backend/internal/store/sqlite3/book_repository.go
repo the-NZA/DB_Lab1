@@ -46,13 +46,6 @@ func (b *BookRepository) Add(ba models.BookWithAuthors) (models.BookWithAuthors,
 		return ba, err
 	}
 
-	// Remove previous information about book and authors relations
-	_, err = tx.Exec("DELETE FROM books_authors WHERE book_id = ?", ba.Book.ID)
-	if err != nil {
-		tx.Rollback()
-		return ba, err
-	}
-
 	// Save new book
 	res, err := tx.Exec(insertBook,
 		ba.Book.Title,
@@ -76,6 +69,13 @@ func (b *BookRepository) Add(ba models.BookWithAuthors) (models.BookWithAuthors,
 	// Save string representation of ID
 	ba.Book.ID = strconv.FormatInt(id, 10)
 
+	// Remove previous information about book if it exists and authors relations
+	_, err = tx.Exec("DELETE FROM books_authors WHERE book_id = ?", ba.Book.ID)
+	if err != nil {
+		tx.Rollback()
+		return ba, err
+	}
+
 	// Insert new information about book and authors relations
 	for i := range ba.AuthorsIDs {
 		_, err = tx.Exec("INSERT INTO books_authors (book_id, author_id) VALUES (?, ?)", ba.Book.ID, ba.AuthorsIDs[i])
@@ -92,37 +92,56 @@ func (b *BookRepository) Add(ba models.BookWithAuthors) (models.BookWithAuthors,
 		return ba, err
 	}
 
-	// res, err := b.db.Exec(insertBook,
-	// 	book.Title,
-	// 	book.Snippet,
-	// 	book.PagesCnt,
-	// 	book.PublishYear,
-	// 	book.GenreID,
-	// )
-	// if err != nil {
-	// 	return book, err
-	// }
-
 	return ba, nil
 }
 
 // Update one book in books
-func (b *BookRepository) Update(book models.Book) (models.Book, error) {
-	// Try update book
-	_, err := b.db.Exec(updateBook,
-		book.Title,
-		book.Snippet,
-		book.PagesCnt,
-		book.PublishYear,
-		book.Deleted,
-		book.GenreID,
-		book.ID,
-	)
+func (b *BookRepository) Update(ba models.BookWithAuthors) (models.BookWithAuthors, error) {
+	// Start transaction
+	tx, err := b.db.Beginx()
 	if err != nil {
-		return book, err
+		return ba, err
 	}
 
-	return book, nil
+	// Remove previous information about book if it exists and authors relations
+	_, err = tx.Exec("DELETE FROM books_authors WHERE book_id = ?", ba.Book.ID)
+	if err != nil {
+		tx.Rollback()
+		return ba, err
+	}
+
+	// Insert new information about book and authors relations
+	for i := range ba.AuthorsIDs {
+		_, err = tx.Exec("INSERT INTO books_authors (book_id, author_id) VALUES (?, ?)", ba.Book.ID, ba.AuthorsIDs[i])
+		if err != nil {
+			tx.Rollback()
+			return ba, err
+		}
+	}
+
+	// Try update book
+	_, err = tx.Exec(updateBook,
+		ba.Book.Title,
+		ba.Book.Snippet,
+		ba.Book.PagesCnt,
+		ba.Book.PublishYear,
+		ba.Book.Deleted,
+		ba.Book.GenreID,
+		ba.Book.ID,
+	)
+	if err != nil {
+		tx.Rollback()
+		return ba, err
+	}
+
+	// Commit transaction
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return ba, err
+	}
+
+	return ba, nil
 }
 
 // Delete one book from books

@@ -27,6 +27,7 @@ func (b Book) Validate() error {
 	)
 }
 
+// BookWithAuthors used for creating or updating books
 type BookWithAuthors struct {
 	Book       Book     `json:"book"`
 	AuthorsIDs []string `json:"authors_ids"`
