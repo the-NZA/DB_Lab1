@@ -69,7 +69,6 @@ const handleSaveGenre = () => {
 const handleAdd = () => {
 	selectedGenreID.value = undefined;
 	showModal.value = true;
-	// store.addGenre()
 }
 
 const handleEdit = () => {

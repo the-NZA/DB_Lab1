@@ -21,7 +21,7 @@
 				<input
 					class="edfields__input"
 					id="edlastname"
-					v-model="currentAuthor.firstname"
+					v-model="currentAuthor.lastname"
 					type="text"
 					placeholder="Введите фамилию автора"
 				/>
@@ -32,7 +32,7 @@
 				<input
 					class="edfields__input"
 					id="edsurname"
-					v-model="currentAuthor.firstname"
+					v-model="currentAuthor.surname"
 					type="text"
 					placeholder="Введите отчество автора"
 				/>
@@ -91,6 +91,7 @@ onBeforeMount(() => {
 			title.value = AuthorEditorTitle.Edit
 			buttonText.value = SaveButtonValue.Update
 
+			currentAuthor.id = author.id
 			currentAuthor.firstname = author.firstname
 			currentAuthor.lastname = author.lastname
 			currentAuthor.surname = author.surname
@@ -100,10 +101,16 @@ onBeforeMount(() => {
 	}
 })
 
-const saveAuthor = () => {
-	setTimeout(() => {
-		emit('savePressed')
-	}, 500)
+const saveAuthor = async () => {
+	if (title.value === AuthorEditorTitle.Create) {
+		// If create new genre
+		await store.addAuthor(currentAuthor)
+	} else {
+		// Update existing 
+		await store.updateAuthor(currentAuthor)
+	}
+
+	emit('savePressed')
 }
 
 </script>

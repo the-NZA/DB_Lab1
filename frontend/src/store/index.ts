@@ -202,6 +202,27 @@ export const useStore = defineStore("main", {
 				console.error(error);
 			}
 		},
+		async addAuthor(author: Author) {
+			try {
+				const res = await POST<Author>(author, "/api/author")
+				this.authors.push(res)
+			}
+			catch (err) {
+				console.error(err);
+			}
+		},
+		async updateAuthor(updated_author: Author) {
+			try {
+				const res = await PUT<Author>(updated_author, "/api/author")
+				const idx = this.authors.findIndex(author => author.id === res.id)
+
+				// Update store through slice with spreads
+				this.authors = [...this.authors.slice(0, idx), res, ...this.authors.slice(idx + 1)]
+			}
+			catch (err) {
+				console.error(err);
+			}
+		},
 		async deleteAuthor(id: string) {
 			try {
 				const resp = await DELETE(`/api/author/${id}`)
