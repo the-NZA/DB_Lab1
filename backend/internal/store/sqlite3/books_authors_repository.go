@@ -28,6 +28,18 @@ type BooksAuthorsRepository struct {
 	db *sqlx.DB
 }
 
+// Get all books and authors by bookID
+func (b *BooksAuthorsRepository) getAll() ([]models.BookAuthor, error) {
+	var booksAuthors []models.BookAuthor
+
+	err := b.db.Select(&booksAuthors, "SELECT * FROM books_authors WHERE deleted != true")
+	if err != nil {
+		return nil, err
+	}
+
+	return booksAuthors, nil
+}
+
 // Get books and authors by bookID
 func (b *BooksAuthorsRepository) getByBookID(bookID string) ([]models.BookAuthor, error) {
 	var booksAuthors []models.BookAuthor
@@ -70,7 +82,7 @@ func (b *BooksAuthorsRepository) GetByIDs(bookID, authorID string) ([]models.Boo
 	hasAuthorID := len(authorID) != 0
 
 	if !hasBookID && !hasAuthorID {
-		return nil, ErrEmptyIDs
+		return b.getAll()
 	}
 
 	if !hasAuthorID {

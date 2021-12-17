@@ -366,21 +366,21 @@ func (a *App) handleGetBookAuthor() http.HandlerFunc {
 	)
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		hasAuthorID := r.URL.Query().Has(authorParam)
-		hasBookID := r.URL.Query().Has(bookParam)
+		// hasAuthorID := r.URL.Query().Has(authorParam)
+		// hasBookID := r.URL.Query().Has(bookParam)
 
-		if !hasAuthorID && !hasBookID {
-			a.error(w, r, http.StatusBadRequest, ErrNoQueryParams)
-			return
-		}
+		// if !hasAuthorID && !hasBookID {
+		// 	a.error(w, r, http.StatusBadRequest, ErrNoQueryParams)
+		// 	return
+		// }
+
+		// if hasAuthorID && len(authorID) == 0 || hasBookID && len(bookID) == 0 {
+		// 	a.error(w, r, http.StatusBadRequest, ErrLenQueryParams)
+		// 	return
+		// }
 
 		authorID := r.URL.Query().Get(authorParam)
 		bookID := r.URL.Query().Get(bookParam)
-
-		if hasAuthorID && len(authorID) == 0 || hasBookID && len(bookID) == 0 {
-			a.error(w, r, http.StatusBadRequest, ErrLenQueryParams)
-			return
-		}
 
 		booksAuthors, err := a.services.BooksAuthors().GetByIDs(bookID, authorID)
 		if err != nil {
