@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onBeforeMount, onMounted, computed } from "vue";
+import { ref, watch, onBeforeMount, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "./store/index";
 
@@ -12,17 +12,36 @@ const isNotHomePage = computed(() => {
 
 const isLoaded = ref(false)
 
-onBeforeMount(async () => {
-	// Load all data from API
+// onBeforeMount(async () => {
+// 	isLoaded.value = false;
+
+// 	// Load all data from API
+// 	await Promise.all([
+// 		store.loadAuthors(),
+// 		store.loadGenres(),
+// 		store.loadBooks(),
+// 		store.loadBooksAuthors()
+// 	]);
+
+// 	console.log("initial load");
+
+// 	isLoaded.value = true;
+// });
+
+// Reload data when page changed
+watch(() => route.params, async () => {
+	isLoaded.value = false;
+
+	// Load new all data from API
 	await Promise.all([
 		store.loadAuthors(),
 		store.loadGenres(),
 		store.loadBooks(),
-		store.loadBooksAuthors(),
+		store.loadBooksAuthors()
 	]);
 
 	isLoaded.value = true;
-});
+})
 </script>
 
 <template>
