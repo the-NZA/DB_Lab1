@@ -24,7 +24,7 @@ export type Author = {
 	deleted: boolean,
 }
 
-export type BooksAuthors = {
+export type BookAuthor = {
 	id: string,
 	book_id: string,
 	author_id: string,

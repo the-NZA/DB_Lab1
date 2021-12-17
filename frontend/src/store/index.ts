@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Book, Genre, Author } from "../types";
+import { Book, Genre, Author, BookAuthor } from "../types";
 import { GET, POST, PUT, DELETE } from "../HTTP"
 import { AuthorRow, BookRow, GenreRow } from "../types/grid";
 
@@ -8,9 +8,11 @@ export const useStore = defineStore("main", {
 		books: [] as Array<Book>,
 		genres: [] as Array<Genre>,
 		authors: [] as Array<Author>,
+		booksAuthors: [] as Array<BookAuthor>,
 		booksLoaded: false,
 		genresLoaded: false,
 		authorsLoaded: false,
+		booksAuthorsLoaded: false,
 	}),
 	getters: {
 		isBooksLoaded(): boolean {
@@ -71,7 +73,7 @@ export const useStore = defineStore("main", {
 					snippet: book.snippet,
 					pages_cnt: book.pages_cnt,
 					pub_year: book.pub_year,
-					genre: "Роман" // TODO: Find at genres by id and insert here
+					genre: this.getGenreByID(book.genre_id)!.title,
 				}
 			})
 		},
@@ -242,6 +244,18 @@ export const useStore = defineStore("main", {
 
 			} catch (err) {
 				console.error(err);
+			}
+		},
+		
+		/* BOOKS AUTHORS */
+		async loadBooksAuthors() {
+			try {
+				const allBooksAuthors = await GET<BookAuthor[]>("api/book-author");
+
+				this.booksAuthors = allBooksAuthors;
+				this.booksAuthorsLoaded = true
+			} catch (error) {
+				console.error(error);
 			}
 		},
 	}

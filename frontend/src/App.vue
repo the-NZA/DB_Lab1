@@ -18,6 +18,7 @@ onBeforeMount(async () => {
 		store.loadAuthors(),
 		store.loadGenres(),
 		store.loadBooks(),
+		store.loadBooksAuthors(),
 	]);
 
 	isLoaded.value = true;

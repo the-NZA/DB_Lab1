@@ -8,6 +8,7 @@ export type BookRow = {
 	id: string,
 	title: string,
 	snippet: string,
+	// authors: string[],
 	genre: string,
 	pages_cnt: number,
 	pub_year: number,
