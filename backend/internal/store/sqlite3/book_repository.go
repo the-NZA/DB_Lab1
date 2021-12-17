@@ -146,9 +146,33 @@ func (b *BookRepository) Update(ba models.BookWithAuthors) (models.BookWithAutho
 
 // Delete one book from books
 func (b *BookRepository) Delete(ID string) error {
-	_, err := b.db.Exec("UPDATE books SET deleted = true WHERE id = ?", ID)
+	// Start transaction
+	tx, err := b.db.Beginx()
+	if err != nil {
+		return err
+	}
 
-	return err
+	_, err = tx.Exec("UPDATE books SET deleted = true WHERE id = ?", ID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Remove previous information about book if it exists and authors relations
+	_, err = tx.Exec("DELETE FROM books_authors WHERE book_id = ?", ID)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Commit transaction
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return nil
 }
 
 // Gell all books from books
