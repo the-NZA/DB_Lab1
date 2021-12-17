@@ -21,7 +21,7 @@ type BookServicer interface {
 type AuthorServicer interface {
 	Get(string) (models.Author, error)
 	Add(models.AuthorWithBooks) (models.AuthorWithBooks, error)
-	Update(models.Author) (models.Author, error)
+	Update(models.AuthorWithBooks) (models.AuthorWithBooks, error)
 	Delete(string) error
 	GetAll() ([]models.Author, error)
 }

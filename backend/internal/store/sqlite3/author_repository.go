@@ -97,21 +97,61 @@ func (a *AuthorRepository) Add(awb models.AuthorWithBooks) (models.AuthorWithBoo
 }
 
 // Update one author
-func (a *AuthorRepository) Update(author models.Author) (models.Author, error) {
+func (a *AuthorRepository) Update(awb models.AuthorWithBooks) (models.AuthorWithBooks, error) {
 	// Try update author
-	_, err := a.db.Exec(updateAuthor,
-		author.Firstname,
-		author.Lastname,
-		author.Surname,
-		author.Snippet,
-		author.Deleted,
-		author.ID,
-	)
+
+	// Start transaction
+	tx, err := a.db.Beginx()
 	if err != nil {
-		return author, err
+		return awb, err
 	}
 
-	return author, nil
+	// Remove previous information about author if it exists and books relations
+	_, err = tx.Exec("DELETE FROM books_authors WHERE author_id = ?", awb.Author.ID)
+	if err != nil {
+		tx.Rollback()
+		return awb, err
+	}
+
+	// If passed any book id for new author
+	if len(awb.BooksIDs) > 0 {
+		// Remove previous information about author if it exists and books relations
+		_, err = tx.Exec("DELETE FROM books_authors WHERE author_id = ?", awb.Author.ID)
+		if err != nil {
+			tx.Rollback()
+			return awb, err
+		}
+
+		// Insert information about author and books relations
+		for i := range awb.BooksIDs {
+			_, err = tx.Exec("INSERT INTO books_authors (book_id, author_id) VALUES (?, ?)", awb.BooksIDs[i], awb.Author.ID)
+			if err != nil {
+				tx.Rollback()
+				return awb, err
+			}
+		}
+	}
+
+	// Try update author
+	_, err = tx.Exec(updateAuthor,
+		awb.Author.Firstname,
+		awb.Author.Lastname,
+		awb.Author.Surname,
+		awb.Author.Snippet,
+		awb.Author.Deleted,
+		awb.Author.ID,
+	)
+	if err != nil {
+		return awb, err
+	}
+
+	// Commit transaction
+	err = tx.Commit()
+	if err != nil {
+		return awb, err
+	}
+
+	return awb, nil
 }
 
 // Delete one author

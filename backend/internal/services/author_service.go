@@ -22,7 +22,7 @@ func (a *AuthorService) Add(author models.AuthorWithBooks) (models.AuthorWithBoo
 	return a.repository.Add(author)
 }
 
-func (a *AuthorService) Update(author models.Author) (models.Author, error) {
+func (a *AuthorService) Update(author models.AuthorWithBooks) (models.AuthorWithBooks, error) {
 	// validate updated author
 	if err := author.Validate(); err != nil {
 		return author, err
