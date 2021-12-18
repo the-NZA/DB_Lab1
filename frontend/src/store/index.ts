@@ -13,8 +13,16 @@ export const useStore = defineStore("main", {
 		genresLoaded: false,
 		authorsLoaded: false,
 		booksAuthorsLoaded: false,
+		errMessage: "",
+		isError: false,
 	}),
 	getters: {
+		getErrMessage(): string {
+			return this.errMessage
+		},
+		getIsError(): boolean {
+			return this.isError
+		},
 		isBooksLoaded(): boolean {
 			return this.booksLoaded
 		},
@@ -157,6 +165,12 @@ export const useStore = defineStore("main", {
 		}
 	},
 	actions: {
+		/* ERRORS */
+		setErrorWithMessage(status: boolean, msg? :string) {
+			this.isError = status
+			this.errMessage = msg ? msg : ""
+		},
+
 		/* BOOKS */
 		async loadBooks() {
 			try {
@@ -164,8 +178,9 @@ export const useStore = defineStore("main", {
 
 				this.books = allBooks;
 				this.booksLoaded = true
-			} catch (error) {
-				console.error(error);
+			} catch (err) {
+				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 		async addBook(ba: BookWithAuthors) {
@@ -177,6 +192,7 @@ export const useStore = defineStore("main", {
 			}
 			catch (err) {
 				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 		async updateBook(ba: BookWithAuthors) {
@@ -191,6 +207,7 @@ export const useStore = defineStore("main", {
 			}
 			catch (err) {
 				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 		async deleteBook(id: string) {
@@ -210,6 +227,7 @@ export const useStore = defineStore("main", {
 
 			} catch (err) {
 				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 
@@ -219,8 +237,9 @@ export const useStore = defineStore("main", {
 				const allGenres = await GET<Genre[]>("api/genre/all");
 				this.genres = allGenres;
 				this.genresLoaded = true
-			} catch (error) {
-				console.error(error);
+			} catch (err) {
+				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 		async addGenre(genre: Genre) {
@@ -230,6 +249,7 @@ export const useStore = defineStore("main", {
 			}
 			catch (err) {
 				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 		async updateGenre(updated_genre: Genre) {
@@ -242,6 +262,7 @@ export const useStore = defineStore("main", {
 			}
 			catch (err) {
 				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 		async deleteGenre(id: string) {
@@ -260,6 +281,7 @@ export const useStore = defineStore("main", {
 
 			} catch (err) {
 				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 
@@ -270,8 +292,9 @@ export const useStore = defineStore("main", {
 
 				this.authors = allAuthors;
 				this.authorsLoaded = true
-			} catch (error) {
-				console.error(error);
+			} catch (err) {
+				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 		async addAuthor(ab: AuthorWithBooks) {
@@ -283,6 +306,7 @@ export const useStore = defineStore("main", {
 			}
 			catch (err) {
 				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 		async updateAuthor(ab: AuthorWithBooks) {
@@ -297,6 +321,7 @@ export const useStore = defineStore("main", {
 			}
 			catch (err) {
 				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 		async deleteAuthor(id: string) {
@@ -317,6 +342,7 @@ export const useStore = defineStore("main", {
 
 			} catch (err) {
 				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 
@@ -327,8 +353,9 @@ export const useStore = defineStore("main", {
 
 				this.booksAuthors = allBooksAuthors;
 				this.booksAuthorsLoaded = true
-			} catch (error) {
-				console.error(error);
+			} catch (err) {
+				console.error(err);
+				this.setErrorWithMessage(true, err as string)
 			}
 		},
 	}

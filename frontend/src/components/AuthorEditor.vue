@@ -13,6 +13,8 @@
 					v-model="currentAuthor.firstname"
 					type="text"
 					placeholder="Введите имя автора"
+					@input="store.setErrorWithMessage(false)"
+					required
 				/>
 			</div>
 
@@ -24,6 +26,8 @@
 					v-model="currentAuthor.lastname"
 					type="text"
 					placeholder="Введите фамилию автора"
+					@input="store.setErrorWithMessage(false)"
+					required
 				/>
 			</div>
 
@@ -69,6 +73,7 @@
 		</div>
 		<div class="editor__footer">
 			<button @click="saveAuthor">{{ buttonText }}</button>
+			<error-message :is-error="store.getIsError" :err-message="store.getErrMessage" />
 		</div>
 	</div>
 </template>
@@ -76,6 +81,7 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount, reactive } from 'vue';
 import Multiselect from 'vue-multiselect'
+import ErrorMessage from './ErrorMessage.vue';
 import { useStore } from "../store"
 import { Author, Book } from '../types';
 import { AuthorEditorTitle, SaveButtonValue } from '../types/enums';
@@ -126,8 +132,18 @@ onBeforeMount(() => {
 })
 
 const saveAuthor = async () => {
-	const booksIDs: string[] = []
+	// Check required status for current author
+	if (
+		!currentAuthor.lastname ||
+		!currentAuthor.firstname ||
+		currentAuthor.lastname.length < 1 ||
+		currentAuthor.firstname.length < 1
+	) {
+		store.setErrorWithMessage(true, "Имя и фамилия обязательны для заполнения")
+		return
+	}
 
+	const booksIDs: string[] = []
 	selectedBooks.value.forEach(book => {
 		booksIDs.push(book.id)
 	})

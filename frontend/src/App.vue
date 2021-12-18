@@ -2,6 +2,7 @@
 import { ref, watch, onBeforeMount, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useStore } from "./store/index";
+import Loader from "./components/Loader.vue";
 
 const route = useRoute()
 const store = useStore();
@@ -32,6 +33,9 @@ const isLoaded = ref(false)
 watch(() => route.params, async () => {
 	isLoaded.value = false;
 
+	// Reset error status and message
+	store.setErrorWithMessage(false)
+
 	// Load new all data from API
 	await Promise.all([
 		store.loadAuthors(),
@@ -40,14 +44,15 @@ watch(() => route.params, async () => {
 		store.loadBooksAuthors()
 	]);
 
-	isLoaded.value = true;
+	// Disable loader
+	setTimeout(() => {
+		isLoaded.value = true;
+	}, 1000)
 })
 </script>
 
 <template>
-	<div v-if="!isLoaded">
-		<h1>Add loader here!</h1>
-	</div>
+	<loader v-if="!isLoaded" />
 
 	<template v-else>
 		<header class="app-header">

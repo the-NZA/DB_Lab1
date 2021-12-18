@@ -1,6 +1,6 @@
 <template>
 	<teleport to="body">
-		<transition name="fade" @after-enter="makeFade = true" @before-leave="makeFade = false">
+		<transition name="slide" @after-enter="makeFade = true" @before-leave="makeFade = false">
 			<div v-if="showModal" class="modal-view" :class="{ 'modal-view--fade': makeFade }">
 				<div class="modal-view__wrapper">
 					<slot></slot>
@@ -48,13 +48,13 @@ const makeFade = ref<boolean>(false);
 	transform: translate(-50%, -50%);
 }
 
-.fade-enter-active,
-.fade-leave-active {
+.slide-enter-active,
+.slide-leave-active {
 	transition: all 0.15s ease-out;
 }
 
-.fade-enter-from,
-.fade-leave-to {
+.slide-enter-from,
+.slide-leave-to {
 	/* opacity: 0; */
 	top: 100%;
 }

@@ -13,6 +13,7 @@
 					v-model="currentBook.title"
 					type="text"
 					placeholder="Введите название книги"
+					required
 				/>
 			</div>
 
@@ -30,6 +31,7 @@
 					selectedLabel="Выбранный"
 					placeholder="Выберите жанр"
 					id="edgenre"
+					required
 				></multiselect>
 			</div>
 
@@ -49,6 +51,7 @@
 					selectedLabel="Выбранный"
 					placeholder="Выберите авторов"
 					id="edauthors"
+					required
 				></multiselect>
 			</div>
 
@@ -71,6 +74,7 @@
 					id="edpubyear"
 					v-model="currentBook.pub_year"
 					placeholder="Введите дату публикации"
+					required
 				/>
 			</div>
 
@@ -88,6 +92,7 @@
 		</div>
 		<div class="editor__footer">
 			<button @click="saveBook">{{ buttonText }}</button>
+			<error-message :is-error="store.getIsError" :err-message="store.getErrMessage" />
 		</div>
 	</div>
 </template>
@@ -95,6 +100,7 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount, reactive, computed, onMounted } from 'vue';
 import Multiselect from 'vue-multiselect'
+import ErrorMessage from './ErrorMessage.vue';
 import { useStore } from "../store"
 import { Author, Book, Genre } from '../types';
 import { BookEditorTitle, SaveButtonValue } from '../types/enums';
@@ -158,10 +164,19 @@ onBeforeMount(() => {
 })
 
 const saveBook = async () => {
+	if (
+		!currentBook.title ||
+		!currentBook.pub_year ||
+		!selectedGenre.value ||
+		selectedAuthors.value.length < 1
+	) {
+		store.setErrorWithMessage(true, "Название, год публикации, жанр и авторы обязательны для заполнения")
+		return
+	}
+
 	currentBook.genre_id = selectedGenre.value!.id
 
 	const authorsIDs: string[] = []
-
 	selectedAuthors.value.forEach(author => {
 		authorsIDs.push(author.id)
 	})

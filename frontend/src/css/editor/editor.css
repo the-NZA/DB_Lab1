@@ -57,11 +57,14 @@
 	background-color: rgb(var(--white));
 }
 
-.editor__footer {}
+.editor__footer {
+	display: flex;
+	align-items: center;
+}
 
 .editor__footer button {
 	box-sizing: border-box;
-	margin-right: var(--offset-half);
+	margin-right: var(--offset);
 	padding: var(--offset-quarter);
 	cursor: pointer;
 	border: 2px solid rgb(var(--greyblue));

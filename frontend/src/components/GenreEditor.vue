@@ -13,6 +13,8 @@
 					v-model="currentGenre.title"
 					type="text"
 					placeholder="Введите название жанра"
+					required
+					@input="store.setErrorWithMessage(false)"
 				/>
 			</div>
 
@@ -28,16 +30,17 @@
 		</div>
 		<div class="editor__footer">
 			<button @click="saveGenre">{{ buttonText }}</button>
+			<error-message :is-error="store.getIsError" :err-message="store.getErrMessage" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeMount, reactive } from 'vue';
+import { ref, onBeforeMount, reactive, computed } from 'vue';
+import ErrorMessage from './ErrorMessage.vue';
 import { useStore } from "../store"
 import { Genre } from '../types';
 import { GenreEditorTitle, SaveButtonValue } from '../types/enums';
-import { POST } from "../HTTP"
 
 const props = defineProps({
 	genre_id: {
@@ -77,6 +80,12 @@ onBeforeMount(() => {
 })
 
 const saveGenre = async () => {
+	// Check required status for current genre
+	if (!currentGenre.title || currentGenre.title.length < 1) {
+		store.setErrorWithMessage(true, "Название жанра обязательно для заполнения")
+		return
+	}
+
 	if (title.value === GenreEditorTitle.Create) {
 		// If create new genre
 		await store.addGenre(currentGenre)
