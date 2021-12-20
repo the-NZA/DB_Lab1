@@ -9,23 +9,43 @@ import (
 )
 
 type MySQLStore struct {
-	db *sqlx.DB
+	db           *sqlx.DB
+	books        storer.BookReporsitory
+	authors      storer.AuthorRepository
+	genres       storer.GenreRepository
+	booksAuthors storer.BookAuthorRepository
 }
 
 func (s *MySQLStore) Books() storer.BookReporsitory {
-	return nil
+	if s.books == nil {
+		s.books = &BookRepository{db: s.db}
+	}
+
+	return s.books
 }
 
 func (s *MySQLStore) Authors() storer.AuthorRepository {
-	return nil
+	if s.authors == nil {
+		s.authors = &AuthorRepository{db: s.db}
+	}
+
+	return s.authors
 }
 
 func (s *MySQLStore) Genres() storer.GenreRepository {
-	return nil
+	if s.genres == nil {
+		s.genres = &GenreRepository{db: s.db}
+	}
+
+	return s.genres
 }
 
 func (s *MySQLStore) BooksAuthors() storer.BookAuthorRepository {
-	return nil
+	if s.booksAuthors == nil {
+		s.booksAuthors = &BooksAuthorsRepository{db: s.db}
+	}
+
+	return s.booksAuthors
 }
 
 func (s *MySQLStore) Close() error {
