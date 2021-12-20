@@ -124,6 +124,9 @@ const gridOptions = ref<GridOptions>({
 	rowSelection: "multiple",
 	suppressCellSelection: true,
 	suppressRowClickSelection: true,
+	localeText: {
+		noRowsToShow: 'Авторов пока не добавлено',
+	},
 	defaultColDef: {
 		wrapText: true,
 		autoHeight: true,

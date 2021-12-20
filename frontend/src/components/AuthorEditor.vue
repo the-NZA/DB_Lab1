@@ -39,6 +39,7 @@
 					v-model="currentAuthor.surname"
 					type="text"
 					placeholder="Введите отчество автора"
+					@input="store.setErrorWithMessage(false)"
 				/>
 			</div>
 
@@ -57,8 +58,12 @@
 					selectLabel
 					selectedLabel="Выбранный"
 					placeholder="Выберите книги"
+					@input="store.setErrorWithMessage(false)"
 					id="edbooks"
-				></multiselect>
+				>
+					<template v-slot:noOptions>Список книг пуст</template>
+					<template v-slot:noResult>Совпадений не найдено</template>
+				</multiselect>
 			</div>
 
 			<div class="edfields__field">
@@ -68,6 +73,7 @@
 					id="edsnippet"
 					v-model="currentAuthor.snippet"
 					placeholder="Введите описание автора"
+					@input="store.setErrorWithMessage(false)"
 				></textarea>
 			</div>
 		</div>

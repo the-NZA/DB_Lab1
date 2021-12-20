@@ -13,6 +13,7 @@
 					v-model="currentBook.title"
 					type="text"
 					placeholder="Введите название книги"
+					@input="store.setErrorWithMessage(false)"
 					required
 				/>
 			</div>
@@ -21,7 +22,7 @@
 				<label class="edfields__label" for="edgenre">Жанр</label>
 				<multiselect
 					v-model="selectedGenre"
-					:options="genres"
+					:options="store.getGenres"
 					track-by="id"
 					label="title"
 					:allow-empty="false"
@@ -30,9 +31,13 @@
 					selectLabel
 					selectedLabel="Выбранный"
 					placeholder="Выберите жанр"
+					@input="store.setErrorWithMessage(false)"
 					id="edgenre"
 					required
-				></multiselect>
+				>
+					<template v-slot:noOptions>Список жанров пуст</template>
+					<template v-slot:noResult>Совпадений не найдено</template>
+				</multiselect>
 			</div>
 
 			<div class="edfields__field">
@@ -50,9 +55,13 @@
 					selectLabel
 					selectedLabel="Выбранный"
 					placeholder="Выберите авторов"
+					@input="store.setErrorWithMessage(false)"
 					id="edauthors"
 					required
-				></multiselect>
+				>
+					<template v-slot:noOptions>Список авторов пуст</template>
+					<template v-slot:noResult>Совпадений не найдено</template>
+				</multiselect>
 			</div>
 
 			<div class="edfields__field">
@@ -62,6 +71,7 @@
 					id="edsnippet"
 					v-model="currentBook.snippet"
 					placeholder="Введите описание автора"
+					@input="store.setErrorWithMessage(false)"
 				></textarea>
 			</div>
 
@@ -74,6 +84,7 @@
 					id="edpubyear"
 					v-model="currentBook.pub_year"
 					placeholder="Введите дату публикации"
+					@input="store.setErrorWithMessage(false)"
 					required
 				/>
 			</div>
@@ -87,6 +98,7 @@
 					id="edpagescnt"
 					v-model="currentBook.pages_cnt"
 					placeholder="Введите количество страниц"
+					@input="store.setErrorWithMessage(false)"
 				/>
 			</div>
 		</div>
@@ -135,7 +147,7 @@ const title = ref<BookEditorTitle>(BookEditorTitle.Create)
 const buttonText = ref<SaveButtonValue>(SaveButtonValue.Save)
 
 onBeforeMount(() => {
-	genres.value = store.getGenres
+	// genres.value = store.getGenres
 
 	if (props.book_id) {
 		const book = store.getBookByID(props.book_id);
@@ -164,6 +176,16 @@ onBeforeMount(() => {
 })
 
 const saveBook = async () => {
+	if (store.getGenres.length < 1) {
+		store.setErrorWithMessage(true, "Еще не создано ни одного жанра. Начните с этого")
+		return
+	}
+
+	if (store.getAuthors.length < 1) {
+		store.setErrorWithMessage(true, "Еще не создано ни одного автора. Начните с этого")
+		return
+	}
+
 	if (
 		!currentBook.title ||
 		!currentBook.pub_year ||

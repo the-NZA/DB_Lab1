@@ -124,6 +124,9 @@ const gridOptions = ref<GridOptions>({
 	rowSelection: "multiple",
 	suppressCellSelection: true,
 	suppressRowClickSelection: true,
+	localeText: {
+		noRowsToShow: 'Жанров пока не добавлено',
+	},
 	defaultColDef: {
 		wrapText: true,
 		autoHeight: true,

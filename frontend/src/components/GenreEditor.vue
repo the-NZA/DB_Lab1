@@ -25,6 +25,7 @@
 					id="edsnippet"
 					v-model="currentGenre.snippet"
 					placeholder="Введите описание жанра"
+					@input="store.setErrorWithMessage(false)"
 				></textarea>
 			</div>
 		</div>

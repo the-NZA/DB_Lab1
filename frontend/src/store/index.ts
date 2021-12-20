@@ -81,12 +81,12 @@ export const useStore = defineStore("main", {
 		},
 		getBooksByAuthorID: (state) => {
 			return (author_id: string) => {
-				const booksAuthorsIDs =  state.booksAuthors.filter(ba => ba.author_id === author_id)
+				const booksAuthorsIDs = state.booksAuthors.filter(ba => ba.author_id === author_id)
 				const books: Book[] = []
 
 				for (const ba of booksAuthorsIDs) {
 					const book = state.books.find(item => item.id === ba.book_id)
-					if (book){
+					if (book) {
 						books.push(book)
 					}
 				}
@@ -102,9 +102,9 @@ export const useStore = defineStore("main", {
 				for (const ba of booksAuthorsIDs) {
 					const author = state.authors.find(item => item.id === ba.author_id)
 					if (author) {
-						let formatedAuthor = author.surname.length === 0 
-						? `${author.lastname} ${author.firstname[0].toUpperCase()}.` 
-						: `${author.lastname} ${author.firstname[0].toUpperCase()}. ${author.surname[0].toUpperCase()}.`
+						let formatedAuthor = author.surname.length === 0
+							? `${author.lastname} ${author.firstname[0].toUpperCase()}.`
+							: `${author.lastname} ${author.firstname[0].toUpperCase()}. ${author.surname[0].toUpperCase()}.`
 
 						authors.push(formatedAuthor.charAt(0).toUpperCase() + formatedAuthor.slice(1))
 					}
@@ -121,7 +121,7 @@ export const useStore = defineStore("main", {
 				for (const ba of booksAuthorsIDs) {
 					const book = state.books.find(item => item.id === ba.book_id)
 
-					if (book){
+					if (book) {
 						books.push(`${book.title.charAt(0).toUpperCase() + book.title.slice(1)}`)
 					}
 				}
@@ -166,7 +166,7 @@ export const useStore = defineStore("main", {
 	},
 	actions: {
 		/* ERRORS */
-		setErrorWithMessage(status: boolean, msg? :string) {
+		setErrorWithMessage(status: boolean, msg?: string) {
 			this.isError = status
 			this.errMessage = msg ? msg : ""
 		},
@@ -176,7 +176,7 @@ export const useStore = defineStore("main", {
 			try {
 				const allBooks = await GET<Book[]>("api/book/all");
 
-				this.books = allBooks;
+				this.books = allBooks !== null ? allBooks : [];
 				this.booksLoaded = true
 			} catch (err) {
 				console.error(err);
@@ -235,7 +235,8 @@ export const useStore = defineStore("main", {
 		async loadGenres() {
 			try {
 				const allGenres = await GET<Genre[]>("api/genre/all");
-				this.genres = allGenres;
+
+				this.genres = allGenres !== null ? allGenres : [];
 				this.genresLoaded = true
 			} catch (err) {
 				console.error(err);
@@ -290,7 +291,7 @@ export const useStore = defineStore("main", {
 			try {
 				const allAuthors = await GET<Author[]>("api/author/all");
 
-				this.authors = allAuthors;
+				this.authors = allAuthors !== null ? allAuthors : [];
 				this.authorsLoaded = true
 			} catch (err) {
 				console.error(err);
