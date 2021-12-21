@@ -52,50 +52,48 @@ watch(() => route.params, async () => {
 </script>
 
 <template>
-	<loader v-if="!isLoaded" />
+	<loader v-show="!isLoaded" />
 
-	<template v-else>
-		<header class="app-header">
-			<div class="header wrapper">
-				<div class="header__intro">
-					<h1 class="header__title">Лабораторная работа №1</h1>
-					<h3 class="header__subtitle">
-						По дисциплине "Программирование и администрирование в
-						среде"
-					</h3>
-				</div>
-
-				<nav class="header__nav">
-					<router-link to="/">Главная</router-link>
-					<router-link to="/books">Книги</router-link>
-					<router-link to="/genres">Жанры</router-link>
-					<router-link to="/authors">Авторы</router-link>
-				</nav>
+	<header class="app-header">
+		<div class="header wrapper">
+			<div class="header__intro">
+				<h1 class="header__title">Лабораторная работа №1</h1>
+				<h3 class="header__subtitle">
+					По дисциплине "Программирование и администрирование в
+					среде"
+				</h3>
 			</div>
-		</header>
 
-		<main class="app-main wrapper" :class="{ 'grid-main': isNotHomePage }">
-			<router-view></router-view>
-		</main>
+			<nav class="header__nav">
+				<router-link to="/">Главная</router-link>
+				<router-link to="/books">Книги</router-link>
+				<router-link to="/genres">Жанры</router-link>
+				<router-link to="/authors">Авторы</router-link>
+			</nav>
+		</div>
+	</header>
 
-		<footer class="app-footer">
-			<div class="footer wrapper">
-				<div class="footer__credits">
-					<p>
-						Выполнил студент группы 15.11Д-МО12/19б факультета
-						ИМИСиЦЭ Козлов Роман
-					</p>
-				</div>
-				<div class="footer__link">
-					<a
-						href="https://github.com/the-NZA/DB_Lab1"
-						target="_blank"
-						title="Откроется в новой вкладке"
-					>Репозиторий</a>
-				</div>
+	<main class="app-main wrapper" :class="{ 'grid-main': isNotHomePage }">
+		<router-view></router-view>
+	</main>
+
+	<footer class="app-footer">
+		<div class="footer wrapper">
+			<div class="footer__credits">
+				<p>
+					Выполнил студент группы 15.11Д-МО12/19б факультета
+					ИМИСиЦЭ Козлов Роман
+				</p>
 			</div>
-		</footer>
-	</template>
+			<div class="footer__link">
+				<a
+					href="https://github.com/the-NZA/DB_Lab1"
+					target="_blank"
+					title="Откроется в новой вкладке"
+				>Репозиторий</a>
+			</div>
+		</div>
+	</footer>
 </template>
 
 <style>
