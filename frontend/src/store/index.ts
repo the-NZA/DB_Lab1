@@ -352,7 +352,7 @@ export const useStore = defineStore("main", {
 			try {
 				const allBooksAuthors = await GET<BookAuthor[]>("api/book-author");
 
-				this.booksAuthors = allBooksAuthors;
+				this.booksAuthors = allBooksAuthors !== null ? allBooksAuthors : [];
 				this.booksAuthorsLoaded = true
 			} catch (err) {
 				console.error(err);
