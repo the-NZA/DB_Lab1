@@ -28,16 +28,18 @@
 	line-height: 25px;
 } */
 
-.centered > div {
+.centered {
 	justify-content: center;
 }
 
-.authors {
+.centered-cell {
 	min-height: 100%;
 	display: flex;
 	align-items: center;
+
+	line-height: 2;
 }
 
-.authors span {
-	line-height: 25px;
+.centered-cell span {
+	line-height: 2;
 }
