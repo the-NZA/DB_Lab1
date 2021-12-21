@@ -62,7 +62,6 @@ const handleCloseModal = () => {
 }
 
 const handleSaveBook = () => {
-	console.log("save was pressed");
 	showModal.value = false;
 }
 
@@ -142,12 +141,14 @@ const gridOptions = ref<GridOptions>({
 			headerName: "Название",
 			flex: 1,
 			minWidth: 250,
+			cellClass: ["centered-cell"]
 		},
 		{
 			field: "snippet",
 			headerName: "Описание",
 			flex: 3,
 			minWidth: 450,
+			cellClass: ["centered-cell"]
 		},
 		{
 			field: "authors",
@@ -155,25 +156,27 @@ const gridOptions = ref<GridOptions>({
 			minWidth: 110,
 			flex: 1,
 			// maxWidth: 115,
-			cellClass: ["authors"]
+			cellClass: ["centered-cell"]
 		},
 		{
 			field: "genre",
 			headerName: "Жанр",
 			minWidth: 120,
 			maxWidth: 140,
+			cellClass: ["centered-cell"]
 		},
 		{
 			field: "pages_cnt",
 			headerName: "Страниц",
 			width: 100,
-			cellClass: ["centered"],
+			// cellClass: ["centered"],
+			cellClass: ["centered", "centered-cell"]
 		},
 		{
 			field: "pub_year",
 			headerName: "Год публикации",
 			maxWidth: 155,
-			cellClass: ["centered"],
+			cellClass: ["centered", "centered-cell"]
 		},
 		{
 			field: "actions",
@@ -181,7 +184,8 @@ const gridOptions = ref<GridOptions>({
 			cellRenderer: "gridBtn",
 			minWidth: 115,
 			maxWidth: 120,
-			flex: 0.5
+			flex: 0.5,
+			cellClass: ["centered-cell"]
 		}
 	],
 	frameworkComponents: {

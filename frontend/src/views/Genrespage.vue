@@ -62,7 +62,6 @@ const handleCloseModal = () => {
 }
 
 const handleSaveGenre = () => {
-	console.log("save was pressed");
 	showModal.value = false;
 }
 
@@ -143,19 +142,22 @@ const gridOptions = ref<GridOptions>({
 			headerName: "Название",
 			flex: 2,
 			minWidth: 250,
+			cellClass: ["centered-cell"]
 		},
 		{
 			field: "snippet",
 			headerName: "Описание",
 			flex: 3,
 			minWidth: 450,
+			cellClass: ["centered-cell"]
 		},
 		{
 			field: "actions",
 			headerName: "Действия",
 			cellRenderer: "gridBtn",
 			minWidth: 115,
-			flex: 0.5
+			flex: 0.5,
+			cellClass: ["centered-cell"]
 		}
 	],
 	frameworkComponents: {
