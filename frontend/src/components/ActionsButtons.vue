@@ -5,17 +5,25 @@
 	3. Delete – If selected at least 1 item-->
 
 	<div class="actions">
-		<button @click="emit('addPressed')" v-show="canAdd" class="actions__btn actions__add">Создать</button>
-		<button
-			@click="emit('editPressed')"
-			v-show="canEdit"
-			class="actions__btn actions__edit"
-		>Редактировать</button>
-		<button
-			@click="emit('deletePressed')"
-			v-show="canDelete"
-			class="actions__btn actions__delete"
-		>Удалить</button>
+		<transition name="fade">
+			<button @click="emit('addPressed')" v-show="canAdd" class="actions__btn actions__add">Создать</button>
+		</transition>
+
+		<transition name="fade">
+			<button
+				@click="emit('editPressed')"
+				v-show="canEdit"
+				class="actions__btn actions__edit"
+			>Редактировать</button>
+		</transition>
+
+		<transition name="fade">
+			<button
+				@click="emit('deletePressed')"
+				v-show="canDelete"
+				class="actions__btn actions__delete"
+			>Удалить</button>
+		</transition>
 	</div>
 </template>
 
