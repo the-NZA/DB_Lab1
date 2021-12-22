@@ -17,6 +17,12 @@
 	gap: var(--offset);
 }
 
+@media screen and (max-width: 980px) {
+	.editor {
+		min-width: 90vw;
+	}	
+}
+
 .editor__header {
 	display: flex;
 	justify-content: space-between;

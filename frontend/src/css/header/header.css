@@ -5,9 +5,17 @@
 	align-items: center;
 }
 
+@media screen and (max-width: 1280px) {
+	.header {
+		flex-direction: column;
+	}	
+
 .header__intro	{
+	margin-bottom: var(--offset);
+}
 
 }
+
 
 .header__title {
 	margin: 0;

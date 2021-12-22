@@ -8,6 +8,16 @@
 	justify-content: space-between;
 }
 
+@media screen and (max-width: 880px){
+	.footer {
+		flex-direction: column;
+	}
+
+	.footer__credits {
+		margin-bottom: var(--offset);
+	}
+}
+
 .footer a {
 	color: rgb(var(--leanen));
 	text-decoration: none;
