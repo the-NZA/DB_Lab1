@@ -10,10 +10,9 @@
 		flex-direction: column;
 	}	
 
-.header__intro	{
-	margin-bottom: var(--offset);
-}
-
+	.header__intro	{
+		margin-bottom: var(--offset);
+	}
 }
 
 
